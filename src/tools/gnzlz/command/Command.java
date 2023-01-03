@@ -1,4 +1,4 @@
-package command;
+package tools.gnzlz.command;
 
 import java.util.ArrayList;
 
