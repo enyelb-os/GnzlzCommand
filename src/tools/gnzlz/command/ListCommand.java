@@ -11,8 +11,8 @@ public class ListCommand {
 
     public Object get(String name){
         for (Command command: listCommands) {
-            if(command.name.equals(name)){
-                return command.value;
+            if(command.name().equals(name)){
+                return command.value();
             }
         }
         return null;
@@ -20,8 +20,8 @@ public class ListCommand {
 
     public String string(String name){
         for (Command command: listCommands) {
-            if(command.name.equals(name)){
-                return command.value.toString();
+            if(command.name().equals(name)){
+                return command.value().toString();
             }
         }
         return "";
@@ -29,8 +29,8 @@ public class ListCommand {
 
     public int integer(String name){
         for (Command command: listCommands) {
-            if(command.name.equals(name) && command.value instanceof Integer){
-                return (int) command.value;
+            if(command.name().equals(name) && command.value() instanceof Integer){
+                return (int) command.value();
             }
         }
         return -1;
