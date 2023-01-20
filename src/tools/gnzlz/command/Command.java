@@ -10,8 +10,11 @@ public class Command {
      * Default list Commands
      ***************************************/
 
-    static ArrayList<Command> listCommands = new ArrayList<Command>();
-    public static ListCommand listCommand = new ListCommand(listCommands);
+    static ArrayList<Command> baseListCommands = new ArrayList<Command>();
+    static ArrayList<Command> listCommands = baseListCommands;
+    public static ListCommand listCommand = new ListCommand();
+
+
 
     /***************************************
      * vars
@@ -109,7 +112,7 @@ public class Command {
             }
         }
 
-        for (Command command: listCommands) {
+        for (Command command: baseListCommands) {
             if(!command.name.equals(name)) {
                 for (String commandName : commands) {
                     for (String commandNameOld: command.commands) {
@@ -128,7 +131,7 @@ public class Command {
 
     public static void command(String name, Object value, String required,  String ... commands){
         boolean newCommand = true;
-        for (Command command: listCommands) {
+        for (Command command: baseListCommands) {
             if(command.name.equals(name)){
                 newCommand = false;
                 command.value = value;
@@ -137,7 +140,7 @@ public class Command {
             }
         }
         if(newCommand){
-            listCommands.add(new Command(name,value, required,  commands));
+            baseListCommands.add(new Command(name,value, required,  commands));
         }
     }
 
@@ -146,16 +149,13 @@ public class Command {
      ***************************************/
 
     public static Command command(String name){
-        for (Command command: listCommands) {
+        for (Command command: baseListCommands) {
             if(command.name.equals(name)){
                 return command;
             }
         }
         Command command = new Command(name);
-        if(GroupCommand.current != null){
-            GroupCommand.current.validateCommands(GroupCommand.current.listCommands, command);
-        }
-        listCommands.add(command);
+        baseListCommands.add(command);
         return command;
     }
 
