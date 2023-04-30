@@ -1,76 +1,63 @@
 package tools.gnzlz.command;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
-public class Command {
+public class Command extends ICommand<Command>{
 
     /***************************************
      * Default list Commands
      ***************************************/
 
-    static ArrayList<Command> baseListCommands = new ArrayList<Command>();
-    static ArrayList<Command> listCommands = baseListCommands;
-    public static ListCommand listCommand = new ListCommand();
-
-
+    static ArrayList<Command> listCommands = new ArrayList<Command>();
 
     /***************************************
      * vars
      ***************************************/
 
-    private ArrayList<String> commands;
-    private String name;
-    private Object value;
-    private boolean assign;
-    private boolean optional;
-    private String message;
+    final ArrayList<String> commands;
+
+    /***************************************
+     * vars
+     ***************************************/
+
+    final ArrayList<String> groups;
+
+    /***************************************
+     * vars
+     ***************************************/
+
+    final ArrayList<InternalCommand> internalCommands;
+
+    /***************************************
+     * vars
+     ***************************************/
+
+    boolean isNew = true;
+
+    /***************************************
+     * vars
+     ***************************************/
+
+    boolean optional;
+
+    /***************************************
+     * vars
+     ***************************************/
+
+    String message;
 
     /***************************************
      * constructor
      ***************************************/
 
-    Command(String name, Object value, String message, String ... commands){
-        this.commands = new ArrayList<String>();
-        this.name = name;
-        this.validateAddCommands(commands);
-        this.value = value;
-        this.assign = false;
-        this.optional = message.isEmpty();
-        this.message = message;
-    }
-
-    /***************************************
-     * constructor
-     ***************************************/
     Command(String name){
-        this(name, null, "", null);
-    }
-
-    /***************************************
-     * get
-     ***************************************/
-
-    public String name() {
-        return name;
-    }
-
-    /***************************************
-     * get
-     ***************************************/
-
-    public Object value() {
-        return value;
-    }
-
-    /***************************************
-     * set
-     ***************************************/
-
-    public Command value(Object value) {
-        this.value = value;
-        return this;
+        super(name);
+        this.commands = new ArrayList<String>();
+        this.groups = new ArrayList<String>();
+        this.assign = false;
+        this.optional = true;
+        this.message = "";
+        this.internalCommands = new ArrayList<InternalCommand>();
     }
 
     /***************************************
@@ -93,31 +80,117 @@ public class Command {
     }
 
     /***************************************
+     * set
+     ***************************************/
+
+    public Command groups(String ... groups) {
+        this.validateAddGroups(groups);
+        return this;
+    }
+
+    /***************************************
+     * set
+     ***************************************/
+
+    public Command option(String option, String ... commands) {
+        if(value instanceof Value){
+            ((Value) value).options(option);
+        }
+        this.validateAddInternalCommands(option,commands);
+        return this;
+    }
+
+    /***************************************
+     * set
+     ***************************************/
+
+    public Command option(String option, Command ... commands) {
+
+        if(value instanceof Value){
+            ((Value) value).options(option);
+        }
+        this.validateAddInternalCommands(option,commands);
+        return this;
+    }
+
+    /***************************************
+     * set
+     ***************************************/
+
+    public Command internal(Command ... commands) {
+        this.validateAddInternalCommands(null,commands);
+        return this;
+    }
+
+    /***************************************
+     * set
+     ***************************************/
+
+    public Command internal(String ... commands) {
+        this.validateAddInternalCommands(null,commands);
+        return this;
+    }
+
+    /***************************************
      * private
      ***************************************/
 
-    private void validateAddCommands(String ... commands){
-        if(commands == null){
-            return;
-        }
-        for (String commandName : commands) {
-            boolean exist = false;
-            for (String commandNameOld: this.commands) {
-                if (commandNameOld.equals(commandName)) {
-                    exist = true;
-                }
-            }
-            if(!exist){
-                this.commands.add(commandName);
+    private void validateAddInternalCommand(String option,String commandName){
+        for (InternalCommand internalCommand: this.internalCommands) {
+            if ( internalCommand.command.name.equals(commandName) && (
+                (internalCommand.option != null && internalCommand.option.equals(option)) ||
+                (internalCommand.option == null && option == null)
+            )) {
+                return;
             }
         }
+        this.commands.add(commandName);
+    }
 
-        for (Command command: baseListCommands) {
-            if(!command.name.equals(name)) {
-                for (String commandName : commands) {
-                    for (String commandNameOld: command.commands) {
-                        if (commandNameOld.equals(commandName)) {
-                            throw new RuntimeException("command duplicate : " + command.name + "." + commandName + " == " + name + "." + commandName);
+    private void validateAddInternalCommands(String option, String ... commands){
+        if(commands != null){
+            for (String commandName : commands) {
+                validateAddInternalCommand(option, commandName);
+            }
+        }
+    }
+
+    private void validateAddInternalCommands(String option, Command ... commands){
+        if(commands != null){
+            for (Command command : commands) {
+                validateAddInternalCommand(option, command.name());
+            }
+        }
+    }
+
+
+    /***************************************
+     * private
+     ***************************************/
+
+    private void validateAddCommand(String commandName){
+        for (String commandNameOld: this.commands) {
+            if (commandNameOld.equals(commandName)) {
+                return;
+            }
+        }
+        this.commands.add(commandName);
+    }
+
+    private void validateAddCommands(String ... commands){
+        if(commands != null){
+            for (String commandName : commands) {
+                validateAddCommand(commandName);
+            }
+
+            //debe ir a otro lugar
+            for (Command command: Command.listCommands) {
+                if(!command.name.equals(name)) {
+                    for (String commandName : commands) {
+                        for (String commandNameOld: command.commands) {
+                            if (commandNameOld.equals(commandName)) {
+                                throw new RuntimeException("command duplicate : " + command.name + "." + commandName + " == " + name + "." + commandName);
+                            }
                         }
                     }
                 }
@@ -126,21 +199,23 @@ public class Command {
     }
 
     /***************************************
-     * static
+     * private
      ***************************************/
 
-    public static void command(String name, Object value, String required,  String ... commands){
-        boolean newCommand = true;
-        for (Command command: baseListCommands) {
-            if(command.name.equals(name)){
-                newCommand = false;
-                command.value = value;
-                command.validateAddCommands(commands);
-                break;
+    private void validateAddGroup(String group){
+        for (String groupOld: this.groups) {
+            if (groupOld.equals(group)) {
+                return;
             }
         }
-        if(newCommand){
-            baseListCommands.add(new Command(name,value, required,  commands));
+        this.groups.add(group);
+    }
+
+    private void validateAddGroups(String ... groups){
+        if(groups != null){
+            for (String groupName : groups) {
+                validateAddGroup(groupName);
+            }
         }
     }
 
@@ -149,81 +224,14 @@ public class Command {
      ***************************************/
 
     public static Command command(String name){
-        for (Command command: baseListCommands) {
+        for (Command command: Command.listCommands) {
             if(command.name.equals(name)){
+                command.isNew = false;
                 return command;
             }
         }
         Command command = new Command(name);
-        baseListCommands.add(command);
+        Command.listCommands.add(command);
         return command;
-    }
-
-    /***************************************
-     * static
-     ***************************************/
-
-    public static ListCommand process(String[] args){
-        String option = "";
-        for (String code: args) {
-            for (Command command: listCommands) {
-                if (code.substring(0, 1).equals("-")) {
-                    option = code;
-                    for (String commandOption: command.commands) {
-                        if (option.equals(commandOption) && command.value instanceof Boolean) {
-                            command.value = true;
-                            command.assign = true;
-                            break;
-                        }
-                    }
-                } else {
-                    for (String commandOption: command.commands) {
-                        if (option.equals(commandOption)) {
-                            if(command.value instanceof Integer){
-                                command.value = Integer.parseInt(code);
-                            } else {
-                                command.value = code;
-                            }
-                            command.assign = true;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        for (Command command: listCommands) {
-            if(!command.assign && !command.optional){
-                String type = "";
-                boolean error = false;
-                do {
-                    Scanner in = new Scanner(System.in);
-                    if (command.value instanceof Integer) {
-                        type = "(int)";
-                    } else if (command.value instanceof Double) {
-                        type = "(float)";
-                    } else if (command.value instanceof Boolean) {
-                        type = "(bool)";
-                    } else {
-                        type = "";
-                    }
-                    System.out.print(command.message + " " + type + ": ");
-                    try {
-                        if (command.value instanceof Integer) {
-                            command.value = in.nextInt();
-                        } else if (command.value instanceof Double) {
-                            command.value = in.nextDouble();
-                        } else if (command.value instanceof Boolean) {
-                            command.value = in.nextBoolean();
-                        } else {
-                            command.value = in.next();
-                        }
-                    } catch (InputMismatchException exception) {
-                        error = true;
-                    }
-
-                }while (error == true);
-            }
-        }
-        return listCommand;
     }
 }

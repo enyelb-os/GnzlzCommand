@@ -5,33 +5,46 @@ import java.util.ArrayList;
 public class GroupCommand {
 
     /***************************************
-     * statics
+     * static
      ***************************************/
 
-    static ArrayList<Command> baseListCommands = new ArrayList<Command>();
+    private static GroupCommand current = new GroupCommand("parent", true, 0, null);
 
-    static GroupCommand current = null;
-    static String[] args = null;
-    static int index = 0;
-    private static ArrayList<GroupCommand> primarys = new ArrayList<GroupCommand>();
+    /***************************************
+     * static
+     ***************************************/
+
+    private static GroupCommand parent = current;
+
+    /***************************************
+     * static
+     ***************************************/
+
+    private static String[] args = null;
 
     /***************************************
      * vars
      ***************************************/
 
-    ArrayList<Command> listCommands = new ArrayList<Command>();
+    int loopCount = 0;
 
     /***************************************
      * vars
      ***************************************/
 
-
+    private final int index;
 
     /***************************************
      * vars
      ***************************************/
 
-    private FunctionGroupCommand functionGroupCommand;
+    private final ArrayList<GroupCommand> internals = new ArrayList<GroupCommand>();
+
+    /***************************************
+     * vars
+     ***************************************/
+
+    private final FunctionGroupCommand functionGroupCommand;
 
     /***************************************
      * vars
@@ -42,141 +55,140 @@ public class GroupCommand {
     /***************************************
      * vars
      ***************************************/
-    private String name;
+
+    private final String name;
 
     /***************************************
      * vars
      ***************************************/
-    private boolean isDefault;
+
+    private final boolean isDefault;
 
     /***************************************
      * constructor
      ***************************************/
 
-    private GroupCommand(String name){
-        this.name = name;
-        this.isDefault = false;
+    private GroupCommand(String name, boolean hashcode, boolean isDefault, int index, FunctionGroupCommand functionGroupCommand){
+        this.name = name + (hashcode ? this.hashCode() : "");
+        this.isDefault = isDefault;
+        this.index = index;
+        this.functionGroupCommand = functionGroupCommand;
     }
 
     /***************************************
      * constructor
      ***************************************/
 
-    private GroupCommand(){
-        this.name = "";
-        this.isDefault = true;
+    private GroupCommand(String name, boolean hashcode, int index, FunctionGroupCommand functionGroupCommand){
+        this(name, hashcode, false, index, functionGroupCommand);
     }
 
     /***************************************
-     * static
+     * constructor
      ***************************************/
 
-    public static GroupCommand command(String command, FunctionGroupCommand functionGroupCommand){
-        GroupCommand groupCommand = new GroupCommand(command);
-        if(GroupCommand.current == null) {
-            groupCommand.functionGroupCommand = functionGroupCommand;
-            GroupCommand.primarys.add(groupCommand);
-        } else {
-            if(GroupCommand.args != null && GroupCommand.args[GroupCommand.index].equals(command)){
-                GroupCommand previous = groupCommand.current;
-                GroupCommand.current.runDefault = false;
-                groupCommand.listCommands = GroupCommand.current.listCommands;
-                groupCommand.current = groupCommand;
-                GroupCommand.index++;
-                functionGroupCommand.run();
-                GroupCommand.current = previous;
-                GroupCommand.index--;
+    private GroupCommand(String name, int index, FunctionGroupCommand functionGroupCommand){
+        this(name, false, false, index, functionGroupCommand);
+    }
 
+    /***************************************
+     * get internal GroupCommand
+     ***************************************/
+
+    private boolean existsGroupCommand(String name) {
+        for (GroupCommand groupCommand : internals) {
+            if(groupCommand.name.equals(name)) {
+                return true;
             }
         }
-        return groupCommand;
+        return false;
     }
 
     /***************************************
      * static
      ***************************************/
 
-    public static GroupCommand command(FunctionGroupCommand functionGroupCommand){
-        GroupCommand groupCommand = new GroupCommand();
-        if(GroupCommand.current == null) {
-            groupCommand.functionGroupCommand = functionGroupCommand;
-            GroupCommand.primarys.add(groupCommand);
-        } else {
-            if(GroupCommand.args != null && GroupCommand.current.runDefault){
-                GroupCommand previous = GroupCommand.current;
-                groupCommand.listCommands = GroupCommand.current.listCommands;
-                GroupCommand.current = groupCommand;
-                GroupCommand.index++;
-                functionGroupCommand.run();
-                GroupCommand.current = previous;
-                GroupCommand.index--;
-
-            }
-        }
-        return groupCommand;
-    }
-
-    /***************************************
-     * static
-     ***************************************/
-
-    public static Command command(String command){
-        if(GroupCommand.current != null){
-            return GroupCommand.validateCommands(GroupCommand.current.listCommands, command);
-        } else{
-            return GroupCommand.validateCommands(GroupCommand.baseListCommands, command);
-        }
-    }
-
-    /***************************************
-     * static
-     ***************************************/
-
-    public static void use(String ... commands){
-        ArrayList<Command> commandArrayList = GroupCommand.baseListCommands;
-        if(GroupCommand.current != null){
-            commandArrayList = GroupCommand.current.listCommands;
-        }
-
-        for (Command command : Command.baseListCommands) {
-            for (String commandName: commands) {
-                if(existCommand(commandArrayList, commandName) == null){
-                    commandArrayList.add(command);
+    public static GroupCommand use(String ... commands) {
+        if(commands != null){
+            for (String command : commands) {
+                for (Command commandOld: Command.listCommands) {
+                    if(commandOld.name.equals(command) || "all".equals(command)){
+                        commandOld.groups(current.name);
+                    }
                 }
             }
         }
+        return current;
+    }
+
+    public static GroupCommand use() {
+        return use("all");
     }
 
     /***************************************
      * static
      ***************************************/
 
-    public static void useAllCommands(){
-        for (Command command : Command.baseListCommands) {
-            if(existCommand(GroupCommand.baseListCommands, command.name()) == null){
-                GroupCommand.baseListCommands.add(command);
-            }
+    public static GroupCommand command(String command, FunctionGroupCommand functionGroupCommand) {
+        if(!current.existsGroupCommand(command)) {
+            GroupCommand newGroupCommand = new GroupCommand(command, current.index + 1, functionGroupCommand);
+            current.internals.add(newGroupCommand);
         }
+        return current;
     }
 
     /***************************************
      * static
      ***************************************/
 
-    public static void process(String[] args){
+    public static GroupCommand command(FunctionGroupCommand functionGroupCommand) {
+        if(current.loopCount == 0){
+            GroupCommand newGroupCommand = new GroupCommand("default", true, true, current.index + 1, functionGroupCommand);
+            current.internals.add(newGroupCommand);
+        }
+        return current;
+    }
+
+    /***************************************
+     * static
+     ***************************************/
+
+    public static Command command(String command) {
+        Command commandOld = Command.command(command);
+        if(commandOld.isNew){
+            commandOld.groups(current.name);
+        } else if(!commandOld.groups.isEmpty()){
+            commandOld.groups(current.name);
+        }
+        return commandOld;
+    }
+
+    /***************************************
+     * static
+     ***************************************/
+
+    public static void process(String[] args) {
         GroupCommand.args = args;
-        boolean runDefault = true;
-        for (GroupCommand groupCommand : primarys){
-            if((groupCommand.isDefault && runDefault) || GroupCommand.args[GroupCommand.index].equals(groupCommand.name)){
-                runDefault = false;
-                groupCommand.listCommands = GroupCommand.copyLists(GroupCommand.baseListCommands.isEmpty() ? Command.baseListCommands : GroupCommand.baseListCommands);
-                Command.listCommands = groupCommand.listCommands;
-                GroupCommand.current = groupCommand;
-                GroupCommand.index++;
+        Process.listCommands.clear();
+        GroupCommand.process(args, Process.listCommands);
+    }
+
+    /***************************************
+     * static
+     ***************************************/
+
+    private static void process(String[] args, ArrayList<Command> listCommands) {
+        current.runDefault = true;
+        mergeLists(listCommands, listCommandsByGroup(current.name));
+        for (GroupCommand groupCommand : current.internals){
+            if((groupCommand.isDefault && current.runDefault) || args != null && args[groupCommand.index].equals(groupCommand.name)){
+                GroupCommand previous = current;
+                current.runDefault = groupCommand.isDefault;
+                current = groupCommand;
                 groupCommand.functionGroupCommand.run();
-                Command.listCommands = Command.baseListCommands;
-                GroupCommand.current = null;
-                GroupCommand.index--;
+                process(args, listCommands);
+                current = previous;
+                groupCommand.loopCount++;
             }
         }
     }
@@ -185,40 +197,45 @@ public class GroupCommand {
      * static
      ***************************************/
 
-    private static Command existCommand(ArrayList<Command> listCommands, String name){
+    private static boolean existsCommand(ArrayList<Command> listCommands, String name){
         if(listCommands != null){
             for (Command command : listCommands) {
                 if(name.equals(command.name())){
-                    return command;
+                    return true;
                 }
             }
         }
-        return null;
+        return false;
     }
 
     /***************************************
      * static
      ***************************************/
 
-    private static Command validateCommands(ArrayList<Command> listCommands, String name){
-        Command command = existCommand(listCommands, name);
-        if(command == null){
-            command = new Command(name);
-            listCommands.add(command);
-        }
-        return command;
-    }
-
-    /***************************************
-     * static
-     ***************************************/
-
-    private static ArrayList<Command> copyLists(ArrayList<Command> ... listCommands){
-        ArrayList<Command> newArrayList = new ArrayList<Command>();
+    private static ArrayList<Command> mergeLists(ArrayList<Command> newArrayList, ArrayList<Command> ... listCommands){
         for (ArrayList<Command> list : listCommands) {
             for (Command command : list) {
-                if (existCommand(newArrayList, command.name()) == null) {
+                if (!existsCommand(newArrayList, command.name())) {
                     newArrayList.add(command);
+                }
+            }
+        }
+
+        return newArrayList;
+    }
+
+    /***************************************
+     * static
+     ***************************************/
+
+    private static ArrayList<Command> listCommandsByGroup(String name){
+        ArrayList<Command> newArrayList = new ArrayList<Command>();
+        for (Command command : Command.listCommands) {
+            if (!existsCommand(newArrayList, command.name())) {
+                for (String group : command.groups) {
+                    if(group.equals(name)) {
+                        newArrayList.add(command);
+                    }
                 }
             }
         }
