@@ -1,6 +1,5 @@
 package tools.gnzlz.command;
 
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -9,18 +8,11 @@ public class Process {
     /***************************************
      * Default list Commands
      ***************************************/
-    static ArrayList<Command> listCommands = new ArrayList<>();
-    public static ListCommand listCommand = new ListCommand();
 
-    public static ListCommand process(String[] args){
-        return process(args, listCommands.isEmpty() ? Command.listCommands : listCommands);
-    }
-
-    private static ListCommand process(String[] args, ArrayList<Command> listCommands){
-        listCommand.listCommands = listCommands;
+    public static ResultListCommand process(String[] args, ListCommand listCommand){
         String option = "";
         for (String code: args) {
-            for (Command command: listCommands) {
+            for (Command command: listCommand.commands) {
                 if (code.substring(0, 1).equals("-")) {
                     option = code;
                     for (String commandOption: command.commands) {
@@ -50,8 +42,8 @@ public class Process {
                 }
             }
         }
-        for (Command command: listCommands) {
-            if(!command.assign && !command.optional){
+        for (Command command: listCommand.commands) {
+            if(!command.assign && command.required){
                 String type = "";
                 boolean error = false;
                 do {
@@ -97,6 +89,6 @@ public class Process {
                 }while (error == true);
             }
         }
-        return listCommand;
+        return ResultListCommand.create(listCommand);
     }
 }

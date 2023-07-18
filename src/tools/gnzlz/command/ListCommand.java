@@ -4,38 +4,59 @@ import java.util.ArrayList;
 
 public class ListCommand {
 
-    ArrayList<Command> listCommands;
+    /***************************************
+     * vars
+     ***************************************/
+    final ArrayList<Command> commands;
 
-    public Object get(String name){
-        for (Command command: listCommands) {
-            if(command.name().equals(name)){
-                return command.value();
-            }
-        }
-        return null;
+    /***************************************
+     * constructor
+     ***************************************/
+     ListCommand(){
+        commands = new ArrayList<Command>();
+     }
+
+    /***************************************
+     * select listCommands
+     ***************************************/
+
+    public static ListCommand create(){
+        return new ListCommand();
     }
 
-    public String string(String name){
-        for (Command command: listCommands) {
-            if(command.name().equals(name)){
-                return command.value().toString();
-            }
-        }
-        return "";
-    }
-
-    public int integer(String name){
-        for (Command command: listCommands) {
-            if(command.name().equals(name) && command.value() instanceof Integer){
-                return (int) command.value();
-            }
-        }
-        return -1;
-    }
+    /***************************************
+     * method
+     ***************************************/
 
     public void listCommands(FunctionCommand functionCommand){
-        for (Command command: listCommands) {
-            functionCommand.run(command);
+        for (Command command: commands) {
+            functionCommand.run(command.resultCommand);
         }
+    }
+
+    /***************************************
+     * static
+     ***************************************/
+
+    public Command command(String name){
+        for (Command command: this.commands) {
+            if(command.name.equals(name)){
+                command.isNew = false;
+                return command;
+            }
+        }
+        Command command = Command.create(name);
+        this.commands.add(command);
+        return command;
+    }
+
+    public Command command(Command name){
+        for (Command command: this.commands) {
+            if(command.name.equals(name.name)){
+                return command;
+            }
+        }
+        this.commands.add(name);
+        return name;
     }
 }

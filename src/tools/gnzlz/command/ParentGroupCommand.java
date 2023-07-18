@@ -6,8 +6,15 @@ public class ParentGroupCommand {
      * vars
      ***************************************/
 
-    protected final GroupCommand parent = new GroupCommand("parent", true, false, null);
+    protected final GroupCommand parent;
 
+    /***************************************
+     * constructor
+     ***************************************/
+
+    ParentGroupCommand(ListCommand listCommand){
+        this.parent = new GroupCommand("parent", true, false, null, listCommand);
+    }
 
     /***************************************
      * get internal GroupCommand
@@ -26,13 +33,7 @@ public class ParentGroupCommand {
      ***************************************/
 
     public ParentGroupCommand addGroup(GroupCommand... groupCommands) {
-        if(groupCommands != null) {
-            for (GroupCommand groupCommand: groupCommands) {
-                if(groupCommand != null && !this.existsGroupCommand(groupCommand.name)) {
-                    this.parent.internals.add(groupCommand);
-                }
-            }
-        }
+        this.parent.addGroup(groupCommands);
         return this;
     }
 
@@ -41,13 +42,7 @@ public class ParentGroupCommand {
      ***************************************/
 
     public ParentGroupCommand addCommand(Command ... commands) {
-        if(commands != null) {
-            for (Command  command: commands) {
-                if(command != null) {
-                    command.groups(this.parent.name);
-                }
-            }
-        }
+        parent.addCommand(commands);
         return this;
     }
 
@@ -55,37 +50,34 @@ public class ParentGroupCommand {
      * static add Command
      ***************************************/
 
-    public static Command command(String command) {
-        return Command.command(command);
+    public Command command(String command) {
+        return parent.command(command);
     }
 
     /***************************************
      * static
      ***************************************/
+
+    public static ParentGroupCommand create(ListCommand listCommand) {
+        return new ParentGroupCommand(listCommand);
+    }
 
     public static ParentGroupCommand create() {
-        return new ParentGroupCommand();
+        return create(ListCommand.create());
     }
 
     /***************************************
      * static
      ***************************************/
 
-    public ParentGroupCommand use(String ... commands) {
-        if(commands != null){
-            for (String command : commands) {
-                for (Command commandOld: Command.listCommands) {
-                    if(commandOld.name.equals(command) || "all".equals(command)){
-                        commandOld.groups(this.parent.name);
-                    }
-                }
-            }
-        }
+    public ParentGroupCommand use(ListCommand listCommand, String ... commands) {
+        parent.use(listCommand, commands);
         return this;
     }
 
-    public ParentGroupCommand use() {
-        return use("all");
+    public ParentGroupCommand use(ListCommand listCommand) {
+        parent.use(listCommand);
+        return this;
     }
 
 }

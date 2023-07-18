@@ -2,7 +2,7 @@ package tools.gnzlz.command;
 
 import java.util.ArrayList;
 
-public class GroupCommand{
+public class GroupCommand {
 
     /***************************************
      * vars
@@ -15,6 +15,12 @@ public class GroupCommand{
      ***************************************/
 
     private FunctionGroupCommand functionGroupCommand;
+
+    /***************************************
+     * vars
+     ***************************************/
+
+    protected ListCommand listCommand;
 
     /***************************************
      * vars
@@ -38,10 +44,11 @@ public class GroupCommand{
      * constructor
      ***************************************/
 
-    protected GroupCommand(String name, boolean hashcode, boolean isDefault, FunctionGroupCommand functionGroupCommand){
+    protected GroupCommand(String name, boolean hashcode, boolean isDefault, FunctionGroupCommand functionGroupCommand, ListCommand listCommand){
         this.name = name + (hashcode ? this.hashCode() : "");
         this.isDefault = isDefault;
         this.functionGroupCommand = functionGroupCommand;
+        this.listCommand = listCommand;
     }
 
     /***************************************
@@ -89,7 +96,7 @@ public class GroupCommand{
         if(commands != null) {
             for (Command  command: commands) {
                 if(command != null) {
-                    command.groups(this.name);
+                    listCommand.command(command);
                 }
             }
         }
@@ -100,8 +107,8 @@ public class GroupCommand{
      * static add Command
      ***************************************/
 
-    public static Command command(String command) {
-        return Command.command(command);
+    public Command command(String command) {
+        return listCommand.command(command);
     }
 
     /***************************************
@@ -109,7 +116,7 @@ public class GroupCommand{
      ***************************************/
 
     public static GroupCommand create(String command) {
-        return new GroupCommand(command, false, false, null);
+        return new GroupCommand(command, false, false, null, ListCommand.create());
     }
 
     /***************************************
@@ -117,7 +124,15 @@ public class GroupCommand{
      ***************************************/
 
     public static GroupCommand create() {
-        return new GroupCommand("default", true, true, null);
+        return new GroupCommand("default", true, true, null, ListCommand.create());
+    }
+
+    /***************************************
+     * static
+     ***************************************/
+
+    public static ParentGroupCommand parent(ListCommand listCommand) {
+        return ParentGroupCommand.create(listCommand);
     }
 
     /***************************************
@@ -132,12 +147,14 @@ public class GroupCommand{
      * static
      ***************************************/
 
-    public GroupCommand use(String ... commands) {
+    public GroupCommand use(ListCommand listCommand,String ... commands) {
         if(commands != null){
             for (String command : commands) {
-                for (Command commandOld: Command.listCommands) {
+                for (Command commandOld: listCommand.commands) {
                     if(commandOld.name.equals(command) || "all".equals(command)){
-                        commandOld.groups(this.name);
+                        if(this.listCommand != listCommand){
+                            this.listCommand.command(commandOld);
+                        }
                     }
                 }
             }
@@ -145,44 +162,52 @@ public class GroupCommand{
         return this;
     }
 
-    public GroupCommand use() {
-        return use("all");
+    /***************************************
+     * static
+     ***************************************/
+
+    public GroupCommand use(ListCommand listCommand) {
+        return use(listCommand,"all");
     }
 
     /***************************************
      * static
      ***************************************/
+
+    public static void process(String[] args, ListCommand listCommand, GroupCommand ... groupCommands) {
+        process(args, ParentGroupCommand.create(listCommand).addGroup(groupCommands));
+    }
 
     public static void process(String[] args, GroupCommand ... groupCommands) {
         process(args, ParentGroupCommand.create().addGroup(groupCommands));
     }
 
     public static void process(String[] args, ParentGroupCommand parentGroupCommand) {
-        Process.listCommands.clear();
-        GroupCommand.process(args, Process.listCommands, parentGroupCommand.parent, 0);
+        GroupCommand.process(args, ListCommand.create() , parentGroupCommand.parent, 0);
     }
 
     /***************************************
      * static
      ***************************************/
 
-    private static void process(String[] args, ArrayList<Command> listCommands, GroupCommand current, int index) {
+    private static ListCommand process(String[] args, ListCommand listCommand, GroupCommand current, int index) {
         current.runDefault = true;
-        mergeLists(listCommands, listCommandsByGroup(current.name));
+        mergeLists(listCommand.commands, current.listCommand.commands);
         boolean isFoundCommand = false;
         for (GroupCommand groupCommand : current.internals){
             if((groupCommand.isDefault && current.runDefault) || args != null && args[index].equals(groupCommand.name)) {
                 current.runDefault = groupCommand.isDefault;
                 if (groupCommand.functionGroupCommand != null) {
-                    groupCommand.functionGroupCommand.run();
+                    groupCommand.functionGroupCommand.run(listCommand);
                 }
-                process(args, listCommands, groupCommand, index+1);
+                process(args, listCommand, groupCommand, index+1);
                 isFoundCommand = true;
             }
         }
         if(!isFoundCommand && !current.internals.isEmpty()) {
             printHelp(current);
         }
+        return listCommand;
     }
 
     /***************************************
@@ -204,7 +229,7 @@ public class GroupCommand{
         }
 
         String commandRequireNew = commandRequire;
-        for (Command require : listCommandsByGroup(groupCommand.name)) {
+        for (Command require : groupCommand.listCommand.commands) {
             if(!commandRequireNew.isEmpty()) {
                 commandRequireNew += ", ";
             }
@@ -242,7 +267,7 @@ public class GroupCommand{
     private static boolean existsCommand(ArrayList<Command> listCommands, String name){
         if(listCommands != null){
             for (Command command : listCommands) {
-                if(name.equals(command.name())){
+                if(name.equals(command.resultCommand.name())){
                     return true;
                 }
             }
@@ -257,30 +282,12 @@ public class GroupCommand{
     private static ArrayList<Command> mergeLists(ArrayList<Command> newArrayList, ArrayList<Command> ... listCommands){
         for (ArrayList<Command> list : listCommands) {
             for (Command command : list) {
-                if (!existsCommand(newArrayList, command.name())) {
+                if (!existsCommand(newArrayList, command.resultCommand.name())) {
                     newArrayList.add(command);
                 }
             }
         }
 
-        return newArrayList;
-    }
-
-    /***************************************
-     * static
-     ***************************************/
-
-    private static ArrayList<Command> listCommandsByGroup(String name){
-        ArrayList<Command> newArrayList = new ArrayList<Command>();
-        for (Command command : Command.listCommands) {
-            if (!existsCommand(newArrayList, command.name())) {
-                for (String group : command.groups) {
-                    if(group.equals(name)) {
-                        newArrayList.add(command);
-                    }
-                }
-            }
-        }
         return newArrayList;
     }
 }
