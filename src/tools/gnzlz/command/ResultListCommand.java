@@ -1,26 +1,28 @@
 package tools.gnzlz.command;
 
+import java.util.ArrayList;
+
 public class ResultListCommand {
 
     /***************************************
      * vars
      ***************************************/
 
-    protected ListCommand listCommand;
+    protected ArrayList<ResultCommand> resultCommands;
 
     /***************************************
      * constructor
      ***************************************/
-    ResultListCommand(ListCommand listCommand){
-        this.listCommand = listCommand;
+    ResultListCommand(ArrayList<ResultCommand> resultCommands){
+        this.resultCommands = resultCommands;
     }
 
     /***************************************
      * select listCommands
      ***************************************/
 
-    static ResultListCommand create(ListCommand listCommand){
-        return new ResultListCommand(listCommand);
+    static ResultListCommand create(ArrayList<ResultCommand> resultCommands){
+        return new ResultListCommand(resultCommands);
     }
 
     /***************************************
@@ -28,9 +30,9 @@ public class ResultListCommand {
      ***************************************/
 
     public Object get(String name){
-        for (Command command: listCommand.commands) {
-            if(command.resultCommand.name().equals(name)){
-                return command.resultCommand.value();
+        for (ResultCommand command: resultCommands) {
+            if(command.name().equals(name)){
+                return command.value();
             }
         }
         return null;
@@ -39,10 +41,10 @@ public class ResultListCommand {
     /***************************************
      * method
      ***************************************/
-    public Value value(String name){
-        for (Command command: listCommand.commands) {
-            if(command.resultCommand.value() != null && command.resultCommand.value() instanceof Value && command.resultCommand.name().equals(name)){
-                return (Value) command.resultCommand.value();
+    public Option value(String name){
+        for (ResultCommand command: resultCommands) {
+            if(command.value() != null){
+                return (Option) command.command.value;
             }
         }
         return null;
@@ -53,9 +55,9 @@ public class ResultListCommand {
      ***************************************/
 
     public String string(String name){
-        for (Command command: listCommand.commands) {
-            if(command.resultCommand.name().equals(name)){
-                return command.resultCommand.value().toString();
+        for (ResultCommand command: resultCommands) {
+            if(command.name().equals(name)){
+                return command.value().toString();
             }
         }
         return "";
@@ -65,10 +67,26 @@ public class ResultListCommand {
      * method
      ***************************************/
 
+    public boolean bool(String name){
+        for (ResultCommand command: resultCommands) {
+            if(command.name().equals(name)){
+                if(command.value() instanceof String)
+                return command.value().toString().equals("1") || command.value().toString().equalsIgnoreCase("true");
+            } else if(command.value() instanceof Boolean) {
+                return (boolean) command.value();
+            }
+        }
+        return false;
+    }
+
+    /***************************************
+     * method
+     ***************************************/
+
     public int integer(String name){
-        for (Command command: listCommand.commands) {
-            if(command.resultCommand.name().equals(name) && command.resultCommand.value() instanceof Integer){
-                return (int) command.resultCommand.value();
+        for (ResultCommand command: resultCommands) {
+            if(command.name().equals(name) && command.value() instanceof Integer){
+                return (int) command.value();
             }
         }
         return -1;
@@ -78,7 +96,57 @@ public class ResultListCommand {
      * method
      ***************************************/
 
+    public ArrayList<ResultListCommand> arrayResultListCommand(String name){
+        for (ResultCommand command: resultCommands) {
+            if(command.name().equals(name)){
+                if(command.value() instanceof ArrayList){
+                    return ((ArrayList<ResultListCommand>) command.value());
+                }
+            }
+        }
+        return new ArrayList<ResultListCommand>();
+    }
+
+    /***************************************
+     * method
+     ***************************************/
+
+    public ResultListCommand resultListCommand(String name){
+        for (ResultCommand command: resultCommands) {
+            if(command.name().equals(name)){
+                if(command.value() instanceof ArrayList){
+                    return ((ResultListCommand) command.value());
+                }
+            }
+        }
+        return new ResultListCommand(new ArrayList<ResultCommand>());
+    }
+
+    /***************************************
+     * method
+     ***************************************/
+
+    private void listCommands(ArrayList<ResultCommand> resultCommands, FunctionCommand functionCommand){
+        for (ResultCommand command: resultCommands) {
+            if(command.value() instanceof ResultListCommand) {
+                listCommands(((ResultListCommand) command.value()).resultCommands, functionCommand);
+            } else if(command.value() instanceof ArrayList) {
+                for (Object o: (ArrayList) command.value()) {
+                    if(o instanceof ResultListCommand) {
+                        listCommands(((ResultListCommand) o).resultCommands, functionCommand);
+                    }
+                }
+            } else {
+                functionCommand.run(command);
+            }
+        }
+    }
+
+    /***************************************
+     * method
+     ***************************************/
+
     public void listCommands(FunctionCommand functionCommand){
-        listCommand.listCommands(functionCommand);
+        listCommands(resultCommands,functionCommand);
     }
 }

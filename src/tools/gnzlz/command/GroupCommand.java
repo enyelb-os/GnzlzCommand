@@ -183,31 +183,45 @@ public class GroupCommand {
     }
 
     public static void process(String[] args, ParentGroupCommand parentGroupCommand) {
-        GroupCommand.process(args, ListCommand.create() , parentGroupCommand.parent, 0);
+        GroupCommand.process(
+            args, ResultListCommand.create(new ArrayList<ResultCommand>()),
+            parentGroupCommand.parent.listCommand, parentGroupCommand.parent, 0
+        );
     }
 
     /***************************************
      * static
      ***************************************/
 
-    private static ListCommand process(String[] args, ListCommand listCommand, GroupCommand current, int index) {
+    private static ResultListCommand process(String[] args, ResultListCommand resultListCommandOld, ListCommand listCommand, GroupCommand current, int index) {
         current.runDefault = true;
-        mergeLists(listCommand.commands, current.listCommand.commands);
+        //mergeLists(listCommand.commands, current.listCommand.commands);
         boolean isFoundCommand = false;
+        //mergeLists(resultListCommand.resultCommands)
+
+
+        mergeLists(resultListCommandOld.resultCommands, Process.process(args, listCommand).resultCommands);
+        mergeLists(resultListCommandOld.resultCommands, Process.process(args, current.listCommand).resultCommands);
+
+
         for (GroupCommand groupCommand : current.internals){
             if((groupCommand.isDefault && current.runDefault) || args != null && args[index].equals(groupCommand.name)) {
                 current.runDefault = groupCommand.isDefault;
+
+                mergeLists(resultListCommandOld.resultCommands, Process.process(args, groupCommand.listCommand).resultCommands);
+
                 if (groupCommand.functionGroupCommand != null) {
-                    groupCommand.functionGroupCommand.run(listCommand);
+                    groupCommand.functionGroupCommand.run(resultListCommandOld);
                 }
-                process(args, listCommand, groupCommand, index+1);
+
+                process(args, resultListCommandOld, groupCommand.listCommand, groupCommand, index+1);
                 isFoundCommand = true;
             }
         }
         if(!isFoundCommand && !current.internals.isEmpty()) {
             printHelp(current);
         }
-        return listCommand;
+        return resultListCommandOld;
     }
 
     /***************************************
@@ -264,10 +278,10 @@ public class GroupCommand {
      * static
      ***************************************/
 
-    private static boolean existsCommand(ArrayList<Command> listCommands, String name){
+    private static boolean existsCommand(ArrayList<ResultCommand> listCommands, String name){
         if(listCommands != null){
-            for (Command command : listCommands) {
-                if(name.equals(command.resultCommand.name())){
+            for (ResultCommand command : listCommands) {
+                if(name.equals(command.name())){
                     return true;
                 }
             }
@@ -279,10 +293,10 @@ public class GroupCommand {
      * static
      ***************************************/
 
-    private static ArrayList<Command> mergeLists(ArrayList<Command> newArrayList, ArrayList<Command> ... listCommands){
-        for (ArrayList<Command> list : listCommands) {
-            for (Command command : list) {
-                if (!existsCommand(newArrayList, command.resultCommand.name())) {
+    private static ArrayList<ResultCommand> mergeLists(ArrayList<ResultCommand> newArrayList, ArrayList<ResultCommand> ... listCommands){
+        for (ArrayList<ResultCommand> list : listCommands) {
+            for (ResultCommand command : list) {
+                if (!existsCommand(newArrayList, command.name())) {
                     newArrayList.add(command);
                 }
             }

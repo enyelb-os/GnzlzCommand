@@ -14,7 +14,7 @@ public class Command {
      * vars
      ***************************************/
 
-    boolean assign;
+     Class<?> className;
 
     /***************************************
      * vars
@@ -28,11 +28,6 @@ public class Command {
 
     String message;
 
-    /***************************************
-     * vars
-     ***************************************/
-
-    boolean isArray = false;
 
     /***************************************
      * vars
@@ -50,7 +45,7 @@ public class Command {
      * vars
      ***************************************/
 
-    final ResultCommand resultCommand;
+    final CommandObject resultCommand;
 
     /***************************************
      * vars
@@ -70,12 +65,12 @@ public class Command {
 
     protected Command(String name){
         this.name = name;
-        this.assign = false;
-        this.required = true;
+        this.required = false;
         this.message = "";
-        this.resultCommand = new ResultCommand(this);
+        this.resultCommand = new CommandObject(this);
         this.commands = new ArrayList<String>();
         this.internalCommands = ListCommand.create();
+        this.className = String.class;
     }
 
     /***************************************
@@ -99,9 +94,56 @@ public class Command {
      * set
      ***************************************/
 
-    public Command value(Object value) {
+    public Command required() {
+        this.required = true;
+        return this;
+    }
+
+    /***************************************
+     * set
+     ***************************************/
+
+    public Command type(Class<?> type) {
+        this.className = type;
+        return this;
+    }
+
+    /***************************************
+     * set
+     ***************************************/
+
+    private Command valueInternal(Object value) {
+        if(value != null){
+            this.className = value.getClass();
+        }
         this.value = value;
         return this;
+    }
+
+    /***************************************
+     * set
+     ***************************************/
+
+    public Command value(int value) {
+        return valueInternal(value);
+    }
+    public Command value(String value) {
+        return valueInternal(value);
+    }
+    public Command value(double value) {
+        return valueInternal(value);
+    }
+    public Command value(boolean value) {
+        return valueInternal(value);
+    }
+    public Command value(Option value) {
+        return valueInternal(value);
+    }
+    public Command value(ListCommand value) {
+        return valueInternal(value);
+    }
+    public Command value(ArrayListCommand value) {
+        return valueInternal(value);
     }
 
     /***************************************

@@ -12,6 +12,7 @@ public class ListCommand {
     /***************************************
      * constructor
      ***************************************/
+
      ListCommand(){
         commands = new ArrayList<Command>();
      }
@@ -22,16 +23,6 @@ public class ListCommand {
 
     public static ListCommand create(){
         return new ListCommand();
-    }
-
-    /***************************************
-     * method
-     ***************************************/
-
-    public void listCommands(FunctionCommand functionCommand){
-        for (Command command: commands) {
-            functionCommand.run(command.resultCommand);
-        }
     }
 
     /***************************************
@@ -58,5 +49,19 @@ public class ListCommand {
         }
         this.commands.add(name);
         return name;
+    }
+
+    /***************************************
+     * static
+     ***************************************/
+
+    public ListCommand addCommand(Command name){
+        for (Command command: this.commands) {
+            if(command.name.equals(name)){
+                return this;
+            }
+        }
+        this.commands.add(name);
+        return this;
     }
 }
