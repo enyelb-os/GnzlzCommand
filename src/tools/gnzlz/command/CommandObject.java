@@ -28,6 +28,9 @@ public class CommandObject {
      ***************************************/
 
     public Object value(){
+        if(command.value instanceof Option){
+            return ((Option) command.value).value();
+        }
         return command.value;
     }
 

@@ -1,13 +1,132 @@
 package tools.gnzlz.command;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Process {
 
+    /***************************************
+     * Default methods
+     ***************************************/
+
+    public static int separator = 70;
+
+    /***************************************
+     * Default methods
+     ***************************************/
+
     private static PrintConsole printConsole = (text -> {
-        System.out.println(text);
+        System.out.print(text);
     });
+
+    /***************************************
+     * Default methods
+     ***************************************/
+
+    public static void clearConsole(){
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                Runtime.getRuntime().exec("clear");
+            }
+        } catch (IOException | InterruptedException ex) {}
+    }
+
+    /***************************************
+     * Default methods
+     ***************************************/
+
+    private static String taps(int taps) {
+        String staps = "";
+        for (int i = 0; i < taps; i++) {
+            staps += "   ";
+        }
+        return staps;
+    }
+
+    /***************************************
+     * Default methods
+     ***************************************/
+
+    private static void printMenuMultipleItem(PrintConsole console,Command command){
+        console.println(" 1. Add item");
+        console.println(" 0. Exit continue");
+        console.println("");
+        console.printTitle(command.message, separator);
+        console.println("");
+        console.print("Choose an option?: ");
+    }
+
+    /***************************************
+     * Default methods
+     ***************************************/
+
+    private static boolean isEmptyResultListCommand(ArrayList<ResultCommand> listCommand){
+        for (ResultCommand resultCommand : listCommand) {
+            if(resultCommand.value() != null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /***************************************
+     * Default methods
+     ***************************************/
+
+    private static void printResultListCommand(PrintConsole console, ArrayList<ResultCommand> listCommand, boolean printObjects, String text){
+        if(printObjects) {
+            clearConsole();
+            console.println();
+            console.printTitle(text, separator);
+            console.println();
+            if (isEmptyResultListCommand(listCommand)) {
+                console.println("List: Empty");
+            } else {
+                printResultListCommand(console, listCommand, 0);
+            }
+            console.println();
+            console.printSeparator(separator);
+            console.println();
+        }
+    }
+
+    /***************************************
+     * Default methods
+     ***************************************/
+
+    private static void printResultListCommand(PrintConsole console, ArrayList<ResultCommand> listCommand, int index){
+        for (ResultCommand resultCommand: listCommand) {
+            if(resultCommand.value() instanceof ResultListCommand){
+                console.println(taps(index) + resultCommand.name() + ": ");
+                printResultListCommand(console, ((ResultListCommand) resultCommand.value()).resultCommands, index+1);
+
+            } else if(resultCommand.value() instanceof ArrayList){
+                console.println(taps(index) + resultCommand.name() + ": ");
+                int item = 1;
+                for (ResultListCommand resultListCommand:(ArrayList<ResultListCommand>) resultCommand.value()) {
+                    console.println(taps(index+1) + "item "+item+": ");
+                    printResultListCommand(console, resultListCommand.resultCommands, index+2);
+                    item++;
+                }
+
+            } else if(resultCommand.value() != null){
+                console.println(taps(index) + resultCommand.name() + ": " + resultCommand.value());
+            }
+        }
+    }
+
+    /***************************************
+     * Default methods
+     ***************************************/
+
+    private static void printQuestion(PrintConsole console,Command command){
+
+        console.print(command.message + type(command) + isDefault(command) + ": ");
+
+    }
 
     /***************************************
      * Default methods
@@ -98,31 +217,37 @@ public class Process {
      ***************************************/
 
     public static ResultListCommand process(String[] args, ListCommand listCommand) {
-        return Process.process(args, listCommand, printConsole);
+        return Process.process(args, listCommand, printConsole, true);
     }
+
     /***************************************
      * Default list Commands
      ***************************************/
 
-    public static ResultListCommand process(String[] args, ListCommand listCommand, PrintConsole console){
+    private static ResultListCommand process(String[] args, ListCommand listCommand, PrintConsole console, boolean printObjects){
+        return Process.process(args, listCommand, console, printObjects, "Objects");
+    }
+
+    /***************************************
+     * Default list Commands
+     ***************************************/
+
+    private static ResultListCommand process(String[] args, ListCommand listCommand, PrintConsole console, boolean printObjects, String text){
         ArrayList<ResultCommand> resultCommands = new ArrayList<ResultCommand>();
         String option = "";
+        Object value = null;
         for (String code: args) {
             for (Command command: listCommand.commands) {
                 if (code.substring(0, 1).equals("-")) {
                     option = code;
-                    for (String commandOption: command.commands) {
-                        if (option.equals(commandOption)) {
-                            resultCommandCreate(resultCommands, command, code).value(true);
-                            break;
-                        }
-                    }
+                    value = true;
                 } else {
-                    for (String commandOption: command.commands) {
-                        if (option.equals(commandOption)) {
-                            resultCommandCreate(resultCommands, command, code).value(code);
-                            break;
-                        }
+                    value = code;
+                }
+                for (String commandOption: command.commands) {
+                    if (option.equals(commandOption)) {
+                        resultCommandCreate(resultCommands, command, code).value(value);
+                        break;
                     }
                 }
             }
@@ -130,61 +255,52 @@ public class Process {
         for (Command command: listCommand.commands) {
             ResultCommand resultCommand = resultCommandCreate(resultCommands, command, null);
             if(resultCommand.value() == null && command.required) {
+
                 if(command.value instanceof ArrayListCommand) {
 
                     ArrayList<ResultListCommand> commands = new ArrayList<ResultListCommand>();
-                    boolean exit;
-                    do {
-                        exit = false;
-
-                        Scanner in = new Scanner(System.in);
-
-
-                        console.print("******************");
-                        console.print("  Menu");
-                        console.print("******************");
-                        console.print("");
-                        console.print(" " + command.message);
-                        console.print("");
-                        console.print(" 1. Add item");
-                        console.print(" 2. Show items");
-                        console.print(" 0. Exit continue");
-                        console.print("");
-                        console.print("Choose an option?: ");
-
-                        String line = in.nextLine();
-                        if(line.equals("1") || line.equalsIgnoreCase("add")) {
-                            ResultListCommand resultListCommand = process(args, (ListCommand) command.value);
-                            commands.add(resultListCommand);
-                        } else if(line.equals("2") || line.equalsIgnoreCase("show")) {
-
-                        } else if(line.equals("0") || line.equalsIgnoreCase("exit")) {
-                            exit = true;
-                        }
-                    } while(!exit);
 
                     resultCommand.value(commands);
 
+                    String line;
+                    do {
+                        Scanner in = new Scanner(System.in);
+
+                        printResultListCommand(console,resultCommands, printObjects, text);
+
+                        printMenuMultipleItem(console, command);
+
+                        line = in.nextLine();
+
+                        if(line.equals("1") || line.equalsIgnoreCase("add")) {
+                            commands.add(Process.process(args, (ListCommand) command.value, printConsole, printObjects, command.message.isEmpty() ? command.name : command.message));
+                        }
+                    } while(!line.equals("0") && !line.equalsIgnoreCase("exit"));
+
                 } else if(command.value instanceof ListCommand) {
 
-                    ResultListCommand resultListCommand = process(args, (ListCommand) command.value);
+                    printResultListCommand(console,resultCommands, printObjects, text);
+
+                    ResultListCommand resultListCommand = Process.process(args, (ListCommand) command.value, printConsole, printObjects, command.message.isEmpty() ? command.name : command.message);
+
                     resultCommand.value(resultListCommand);
 
                 } else {
-
-                    boolean error;
                     do {
-                        error = false;
-                        Scanner in = new Scanner(System.in);
-                        console.print(command.message + type(command) + isDefault(command) + ": ");
-                        resultCommand.value(in.nextLine());
-                        if (resultCommand.value() == null && command.value == null) {
-                            error = true;
-                        } else if (resultCommand.value() == null) {
-                            resultCommand.value(command.value);
-                        }
-                    } while (error);
 
+                        Scanner in = new Scanner(System.in);
+
+                        printResultListCommand(console,resultCommands, printObjects, text);
+
+                        printQuestion(console, command);
+
+                        resultCommand.value(in.nextLine());
+
+                        if (resultCommand.value() == null && command.resultCommand.value() != null) {
+                            resultCommand.value(command.resultCommand.value());
+                        }
+
+                    } while (resultCommand.value() == null);
                 }
             }
         }
