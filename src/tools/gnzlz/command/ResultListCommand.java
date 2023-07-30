@@ -1,5 +1,7 @@
 package tools.gnzlz.command;
 
+import tools.gnzlz.command.funtional.FunctionCommand;
+
 import java.util.ArrayList;
 
 public class ResultListCommand {
@@ -21,7 +23,7 @@ public class ResultListCommand {
      * select listCommands
      ***************************************/
 
-    static ResultListCommand create(ArrayList<ResultCommand> resultCommands){
+    public static ResultListCommand create(ArrayList<ResultCommand> resultCommands){
         return new ResultListCommand(resultCommands);
     }
 
@@ -33,18 +35,6 @@ public class ResultListCommand {
         for (ResultCommand command: resultCommands) {
             if(command.name().equals(name)){
                 return command.value();
-            }
-        }
-        return null;
-    }
-
-    /***************************************
-     * method
-     ***************************************/
-    public Option value(String name){
-        for (ResultCommand command: resultCommands) {
-            if(command.value() != null){
-                return (Option) command.command.value;
             }
         }
         return null;

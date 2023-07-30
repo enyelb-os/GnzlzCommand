@@ -5,19 +5,18 @@ import java.util.ArrayList;
 public class Option<Type> {
 
     /***************************************
-     * vars
+     * command reference
+     ***************************************/
+    Command commandReference;
+
+    /***************************************
+     * Value
      ***************************************/
 
     Type value;
 
     /***************************************
-     * vars
-     ***************************************/
-
-    Class <Type> className;
-
-    /***************************************
-     * vars
+     * list to options
      ***************************************/
 
     final ArrayList<Type> options;
@@ -26,81 +25,12 @@ public class Option<Type> {
      * constructor
      ***************************************/
 
-     Option(Class<Type> className){
-        this.className = className;
+     Option(){
         this.options = new ArrayList<Type>();
     }
 
     /***************************************
-     * set
-     ***************************************/
-
-    public Option options(Type ... options) {
-        this.validateAddOptions(options);
-        return this;
-    }
-
-    /***************************************
-     * set
-     ***************************************/
-
-    private Option type(Class<Type> className) {
-        this.className = className;
-        return this;
-    }
-
-    /***************************************
-     * get
-     ***************************************/
-
-    public boolean valid(Type value) {
-        for (Type option : options) {
-            if(this.value instanceof String) {
-                return ((String) option).equalsIgnoreCase(value.toString());
-            }
-            return option.equals(value);
-
-        }
-        return false;
-    }
-
-    /***************************************
-     * get
-     ***************************************/
-
-    public boolean is(Type value) {
-        if(this.value instanceof String){
-            return ((String) this.value).equalsIgnoreCase(value.toString());
-        }
-        return this.value.equals(value);
-    }
-
-    /***************************************
-     * get
-     ***************************************/
-
-    public Type value() {
-        return this.value;
-    }
-
-    /***************************************
-     * set
-     ***************************************/
-
-    public static <Type> Option option(Class<Type> className, Type ... options) {
-        return new Option<Type>(className).options(options);
-    }
-
-    /***************************************
-     * set
-     ***************************************/
-
-    public static Option option(String ... options) {
-        return new Option<String>(String.class).options(options);
-    }
-
-    /***************************************
-     * private
+     * validate and add list options
      ***************************************/
 
     private void validateAddOptions(Type ... options){
@@ -114,6 +44,81 @@ public class Option<Type> {
                 this.options.add(optionName);
             }
         }
+    }
+
+    /***************************************
+     * set Options
+     ***************************************/
+
+    public Option options(Type ... options) {
+        this.validateAddOptions(options);
+        return this;
+    }
+
+    /***************************************
+     * set reference command to list
+     ***************************************/
+
+    public Option reference(Command commandReference) {
+        this.commandReference = commandReference;
+        return this;
+    }
+
+    /***************************************
+     * get valid option
+     ***************************************/
+
+    public boolean valid(Type value) {
+        for (Type option : options) {
+            if(this.value instanceof String) {
+                if(((String) option).equalsIgnoreCase(value.toString())){
+                    return true;
+                }
+            }
+            if(option.equals(value)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /***************************************
+     * get value
+     ***************************************/
+
+    public Type value() {
+        return this.value;
+    }
+
+    /**
+     * toString
+     *
+     */
+
+    @Override
+    public String toString(){
+        String type = "(";
+        for (int i = 0; i < options.size(); i++) {
+            type += (i !=0 ? "|": "") + options.get(i);
+        }
+        type += ")";
+        return type;
+    }
+
+    /***************************************
+     * statics constructors
+     ***************************************/
+
+    public static Option<String> string(String ... options) {
+        return new Option<String>().options(options);
+    }
+
+    /***************************************
+     * statics constructors
+     ***************************************/
+
+    public static Option<Integer> integer(Integer ... options) {
+        return new Option<Integer>().options(options);
     }
 
 }

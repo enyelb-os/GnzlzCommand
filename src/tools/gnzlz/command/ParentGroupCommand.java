@@ -47,14 +47,6 @@ public class ParentGroupCommand {
     }
 
     /***************************************
-     * static add Command
-     ***************************************/
-
-    public Command command(String command) {
-        return parent.command(command);
-    }
-
-    /***************************************
      * static
      ***************************************/
 

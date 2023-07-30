@@ -34,4 +34,12 @@ public class CommandObject {
         return command.value;
     }
 
+    /***************************************
+     * get
+     ***************************************/
+
+    public String message(){
+        return command.message;
+    }
+
 }

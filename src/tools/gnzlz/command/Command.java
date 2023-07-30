@@ -1,8 +1,10 @@
 package tools.gnzlz.command;
 
+import tools.gnzlz.command.funtional.FunctionRequiredCommand;
+
 import java.util.ArrayList;
 
-public class Command {
+public abstract class Command<Type, C> {
 
     /***************************************
      * vars
@@ -14,13 +16,14 @@ public class Command {
      * vars
      ***************************************/
 
-     Class<?> className;
+    final static FunctionRequiredCommand TRUE = (list) -> true;
+    final static FunctionRequiredCommand FALSE = (list) -> false;
 
     /***************************************
      * vars
      ***************************************/
 
-    boolean required;
+    FunctionRequiredCommand required;
 
     /***************************************
      * vars
@@ -39,13 +42,13 @@ public class Command {
      * vars
      ***************************************/
 
-    Object value;
+    protected Type value;
 
     /***************************************
      * vars
      ***************************************/
 
-    final CommandObject resultCommand;
+    public final CommandObject resultCommand;
 
     /***************************************
      * vars
@@ -54,136 +57,78 @@ public class Command {
     final ArrayList<String> commands;
 
     /***************************************
-     * vars
-     ***************************************/
-
-    final ListCommand internalCommands;
-
-    /***************************************
      * constructor
+     * @param name
      ***************************************/
 
     protected Command(String name){
         this.name = name;
-        this.required = false;
+        this.required = FALSE;
         this.message = "";
         this.resultCommand = new CommandObject(this);
         this.commands = new ArrayList<String>();
-        this.internalCommands = ListCommand.create();
-        this.className = String.class;
     }
 
     /***************************************
-     * static
+     * set required
+     * @param required
      ***************************************/
 
-    public static Command create(String name){
-        return new Command(name);
+    public C required(boolean required) {
+        this.required = required ? TRUE : FALSE;
+        return (C) this;
     }
 
     /***************************************
-     * set
+     * set required
+     * @param required
      ***************************************/
 
-    public Command required(boolean required) {
+    public C required(FunctionRequiredCommand required) {
         this.required = required;
-        return this;
+        return (C) this;
     }
 
     /***************************************
-     * set
+     * set required
      ***************************************/
 
-    public Command required() {
-        this.required = true;
-        return this;
+    public C required() {
+        this.required = TRUE;
+        return (C) this;
     }
 
     /***************************************
-     * set
+     * set value
+     * @param value
      ***************************************/
 
-    public Command type(Class<?> type) {
-        this.className = type;
-        return this;
-    }
-
-    /***************************************
-     * set
-     ***************************************/
-
-    private Command valueInternal(Object value) {
-        if(value != null){
-            this.className = value.getClass();
-        }
+    public C value(Type value) {
         this.value = value;
-        return this;
+        return (C) this;
     }
 
     /***************************************
      * set
      ***************************************/
 
-    public Command value(int value) {
-        return valueInternal(value);
-    }
-    public Command value(String value) {
-        return valueInternal(value);
-    }
-    public Command value(double value) {
-        return valueInternal(value);
-    }
-    public Command value(boolean value) {
-        return valueInternal(value);
-    }
-    public Command value(Option value) {
-        return valueInternal(value);
-    }
-    public Command value(ListCommand value) {
-        return valueInternal(value);
-    }
-    public Command value(ArrayListCommand value) {
-        return valueInternal(value);
-    }
-
-    /***************************************
-     * set
-     ***************************************/
-
-    public Command message(String message) {
+    public C message(String message) {
         this.message = message;
-        return this;
+        return (C) this;
     }
 
     /***************************************
      * set
      ***************************************/
 
-    public Command commands(String ... commands) {
+    public C commands(String ... commands) {
         this.validateAddCommands(commands);
-        return this;
+        return (C) this;
     }
 
     /***************************************
-     * set
-     ***************************************/
-
-    public Command internal(Command ... commands) {
-        //this.validateAddInternalCommands(null,commands);
-        return this;
-    }
-
-    /***************************************
-     * set
-     ***************************************/
-
-    public Command internal(String ... commands) {
-        //this.validateAddInternalCommands(null,commands);
-        return this;
-    }
-
-    /***************************************
-     * private
+     * valid exists name args
+     * @param commandName
      ***************************************/
 
     private void validateAddCommand(String commandName){
@@ -195,25 +140,29 @@ public class Command {
         this.commands.add(commandName);
     }
 
+    /***************************************
+     * valid list command exists name args
+     * @param commands
+     ***************************************/
+
     private void validateAddCommands(String ... commands){
         if(commands != null){
             for (String commandName : commands) {
                 validateAddCommand(commandName);
             }
-
-            //debe ir a otro lugar
-            /*for (Command command: listCommand.commands) {
-                if(!command.name.equals(name)) {
-                    for (String commandName : commands) {
-                        for (String commandNameOld: command.commands) {
-                            if (commandNameOld.equals(commandName)) {
-                                throw new RuntimeException("command duplicate : " + command.name + "." + commandName + " == " + name + "." + commandName);
-                            }
-                        }
-                    }
-                }
-            }*/
         }
     }
 
+
+    /***************************************
+     * abstract
+     ***************************************/
+
+    public abstract String type();
+
+    /***************************************
+     * abstract
+     ***************************************/
+
+    public abstract Object valueProcess(Object value);
 }

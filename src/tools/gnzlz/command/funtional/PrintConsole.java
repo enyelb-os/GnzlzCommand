@@ -1,4 +1,4 @@
-package tools.gnzlz.command;
+package tools.gnzlz.command.funtional;
 
 @FunctionalInterface
 public interface PrintConsole {

@@ -1,5 +1,7 @@
 package tools.gnzlz.command;
 
+import tools.gnzlz.command.funtional.FunctionGroupCommand;
+
 import java.util.ArrayList;
 
 public class GroupCommand {
@@ -104,14 +106,6 @@ public class GroupCommand {
     }
 
     /***************************************
-     * static add Command
-     ***************************************/
-
-    public Command command(String command) {
-        return listCommand.command(command);
-    }
-
-    /***************************************
      * static
      ***************************************/
 
@@ -174,16 +168,16 @@ public class GroupCommand {
      * static
      ***************************************/
 
-    public static void process(String[] args, ListCommand listCommand, GroupCommand ... groupCommands) {
-        process(args, ParentGroupCommand.create(listCommand).addGroup(groupCommands));
+    public static ResultListCommand process(String[] args, ListCommand listCommand, GroupCommand ... groupCommands) {
+        return process(args, ParentGroupCommand.create(listCommand).addGroup(groupCommands));
     }
 
-    public static void process(String[] args, GroupCommand ... groupCommands) {
-        process(args, ParentGroupCommand.create().addGroup(groupCommands));
+    public static ResultListCommand process(String[] args, GroupCommand ... groupCommands) {
+        return process(args, ParentGroupCommand.create().addGroup(groupCommands));
     }
 
-    public static void process(String[] args, ParentGroupCommand parentGroupCommand) {
-        GroupCommand.process(
+    public static ResultListCommand process(String[] args, ParentGroupCommand parentGroupCommand) {
+        return GroupCommand.process(
             args, ResultListCommand.create(new ArrayList<ResultCommand>()),
             parentGroupCommand.parent.listCommand, parentGroupCommand.parent, 0
         );
@@ -195,20 +189,13 @@ public class GroupCommand {
 
     private static ResultListCommand process(String[] args, ResultListCommand resultListCommandOld, ListCommand listCommand, GroupCommand current, int index) {
         current.runDefault = true;
-        //mergeLists(listCommand.commands, current.listCommand.commands);
         boolean isFoundCommand = false;
-        //mergeLists(resultListCommand.resultCommands)
 
-
-        mergeLists(resultListCommandOld.resultCommands, Process.process(args, listCommand).resultCommands);
-        mergeLists(resultListCommandOld.resultCommands, Process.process(args, current.listCommand).resultCommands);
-
+        Process.argsAndQuestions(args, listCommand, resultListCommandOld);
 
         for (GroupCommand groupCommand : current.internals){
-            if((groupCommand.isDefault && current.runDefault) || args != null && args[index].equals(groupCommand.name)) {
+            if((groupCommand.isDefault && current.runDefault) || args != null && args.length > index && args[index].equals(groupCommand.name)) {
                 current.runDefault = groupCommand.isDefault;
-
-                mergeLists(resultListCommandOld.resultCommands, Process.process(args, groupCommand.listCommand).resultCommands);
 
                 if (groupCommand.functionGroupCommand != null) {
                     groupCommand.functionGroupCommand.run(resultListCommandOld);
