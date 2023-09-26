@@ -1,4 +1,6 @@
-package tools.gnzlz.command;
+package tools.gnzlz.command.command.object;
+
+import tools.gnzlz.command.command.Command;
 
 public class ArrayListCommand extends ListCommand {
 
@@ -14,7 +16,7 @@ public class ArrayListCommand extends ListCommand {
      * select listCommands
      ***************************************/
 
-    public static ArrayListCommand create(Command ... command){
+    public static ArrayListCommand create(Command<?,?,?>... command){
         return new ArrayListCommand().addCommand(command);
     }
 
@@ -22,21 +24,8 @@ public class ArrayListCommand extends ListCommand {
      * static
      ***************************************/
 
-    public ArrayListCommand addCommand(Command command){
-        super.addCommand(command);
-        return this;
-    }
-
-    /***************************************
-     * static
-     ***************************************/
-
-    public ArrayListCommand addCommand(Command ... names){
-        if(names != null){
-            for (Command name: names){
-                super.addCommand(name);
-            }
-        }
+    public ArrayListCommand addCommand(Command<?,?,?> ... names){
+        super.addCommand(names);
         return this;
     }
 

@@ -1,28 +1,19 @@
-package tools.gnzlz.command.type;
+package tools.gnzlz.command.command.type;
 
-import tools.gnzlz.command.Command;
+import tools.gnzlz.command.command.Command;
 
-public class CommandString extends Command<String, CommandString> {
+public class CommandString extends Command<String, String, CommandString> {
 
     /***************************************
      * constructor
-     * @param name
+     * @param name name
      **************************************
      */
 
-    protected CommandString(String name) {
+    public CommandString(String name) {
         super(name);
     }
 
-    /**
-     * type
-     *
-     */
-
-    @Override
-    public String type() {
-        return "";
-    }
 
     /**
      * converter
@@ -30,9 +21,9 @@ public class CommandString extends Command<String, CommandString> {
      */
 
     @Override
-    public Object valueProcess(Object value) {
+    public String valueProcess(Object value) {
         if(value instanceof String){
-            return ((String) value).isEmpty() ? null : value;
+            return ((String) value).isEmpty() ? null : value.toString();
         }
         return null;
     }

@@ -1,31 +1,20 @@
-package tools.gnzlz.command.type;
+package tools.gnzlz.command.command.type;
 
-import tools.gnzlz.command.ArrayListCommand;
-import tools.gnzlz.command.Command;
+import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.command.object.ArrayListCommand;
+import tools.gnzlz.command.result.object.ResultArrayListCommand;
 
-import java.util.ArrayList;
-
-public class CommandArray extends Command<ArrayListCommand, CommandArray> {
+public class CommandArray extends Command<ArrayListCommand, ResultArrayListCommand, CommandArray> {
 
     /***************************************
      * constructor
-     * @param name
+     * @param name name
      **************************************
      */
 
-    protected CommandArray(String name) {
+     CommandArray(String name) {
         super(name);
-    }
-
-    /**
-     * type
-     *
-     */
-
-    @Override
-    public String type() {
-        return "";
-    }
+     }
 
     /**
      * converter
@@ -33,9 +22,9 @@ public class CommandArray extends Command<ArrayListCommand, CommandArray> {
      */
 
     @Override
-    public Object valueProcess(Object value) {
-        if(value instanceof ArrayList) {
-            return value;
+    public ResultArrayListCommand valueProcess(Object value) {
+        if(value instanceof ResultArrayListCommand) {
+            return (ResultArrayListCommand) value;
         }
         return null;
     }
@@ -43,7 +32,7 @@ public class CommandArray extends Command<ArrayListCommand, CommandArray> {
 
     /***************************************
      * static create
-     * @param name
+     * @param name name
      ***************************************/
 
     public static CommandArray create(String name){
@@ -52,7 +41,7 @@ public class CommandArray extends Command<ArrayListCommand, CommandArray> {
 
     /***************************************
      * set array
-     * @param value
+     * @param value value
      ***************************************/
 
     public CommandArray array(ArrayListCommand value) {
@@ -61,10 +50,10 @@ public class CommandArray extends Command<ArrayListCommand, CommandArray> {
 
     /***************************************
      * set array
-     * @param value
+     * @param value value
      ***************************************/
 
-    public CommandArray array(Command ... value) {
+    public CommandArray array(Command<?,?,?> ... value) {
         return this.value(ArrayListCommand.create().addCommand(value));
     }
 }

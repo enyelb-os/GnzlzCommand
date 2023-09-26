@@ -1,27 +1,17 @@
-package tools.gnzlz.command.type;
+package tools.gnzlz.command.command.type;
 
-import tools.gnzlz.command.Command;
+import tools.gnzlz.command.command.Command;
 
-public class CommandInteger extends Command<Integer, CommandInteger> {
+public class CommandInteger extends Command<Integer, Integer, CommandInteger> {
 
     /***************************************
      * constructor
-     * @param name
+     * @param name name
      **************************************
      */
 
-    protected CommandInteger(String name) {
+    public CommandInteger(String name) {
         super(name);
-    }
-
-    /**
-     * type
-     *
-     */
-
-    @Override
-    public String type() {
-        return "(int)";
     }
 
     /**
@@ -30,13 +20,13 @@ public class CommandInteger extends Command<Integer, CommandInteger> {
      */
 
     @Override
-    public Object valueProcess(Object value) {
+    public Integer valueProcess(Object value) {
         if(value instanceof String){
             try {
                 return Integer.parseInt(String.valueOf(value));
-            } catch (NumberFormatException exception) {}
+            } catch (NumberFormatException ignored) {}
         } else if(value instanceof Integer){
-            return value;
+            return (Integer) value;
         }
         return null;
     }
@@ -44,7 +34,7 @@ public class CommandInteger extends Command<Integer, CommandInteger> {
 
     /***************************************
      * static create
-     * @param name
+     * @param name name
      ***************************************/
 
     public static CommandInteger create(String name){

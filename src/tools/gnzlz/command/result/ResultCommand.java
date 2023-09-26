@@ -1,6 +1,9 @@
-package tools.gnzlz.command;
+package tools.gnzlz.command.result;
 
-public class ResultCommand {
+import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.command.ExposeCommand;
+
+public class ResultCommand<Type extends Object> {
 
     /***************************************
      * vars
@@ -12,30 +15,30 @@ public class ResultCommand {
      * vars
      ***************************************/
 
-    protected Command command;
+    protected Command<?,Type,?> command;
 
     /***************************************
      * vars
      ***************************************/
 
-    protected Object value;
+    protected Type value;
 
     /***************************************
      * constructor
      ***************************************/
 
-    public ResultCommand(Command command, Object value){
+     public ResultCommand(Command<?,Type,?> command, Type value){
         this.command = command;
         this.value = value;
         this.assign = false;
-    }
+     }
 
     /***************************************
      * get
      ***************************************/
 
     public String name(){
-        return command.name;
+        return ExposeCommand.name(command);
     }
 
     /***************************************
@@ -50,8 +53,16 @@ public class ResultCommand {
      * get
      ***************************************/
 
-    ResultCommand value(Object value){
-        Object newValue = null;
+    public Command<?,Type,?> command(){
+        return command;
+    }
+
+    /***************************************
+     * get
+     ***************************************/
+
+    public ResultCommand<Type> value(Object value){
+        Type newValue = null;
         if(value != null) {
             newValue = command.valueProcess(value);
         }

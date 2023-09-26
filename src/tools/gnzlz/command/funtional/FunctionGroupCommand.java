@@ -1,6 +1,6 @@
 package tools.gnzlz.command.funtional;
 
-import tools.gnzlz.command.ResultListCommand;
+import tools.gnzlz.command.result.object.ResultListCommand;
 
 @FunctionalInterface
 public interface FunctionGroupCommand {

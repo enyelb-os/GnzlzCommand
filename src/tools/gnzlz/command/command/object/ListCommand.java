@@ -1,4 +1,7 @@
-package tools.gnzlz.command;
+package tools.gnzlz.command.command.object;
+
+import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.command.ExposeCommand;
 
 import java.util.ArrayList;
 
@@ -7,14 +10,14 @@ public class ListCommand {
     /***************************************
      * vars
      ***************************************/
-    final ArrayList<Command> commands;
+     final ArrayList<Command<?,?,?>> commands;
 
     /***************************************
      * constructor
      ***************************************/
 
      ListCommand(){
-        commands = new ArrayList<Command>();
+        commands = new ArrayList<Command<?,?,?>>();
      }
 
     /***************************************
@@ -25,9 +28,9 @@ public class ListCommand {
         return new ListCommand();
     }
 
-    public Command command(Command name){
-        for (Command command: this.commands) {
-            if(command.name.equals(name.name)){
+    public Command<?,?,?> command(Command<?,?,?> name){
+        for (Command<?,?,?> command: this.commands) {
+            if(ExposeCommand.name(command).equals(ExposeCommand.name(name))){
                 return command;
             }
         }
@@ -39,9 +42,9 @@ public class ListCommand {
      * static
      ***************************************/
 
-    public  <Type, C extends Command>  ListCommand addCommand(Command<Type, C> name){
-        for (Command command: this.commands) {
-            if(command.name.equals(name)){
+    public ListCommand addCommand(Command<?,?,?> name){
+        for (Command<?,?,?> command: this.commands) {
+            if(ExposeCommand.name(command).equals(ExposeCommand.name(name))){
                 return this;
             }
         }
@@ -53,9 +56,9 @@ public class ListCommand {
      * static
      ***************************************/
 
-    public ListCommand addCommand(Command ... names){
+    public ListCommand addCommand(Command<?,?,?> ... names){
         if(names != null){
-            for (Command name: names) {
+            for (Command<?,?,?> name: names) {
                 this.addCommand(name);
             }
         }

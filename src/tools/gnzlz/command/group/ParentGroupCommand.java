@@ -1,4 +1,7 @@
-package tools.gnzlz.command;
+package tools.gnzlz.command.group;
+
+import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.command.object.ListCommand;
 
 public class ParentGroupCommand {
 
@@ -17,18 +20,6 @@ public class ParentGroupCommand {
     }
 
     /***************************************
-     * get internal GroupCommand
-     ***************************************/
-    protected boolean existsGroupCommand(String name) {
-        for (GroupCommand groupCommand : parent.internals) {
-            if(groupCommand.name.equals(name)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /***************************************
      * add Group
      ***************************************/
 
@@ -41,7 +32,7 @@ public class ParentGroupCommand {
      * add Command
      ***************************************/
 
-    public ParentGroupCommand addCommand(Command ... commands) {
+    public ParentGroupCommand addCommand(Command<?,?,?>... commands) {
         parent.addCommand(commands);
         return this;
     }

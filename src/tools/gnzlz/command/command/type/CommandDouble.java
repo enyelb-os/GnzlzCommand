@@ -1,27 +1,17 @@
-package tools.gnzlz.command.type;
+package tools.gnzlz.command.command.type;
 
-import tools.gnzlz.command.Command;
+import tools.gnzlz.command.command.Command;
 
-public class CommandDouble extends Command<Double, CommandDouble> {
+public class CommandDouble extends Command<Double, Double, CommandDouble> {
 
     /***************************************
      * constructor
-     * @param name
+     * @param name name
      **************************************
      */
 
-    protected CommandDouble(String name) {
+    public CommandDouble(String name) {
         super(name);
-    }
-
-    /**
-     * type
-     *
-     */
-
-    @Override
-    public String type() {
-        return "(number)";
     }
 
     /**
@@ -30,20 +20,20 @@ public class CommandDouble extends Command<Double, CommandDouble> {
      */
 
     @Override
-    public Object valueProcess(Object value) {
+    public Double valueProcess(Object value) {
         if(value instanceof String){
             try {
                 return Double.parseDouble(String.valueOf(value));
-            } catch (NumberFormatException exception) {}
+            } catch (NumberFormatException ignored) {}
         } else if (value instanceof Double){
-            return value;
+            return (Double) value;
         }
         return null;
     }
 
     /***************************************
      * static create
-     * @param name
+     * @param name name
      ***************************************/
 
     public static CommandDouble create(String name){

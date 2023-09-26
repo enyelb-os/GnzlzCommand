@@ -1,10 +1,13 @@
-package tools.gnzlz.command;
+package tools.gnzlz.command.command;
 
+import tools.gnzlz.command.command.incertaces.Icommand;
 import tools.gnzlz.command.funtional.FunctionRequiredCommand;
+import tools.gnzlz.command.result.ExposeResultCommand;
+import tools.gnzlz.command.result.ResultCommand;
 
 import java.util.ArrayList;
 
-public abstract class Command<Type, C> {
+public abstract class Command<Type, R, C extends Command<?, ?, ?>> implements Icommand<Type, R, C> {
 
     /***************************************
      * vars
@@ -31,13 +34,6 @@ public abstract class Command<Type, C> {
 
     String message;
 
-
-    /***************************************
-     * vars
-     ***************************************/
-
-    boolean isNew = true;
-
     /***************************************
      * vars
      ***************************************/
@@ -48,30 +44,23 @@ public abstract class Command<Type, C> {
      * vars
      ***************************************/
 
-    public final CommandObject resultCommand;
-
-    /***************************************
-     * vars
-     ***************************************/
-
     final ArrayList<String> commands;
 
     /***************************************
      * constructor
-     * @param name
+     * @param name name
      ***************************************/
 
     protected Command(String name){
         this.name = name;
         this.required = FALSE;
         this.message = "";
-        this.resultCommand = new CommandObject(this);
         this.commands = new ArrayList<String>();
     }
 
     /***************************************
      * set required
-     * @param required
+     * @param required required
      ***************************************/
 
     public C required(boolean required) {
@@ -81,7 +70,7 @@ public abstract class Command<Type, C> {
 
     /***************************************
      * set required
-     * @param required
+     * @param required required
      ***************************************/
 
     public C required(FunctionRequiredCommand required) {
@@ -100,7 +89,7 @@ public abstract class Command<Type, C> {
 
     /***************************************
      * set value
-     * @param value
+     * @param value value
      ***************************************/
 
     public C value(Type value) {
@@ -128,7 +117,7 @@ public abstract class Command<Type, C> {
 
     /***************************************
      * valid exists name args
-     * @param commandName
+     * @param commandName commandName
      ***************************************/
 
     private void validateAddCommand(String commandName){
@@ -142,7 +131,7 @@ public abstract class Command<Type, C> {
 
     /***************************************
      * valid list command exists name args
-     * @param commands
+     * @param commands commands
      ***************************************/
 
     private void validateAddCommands(String ... commands){
@@ -153,16 +142,12 @@ public abstract class Command<Type, C> {
         }
     }
 
-
     /***************************************
-     * abstract
+     * create
      ***************************************/
 
-    public abstract String type();
+    protected ResultCommand<R> createResultCommand(R object){
+        return ExposeResultCommand.create(this, object);
+    }
 
-    /***************************************
-     * abstract
-     ***************************************/
-
-    public abstract Object valueProcess(Object value);
 }

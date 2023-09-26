@@ -1,4 +1,6 @@
-package tools.gnzlz.command;
+package tools.gnzlz.command.command.object;
+
+import tools.gnzlz.command.command.Command;
 
 import java.util.ArrayList;
 
@@ -7,7 +9,7 @@ public class Option<Type> {
     /***************************************
      * command reference
      ***************************************/
-    Command commandReference;
+    Command<?,Type,?> commandReference;
 
     /***************************************
      * Value
@@ -50,7 +52,7 @@ public class Option<Type> {
      * set Options
      ***************************************/
 
-    public Option options(Type ... options) {
+    public Option<Type> options(Type ... options) {
         this.validateAddOptions(options);
         return this;
     }
@@ -59,7 +61,7 @@ public class Option<Type> {
      * set reference command to list
      ***************************************/
 
-    public Option reference(Command commandReference) {
+    public Option<Type> reference(Command<?,Type,?> commandReference) {
         this.commandReference = commandReference;
         return this;
     }

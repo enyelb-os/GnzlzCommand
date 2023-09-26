@@ -1,30 +1,21 @@
-package tools.gnzlz.command.type;
+package tools.gnzlz.command.command.type;
 
-import tools.gnzlz.command.Command;
-import tools.gnzlz.command.ListCommand;
-import tools.gnzlz.command.ResultListCommand;
+import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.command.object.ListCommand;
+import tools.gnzlz.command.result.object.ResultListCommand;
 
-public class CommandList extends Command<ListCommand, CommandList> {
+public class CommandList extends Command<ListCommand, ResultListCommand, CommandList> {
 
     /***************************************
      * constructor
-     * @param name
+     * @param name name
      **************************************
      */
 
-    protected CommandList(String name) {
+    public CommandList(String name) {
         super(name);
     }
 
-    /**
-     * type
-     *
-     */
-
-    @Override
-    public String type() {
-        return "";
-    }
 
     /**
      * converter
@@ -32,16 +23,16 @@ public class CommandList extends Command<ListCommand, CommandList> {
      */
 
     @Override
-    public Object valueProcess(Object value) {
+    public ResultListCommand valueProcess(Object value) {
         if(value instanceof ResultListCommand) {
-            return value;
+            return (ResultListCommand) value;
         }
         return null;
     }
 
     /***************************************
      * static create
-     * @param name
+     * @param name name
      ***************************************/
 
     public static CommandList create(String name){
@@ -50,7 +41,7 @@ public class CommandList extends Command<ListCommand, CommandList> {
 
     /***************************************
      * set list
-     * @param value
+     * @param value name
      ***************************************/
 
     public CommandList list(ListCommand value) {
@@ -59,10 +50,10 @@ public class CommandList extends Command<ListCommand, CommandList> {
 
     /***************************************
      * set list
-     * @param value
+     * @param value name
      ***************************************/
 
-    public CommandList list(Command ... value) {
+    public CommandList list(Command<?,?,?> ... value) {
         return this.value(ListCommand.create().addCommand(value));
     }
 }

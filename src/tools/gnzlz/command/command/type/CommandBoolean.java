@@ -1,47 +1,36 @@
-package tools.gnzlz.command.type;
+package tools.gnzlz.command.command.type;
 
-import tools.gnzlz.command.Command;
+import tools.gnzlz.command.command.Command;
 
-public class CommandBoolean extends Command<Boolean, CommandBoolean> {
+public class CommandBoolean extends Command<Boolean, Boolean, CommandBoolean> {
 
     /***************************************
      * constructor
-     * @param name
+     * @param name name
      **************************************
      */
 
-    protected CommandBoolean(String name) {
+    public CommandBoolean(String name) {
         super(name);
     }
 
     /**
-     * type
-     *
-     */
-
-    @Override
-    public String type() {
-        return "(boolean)";
-    }
-
-    /**
      * converter
-     *
      */
 
     @Override
-    public Object valueProcess(Object value) {
-        if(value instanceof String){
+    public Boolean valueProcess(Object value) {
+        if(value instanceof CommandString){
             return value.toString().equalsIgnoreCase("true") || value.toString().equals("1");
         } else if (value instanceof Boolean){
-            return value;
+            return (Boolean) value;
         }
-        return null;
+        return false;
     }
 
     /***************************************
      * static create
-     * @param name
+     * @param name name
      ***************************************/
 
     public static CommandBoolean create(String name){

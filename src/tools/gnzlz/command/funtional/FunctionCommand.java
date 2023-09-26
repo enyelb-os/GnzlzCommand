@@ -1,6 +1,6 @@
 package tools.gnzlz.command.funtional;
 
-import tools.gnzlz.command.ResultCommand;
+import tools.gnzlz.command.result.ResultCommand;
 
 @FunctionalInterface
 public interface FunctionCommand {

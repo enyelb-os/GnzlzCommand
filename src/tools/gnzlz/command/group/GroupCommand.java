@@ -1,8 +1,17 @@
-package tools.gnzlz.command;
+package tools.gnzlz.command.group;
 
+import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.command.ExposeCommand;
+import tools.gnzlz.command.command.object.ListCommand;
+import tools.gnzlz.command.Process;
+import tools.gnzlz.command.command.object.ExposeListCommand;
 import tools.gnzlz.command.funtional.FunctionGroupCommand;
+import tools.gnzlz.command.result.ResultCommand;
+import tools.gnzlz.command.result.object.ResultListCommand;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class GroupCommand {
 
@@ -94,13 +103,9 @@ public class GroupCommand {
      * add Command
      ***************************************/
 
-    public GroupCommand addCommand(Command ... commands) {
+    public GroupCommand addCommand(Command<?,?,?>... commands) {
         if(commands != null) {
-            for (Command  command: commands) {
-                if(command != null) {
-                    listCommand.command(command);
-                }
-            }
+            Arrays.stream(commands).filter(Objects::nonNull).forEach(command -> listCommand.command(command));
         }
         return this;
     }
@@ -144,13 +149,7 @@ public class GroupCommand {
     public GroupCommand use(ListCommand listCommand,String ... commands) {
         if(commands != null){
             for (String command : commands) {
-                for (Command commandOld: listCommand.commands) {
-                    if(commandOld.name.equals(command) || "all".equals(command)){
-                        if(this.listCommand != listCommand){
-                            this.listCommand.command(commandOld);
-                        }
-                    }
-                }
+                ExposeListCommand.commands(listCommand).stream().filter(commandOld -> ExposeCommand.name(commandOld).equals(command) || "all".equals(command)).filter(commandOld -> this.listCommand != listCommand).forEach(commandOld -> this.listCommand.command(commandOld));
             }
         }
         return this;
@@ -178,7 +177,7 @@ public class GroupCommand {
 
     public static ResultListCommand process(String[] args, ParentGroupCommand parentGroupCommand) {
         return GroupCommand.process(
-            args, ResultListCommand.create(new ArrayList<ResultCommand>()),
+            args, ResultListCommand.create(new ArrayList<ResultCommand<?>>()),
             parentGroupCommand.parent.listCommand, parentGroupCommand.parent, 0
         );
     }
@@ -229,13 +228,13 @@ public class GroupCommand {
             }
         }
 
-        String commandRequireNew = commandRequire;
-        for (Command require : groupCommand.listCommand.commands) {
-            if(!commandRequireNew.isEmpty()) {
-                commandRequireNew += ", ";
+        StringBuilder commandRequireNew = new StringBuilder(commandRequire);
+        ExposeListCommand.commands(groupCommand.listCommand).forEach(require -> {
+            if (!commandRequireNew.isEmpty()) {
+                commandRequireNew.append(", ");
             }
-            commandRequireNew += require.name;
-        }
+            commandRequireNew.append(ExposeCommand.name(require));
+        });
 
         if(existsDefault) {
             System.out.println(taps(taps) + "- " + commandRequireNew);
@@ -244,7 +243,7 @@ public class GroupCommand {
         for (GroupCommand command : groupCommand.internals) {
             if(!command.isDefault) {
                 System.out.println(taps(taps) + command.name + ":");
-                printHelp(command, taps + 1, commandRequireNew);
+                printHelp(command, taps + 1, commandRequireNew.toString());
             }
         }
 
@@ -254,41 +253,10 @@ public class GroupCommand {
     }
 
     private static String taps(int taps) {
-        String staps = "";
+        StringBuilder staps = new StringBuilder();
         for (int i = 0; i < taps; i++) {
-            staps += "\t";
+            staps.append("\t");
         }
-        return staps;
-    }
-
-    /***************************************
-     * static
-     ***************************************/
-
-    private static boolean existsCommand(ArrayList<ResultCommand> listCommands, String name){
-        if(listCommands != null){
-            for (ResultCommand command : listCommands) {
-                if(name.equals(command.name())){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /***************************************
-     * static
-     ***************************************/
-
-    private static ArrayList<ResultCommand> mergeLists(ArrayList<ResultCommand> newArrayList, ArrayList<ResultCommand> ... listCommands){
-        for (ArrayList<ResultCommand> list : listCommands) {
-            for (ResultCommand command : list) {
-                if (!existsCommand(newArrayList, command.name())) {
-                    newArrayList.add(command);
-                }
-            }
-        }
-
-        return newArrayList;
+        return staps.toString();
     }
 }
