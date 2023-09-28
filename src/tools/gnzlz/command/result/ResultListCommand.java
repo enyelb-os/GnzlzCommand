@@ -1,38 +1,31 @@
-package tools.gnzlz.command.result.object;
+package tools.gnzlz.command.result;
 
 import tools.gnzlz.command.funtional.FunctionCommand;
-import tools.gnzlz.command.result.ResultCommand;
 
 import java.util.ArrayList;
 
 public class ResultListCommand {
 
-    /***************************************
+    /**
      * vars
-     ***************************************/
+     */
 
-    protected ArrayList<ResultCommand<?>> resultCommands;
+    protected final ArrayList<ResultCommand<?>> resultCommands;
 
-    /***************************************
+    /**
      * constructor
-     ***************************************/
-    public ResultListCommand(ArrayList<ResultCommand<?>> resultCommands){
-        this.resultCommands = resultCommands;
+     */
+
+    protected ResultListCommand(){
+        this.resultCommands = new ArrayList<ResultCommand<?>>();
     }
 
-    /***************************************
-     * select listCommands
-     ***************************************/
-
-    public static ResultListCommand create(ArrayList<ResultCommand<?>> resultCommands){
-        return new ResultListCommand(resultCommands);
-    }
-
-    /***************************************
+    /**
      * add
-     ***************************************/
+     * @param resultCommand resultCommand
+     */
 
-    public ResultListCommand add(ResultCommand<?> resultCommand){
+    protected ResultListCommand add(ResultCommand<?> resultCommand){
        for (ResultCommand<?> command: resultCommands) {
             if(command.command() == resultCommand.command()){
                 return this;
@@ -42,12 +35,10 @@ public class ResultListCommand {
        return this;
     }
 
-
-    //Mover
-
-    /***************************************
-     * method
-     ***************************************/
+    /**
+     * get
+     * @param name name
+     */
 
     public Object get(String name){
         for (ResultCommand<?> command: resultCommands) {
@@ -58,9 +49,10 @@ public class ResultListCommand {
         return null;
     }
 
-    /***************************************
-     * method
-     ***************************************/
+    /**
+     * string
+     * @param name name
+     */
 
     public String string(String name){
         for (ResultCommand<?> command: resultCommands) {
@@ -71,9 +63,10 @@ public class ResultListCommand {
         return "";
     }
 
-    /***************************************
-     * method
-     ***************************************/
+    /**
+     * bool
+     * @param name name
+     */
 
     public boolean bool(String name){
         for (ResultCommand<?> command: resultCommands) {
@@ -88,9 +81,10 @@ public class ResultListCommand {
         return false;
     }
 
-    /***************************************
-     * method
-     ***************************************/
+    /**
+     * integer
+     * @param name name
+     */
 
     public int integer(String name){
         for (ResultCommand<?> command: resultCommands) {
@@ -101,11 +95,12 @@ public class ResultListCommand {
         return -1;
     }
 
-    /***************************************
-     * method
-     ***************************************/
+    /**
+     * array
+     * @param name name
+     */
 
-    public ArrayList<ResultListCommand> arrayResultListCommand(String name){
+    public ArrayList<ResultListCommand> array(String name){
         for (ResultCommand<?> command: resultCommands) {
             if(command.name().equals(name)){
                 if(command.value() instanceof ArrayList){
@@ -117,11 +112,12 @@ public class ResultListCommand {
         return new ArrayList<ResultListCommand>();
     }
 
-    /***************************************
-     * method
-     ***************************************/
+    /**
+     * list
+     * @param name name
+     */
 
-    public ResultListCommand resultListCommand(String name){
+    public ResultListCommand list(String name){
         for (ResultCommand<?> command: resultCommands) {
             if(command.name().equals(name)){
                 if(command.value() instanceof ArrayList){
@@ -129,12 +125,12 @@ public class ResultListCommand {
                 }
             }
         }
-        return new ResultListCommand(new ArrayList<ResultCommand<?>>());
+        return new ResultListCommand();
     }
 
-    /***************************************
+    /**
      * method
-     ***************************************/
+     **/
 
     private void listCommands(ArrayList<ResultCommand<?>> resultCommands, FunctionCommand functionCommand){
         for (ResultCommand<?> command: resultCommands) {
@@ -152,9 +148,9 @@ public class ResultListCommand {
         }
     }
 
-    /***************************************
+    /**
      * method
-     ***************************************/
+     **/
 
     public void listCommands(FunctionCommand functionCommand){
         listCommands(resultCommands,functionCommand);

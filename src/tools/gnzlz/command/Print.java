@@ -6,8 +6,8 @@ import tools.gnzlz.command.command.object.ExposeOption;
 import tools.gnzlz.command.command.object.Option;
 import tools.gnzlz.command.funtional.PrintConsole;
 import tools.gnzlz.command.result.ResultCommand;
-import tools.gnzlz.command.result.object.ExposeResultListCommand;
-import tools.gnzlz.command.result.object.ResultListCommand;
+import tools.gnzlz.command.result.ExposeResultListCommand;
+import tools.gnzlz.command.result.ResultListCommand;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,13 +1,13 @@
 package tools.gnzlz.command.group;
 
+import tools.gnzlz.command.Process;
 import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.command.ExposeCommand;
-import tools.gnzlz.command.command.object.ListCommand;
-import tools.gnzlz.command.Process;
 import tools.gnzlz.command.command.object.ExposeListCommand;
+import tools.gnzlz.command.command.object.ListCommand;
 import tools.gnzlz.command.funtional.FunctionGroupCommand;
-import tools.gnzlz.command.result.ResultCommand;
-import tools.gnzlz.command.result.object.ResultListCommand;
+import tools.gnzlz.command.result.ExposeResultListCommand;
+import tools.gnzlz.command.result.ResultListCommand;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -177,7 +177,7 @@ public class GroupCommand {
 
     public static ResultListCommand process(String[] args, ParentGroupCommand parentGroupCommand) {
         return GroupCommand.process(
-            args, ResultListCommand.create(new ArrayList<ResultCommand<?>>()),
+            args, ExposeResultListCommand.create(),
             parentGroupCommand.parent.listCommand, parentGroupCommand.parent, 0
         );
     }

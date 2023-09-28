@@ -2,7 +2,7 @@ package tools.gnzlz.command.command.type;
 
 import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.command.object.ListCommand;
-import tools.gnzlz.command.result.object.ResultListCommand;
+import tools.gnzlz.command.result.ResultListCommand;
 
 public class CommandList extends Command<ListCommand, ResultListCommand, CommandList> {
 

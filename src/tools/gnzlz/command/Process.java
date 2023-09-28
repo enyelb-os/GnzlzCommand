@@ -4,11 +4,7 @@ import tools.gnzlz.command.command.ExposeCommand;
 import tools.gnzlz.command.command.object.*;
 import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.funtional.PrintConsole;
-import tools.gnzlz.command.result.ExposeResultCommand;
-import tools.gnzlz.command.result.object.ExposeResultListCommand;
-import tools.gnzlz.command.result.object.ResultArrayListCommand;
-import tools.gnzlz.command.result.ResultCommand;
-import tools.gnzlz.command.result.object.ResultListCommand;
+import tools.gnzlz.command.result.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -61,7 +57,7 @@ public class Process {
             resultCommand = ExposeCommand.createResultCommand((Command<?, Object, ?>) command, value);
             resultCommands.add(resultCommand);
         }
-        resultCommand.value(value);
+        ExposeResultCommand.value(resultCommand, value);
         return resultCommand;
     }
 
@@ -128,7 +124,7 @@ public class Process {
                         );
                         ExposeResultCommand.assign(resultCommand, true);
 
-                        ((ResultCommand<Object>)resultCommand).value(value);
+                        ExposeResultCommand.value(resultCommand, value);
 
                         break;
                     }
@@ -164,13 +160,12 @@ public class Process {
                 addOptionsCommandReference(command, allResultListCommand);
 
                 if(ExposeCommand.value(command) instanceof ArrayListCommand) {
-                    ResultCommand<ResultArrayListCommand> resultCommandTemp = (ResultCommand<ResultArrayListCommand>) resultCommand;
                     ResultArrayListCommand resultArrayListCommand;
                     if(resultCommand.value() instanceof ResultArrayListCommand){
                         resultArrayListCommand = (ResultArrayListCommand) resultCommand.value();
                     } else {
-                        resultArrayListCommand = ResultArrayListCommand.create();
-                        resultCommandTemp.value(resultArrayListCommand);
+                        resultArrayListCommand = ExposeResultArrayCommand.create();
+                        ExposeResultCommand.value(resultCommand, resultArrayListCommand);
                     }
 
                     String line;
@@ -184,8 +179,9 @@ public class Process {
                         line = in.nextLine();
 
                         if(line.equals("1") || line.equalsIgnoreCase("add")) {
-                            ResultListCommand resultListCommandNew = ResultListCommand.create(new ArrayList<ResultCommand<?>>());
-                            resultArrayListCommand.add(
+                            ResultListCommand resultListCommandNew = ExposeResultListCommand.create();
+                            ExposeResultArrayCommand.addResultListCommand(
+                                resultArrayListCommand,
                                 Process.processQuestion(
                                     (ListCommand) ExposeCommand.value(command),
                                     console,
@@ -206,19 +202,20 @@ public class Process {
                     if(resultCommand.value() instanceof ResultListCommand){
                         resultListCommandTemp = (ResultListCommand) resultCommand.value();
                     } else {
-                        resultListCommandTemp = ResultListCommand.create(new ArrayList<ResultCommand<?>>());
+                        resultListCommandTemp = ExposeResultListCommand.create();
                     }
 
-                    resultListCommandTemp = Process.processQuestion(
-                        (ListCommand) ExposeCommand.value(command),
-                        console,
-                        printObjects,
-                        ExposeCommand.message(command).isEmpty() ? ExposeCommand.name(command) : ExposeCommand.message(command),
-                        resultListCommandTemp,
-                        allResultListCommand
-                     );
-
-                    ((ResultCommand<ResultListCommand>)resultCommand).value(resultListCommandTemp);
+                    ExposeResultCommand.value(
+                        resultCommand,
+                        Process.processQuestion(
+                            (ListCommand) ExposeCommand.value(command),
+                            console,
+                            printObjects,
+                            ExposeCommand.message(command).isEmpty() ? ExposeCommand.name(command) : ExposeCommand.message(command),
+                            resultListCommandTemp,
+                            allResultListCommand
+                         )
+                    );
 
                 } else {
                     do {
@@ -229,10 +226,10 @@ public class Process {
 
                         Print.printQuestion(console, command, resultCommand);
 
-                        resultCommand.value(in.nextLine());
+                       ExposeResultCommand.value(resultCommand, in.nextLine());
 
                         if (resultCommand.value() == null && ExposeCommand.value(command) != null) {
-                            resultCommand.value(ExposeCommand.value(command));
+                            ExposeResultCommand.value(resultCommand, ExposeCommand.value(command));
                         }
 
                     } while (resultCommand.value() == null);
@@ -258,7 +255,7 @@ public class Process {
      ***************************************/
 
     public static ResultListCommand args(String[] args, ListCommand listCommand) {
-        return Process.args(args, listCommand, ResultListCommand.create(new ArrayList<ResultCommand<?>>()));
+        return Process.args(args, listCommand, ExposeResultListCommand.create());
     }
 
     /***************************************
@@ -287,7 +284,7 @@ public class Process {
      ***************************************/
 
     public static ResultListCommand questions(ListCommand listCommand) {
-        return Process.questions(listCommand, printConsole, ResultListCommand.create(new ArrayList<ResultCommand<?>>()));
+        return Process.questions(listCommand, printConsole, ExposeResultListCommand.create());
     }
 
     /***************************************
@@ -317,6 +314,6 @@ public class Process {
      */
 
     public static ResultListCommand argsAndQuestions(String[] args, ListCommand listCommand) {
-        return Process.argsAndQuestions(args, listCommand, printConsole, ResultListCommand.create(new ArrayList<ResultCommand<?>>()));
+        return Process.argsAndQuestions(args, listCommand, printConsole, ExposeResultListCommand.create());
     }
 }

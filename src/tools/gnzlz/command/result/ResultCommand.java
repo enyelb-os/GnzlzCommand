@@ -3,65 +3,68 @@ package tools.gnzlz.command.result;
 import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.command.ExposeCommand;
 
-public class ResultCommand<Type extends Object> {
+public class ResultCommand<Type> {
 
-    /***************************************
+    /**
      * vars
-     ***************************************/
+     */
 
-    boolean assign;
+    protected boolean assign;
 
-    /***************************************
+    /**
      * vars
-     ***************************************/
+     */
 
     protected Command<?,Type,?> command;
 
-    /***************************************
+    /**
      * vars
-     ***************************************/
+     */
 
     protected Type value;
 
-    /***************************************
+    /**
      * constructor
-     ***************************************/
+     * @param command command
+     * @param value value
+     */
 
-     public ResultCommand(Command<?,Type,?> command, Type value){
+     protected ResultCommand(Command<?,Type,?> command, Type value){
         this.command = command;
         this.value = value;
         this.assign = false;
      }
 
-    /***************************************
-     * get
-     ***************************************/
+    /**
+     * name
+     */
 
     public String name(){
         return ExposeCommand.name(command);
     }
 
-    /***************************************
-     * get
-     ***************************************/
+    /**
+     * value
+     */
 
     public Object value(){
         return value;
     }
 
-    /***************************************
-     * get
-     ***************************************/
+    /**
+     * command
+     */
 
     public Command<?,Type,?> command(){
         return command;
     }
 
-    /***************************************
-     * get
-     ***************************************/
+    /**
+     * value
+     * @param value value
+     */
 
-    public ResultCommand<Type> value(Object value){
+    protected ResultCommand<Type> value(Object value){
         Type newValue = null;
         if(value != null) {
             newValue = command.valueProcess(value);

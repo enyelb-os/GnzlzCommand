@@ -2,7 +2,7 @@ package tools.gnzlz.command.command.type;
 
 import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.command.object.ArrayListCommand;
-import tools.gnzlz.command.result.object.ResultArrayListCommand;
+import tools.gnzlz.command.result.ResultArrayListCommand;
 
 public class CommandArray extends Command<ArrayListCommand, ResultArrayListCommand, CommandArray> {
 
