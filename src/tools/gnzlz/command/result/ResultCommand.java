@@ -64,14 +64,9 @@ public class ResultCommand<Type> {
      * @param value value
      */
 
-    protected ResultCommand<Type> value(Object value){
-        Type newValue = null;
+    protected ResultCommand<Type> value(Type value){
         if(value != null) {
-            newValue = command.valueProcess(value);
-        }
-
-        if(newValue != null) {
-            this.value = newValue;
+            this.value = value;
         }
         return this;
     }

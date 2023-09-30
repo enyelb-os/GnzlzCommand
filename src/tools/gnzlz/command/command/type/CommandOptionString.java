@@ -1,9 +1,10 @@
 package tools.gnzlz.command.command.type;
 
 import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.command.CommandOption;
 import tools.gnzlz.command.command.object.Option;
 
-public class CommandOptionString extends Command<Option<String>, String, CommandOptionString> {
+public class CommandOptionString extends CommandOption<String, CommandOptionString> {
 
     /**
      * constructor
@@ -30,7 +31,7 @@ public class CommandOptionString extends Command<Option<String>, String, Command
      */
 
     @Override
-    public String valueProcess(Object value) {
+    protected String processValue(Object value) {
         if(this.value.valid(value.toString())){
             return value.toString();
         }
@@ -42,8 +43,10 @@ public class CommandOptionString extends Command<Option<String>, String, Command
      * @param value value
      */
 
+    @Override
     public CommandOptionString option(Command<?,String,?> value) {
-        return this.value(Option.string().reference(value));
+        this.value(Option.string().reference(value));
+        return this;
     }
 
     /**
@@ -51,7 +54,9 @@ public class CommandOptionString extends Command<Option<String>, String, Command
      * @param value value
      */
 
+    @Override
     public CommandOptionString option(String ... value) {
-        return this.value(Option.string(value));
+        this.value(Option.string(value));
+        return this;
     }
 }

@@ -1,4 +1,4 @@
-package tools.gnzlz.command.funtional;
+package tools.gnzlz.command.command.functional;
 
 import tools.gnzlz.command.result.ResultListCommand;
 

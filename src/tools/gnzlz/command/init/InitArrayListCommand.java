@@ -1,7 +1,7 @@
 package tools.gnzlz.command.init;
 
-import tools.gnzlz.command.init.funtional.FunctionInitListCommand;
-import tools.gnzlz.command.init.funtional.FunctionReturnInitListCommand;
+import tools.gnzlz.command.init.functional.FunctionInitListCommand;
+import tools.gnzlz.command.init.functional.FunctionReturnInitListCommand;
 import tools.gnzlz.command.result.ExposeResultArrayCommand;
 import tools.gnzlz.command.result.ResultArrayListCommand;
 

@@ -1,4 +1,4 @@
-package tools.gnzlz.command.init.funtional;
+package tools.gnzlz.command.init.functional;
 
 import tools.gnzlz.command.init.InitListCommand;
 

@@ -1,8 +1,8 @@
 package tools.gnzlz.command.command.type;
 
-import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.command.CommandBasic;
 
-public class CommandBoolean extends Command<Boolean, Boolean, CommandBoolean> {
+public class CommandBoolean extends CommandBasic<Boolean, CommandBoolean> {
 
     /***************************************
      * constructor
@@ -19,7 +19,7 @@ public class CommandBoolean extends Command<Boolean, Boolean, CommandBoolean> {
      */
 
     @Override
-    public Boolean valueProcess(Object value) {
+    protected Boolean processValue(Object value) {
         if(value instanceof CommandString){
             return value.toString().equalsIgnoreCase("true") || value.toString().equals("1");
         } else if (value instanceof Boolean){

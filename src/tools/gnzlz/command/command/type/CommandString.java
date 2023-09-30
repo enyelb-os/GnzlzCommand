@@ -1,13 +1,12 @@
 package tools.gnzlz.command.command.type;
 
-import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.command.CommandBasic;
 
-public class CommandString extends Command<String, String, CommandString> {
+public class CommandString extends CommandBasic<String, CommandString> {
 
-    /***************************************
+    /**
      * constructor
      * @param name name
-     **************************************
      */
 
     public CommandString(String name) {
@@ -17,21 +16,21 @@ public class CommandString extends Command<String, String, CommandString> {
 
     /**
      * converter
-     *
+     * @param value value
      */
 
     @Override
-    public String valueProcess(Object value) {
-        if(value instanceof String){
-            return ((String) value).isEmpty() ? null : value.toString();
+    protected String processValue(Object value) {
+        if(value instanceof String str){
+            return str.isEmpty() ? null : str;
         }
         return null;
     }
 
-    /***************************************
+    /**
      * static create
-     * @param name
-     ***************************************/
+     * @param name name
+     */
 
     public static CommandString create(String name){
         return new CommandString(name);

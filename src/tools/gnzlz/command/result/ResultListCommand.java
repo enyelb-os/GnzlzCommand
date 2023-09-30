@@ -1,6 +1,6 @@
 package tools.gnzlz.command.result;
 
-import tools.gnzlz.command.funtional.FunctionCommand;
+import tools.gnzlz.command.functional.FunctionCommand;
 
 import java.util.ArrayList;
 

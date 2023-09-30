@@ -1,9 +1,10 @@
 package tools.gnzlz.command.command.type;
 
 import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.command.CommandOption;
 import tools.gnzlz.command.command.object.Option;
 
-public class CommandOptionInteger extends Command<Option<Integer>, Integer, CommandOptionInteger> {
+public class CommandOptionInteger extends CommandOption<Integer, CommandOptionInteger> {
 
     /***************************************
      * constructor
@@ -25,10 +26,10 @@ public class CommandOptionInteger extends Command<Option<Integer>, Integer, Comm
     }
 
     @Override
-    public Integer valueProcess(Object value) {
-        if(value instanceof Integer){
-            if(this.value.valid((Integer) value)){
-                return (Integer) value;
+    protected Integer processValue(Object value) {
+        if(value instanceof Integer integer){
+            if(this.value.valid(integer)){
+                return integer;
             }
         }
         return null;
@@ -39,8 +40,10 @@ public class CommandOptionInteger extends Command<Option<Integer>, Integer, Comm
      * @param value value
      ***************************************/
 
+    @Override
     public CommandOptionInteger option(Command<?,Integer,?> value) {
-        return this.value(Option.integer().reference(value));
+        this.value(Option.integer().reference(value));
+        return this;
     }
 
     /***************************************
@@ -48,7 +51,9 @@ public class CommandOptionInteger extends Command<Option<Integer>, Integer, Comm
      * @param value value
      ***************************************/
 
+    @Override
     public CommandOptionInteger option(Integer ... value) {
-        return this.value(Option.integer(value));
+        this.value(Option.integer(value));
+        return this;
     }
 }

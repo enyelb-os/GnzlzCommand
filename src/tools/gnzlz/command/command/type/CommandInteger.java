@@ -1,8 +1,8 @@
 package tools.gnzlz.command.command.type;
 
-import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.command.CommandBasic;
 
-public class CommandInteger extends Command<Integer, Integer, CommandInteger> {
+public class CommandInteger extends CommandBasic<Integer, CommandInteger> {
 
     /***************************************
      * constructor
@@ -20,13 +20,13 @@ public class CommandInteger extends Command<Integer, Integer, CommandInteger> {
      */
 
     @Override
-    public Integer valueProcess(Object value) {
-        if(value instanceof String){
+    protected Integer processValue(Object value) {
+        if(value instanceof String str){
             try {
-                return Integer.parseInt(String.valueOf(value));
+                return Integer.parseInt(str);
             } catch (NumberFormatException ignored) {}
-        } else if(value instanceof Integer){
-            return (Integer) value;
+        } else if(value instanceof Integer integer){
+            return integer;
         }
         return null;
     }

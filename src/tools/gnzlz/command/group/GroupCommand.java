@@ -1,12 +1,13 @@
 package tools.gnzlz.command.group;
 
-import tools.gnzlz.command.Process;
+import tools.gnzlz.command.process.Process;
 import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.command.ExposeCommand;
 import tools.gnzlz.command.command.object.ExposeListCommand;
 import tools.gnzlz.command.command.object.ListCommand;
-import tools.gnzlz.command.funtional.FunctionGroupCommand;
-import tools.gnzlz.command.result.ExposeResultListCommand;
+import tools.gnzlz.command.functional.FunctionGroupCommand;
+import tools.gnzlz.command.init.ExposeInitListCommand;
+import tools.gnzlz.command.init.InitListCommand;
 import tools.gnzlz.command.result.ResultListCommand;
 
 import java.util.ArrayList;
@@ -15,45 +16,45 @@ import java.util.Objects;
 
 public class GroupCommand {
 
-    /***************************************
+    /**
      * vars
-     ***************************************/
+     */
 
     protected final ArrayList<GroupCommand> internals = new ArrayList<GroupCommand>();
 
-    /***************************************
+    /**
      * vars
-     ***************************************/
+     */
 
     private FunctionGroupCommand functionGroupCommand;
 
-    /***************************************
+    /**
      * vars
-     ***************************************/
+     */
 
     protected ListCommand listCommand;
 
-    /***************************************
+    /**
      * vars
-     ***************************************/
+     */
 
     private boolean runDefault = true;
 
-    /***************************************
+    /**
      * vars
-     ***************************************/
+     */
 
     protected final String name;
 
-    /***************************************
+    /**
      * vars
-     ***************************************/
+     */
 
     private final boolean isDefault;
 
-    /***************************************
+    /**
      * constructor
-     ***************************************/
+     */
 
     protected GroupCommand(String name, boolean hashcode, boolean isDefault, FunctionGroupCommand functionGroupCommand, ListCommand listCommand){
         this.name = name + (hashcode ? this.hashCode() : "");
@@ -62,9 +63,9 @@ public class GroupCommand {
         this.listCommand = listCommand;
     }
 
-    /***************************************
+    /**
      * get internal GroupCommand
-     ***************************************/
+     */
 
     private boolean existsGroupCommand(String name) {
         for (GroupCommand groupCommand : internals) {
@@ -75,9 +76,9 @@ public class GroupCommand {
         return false;
     }
 
-    /***************************************
+    /**
      * add Group
-     ***************************************/
+     */
 
     public GroupCommand addGroup(GroupCommand ... groupCommands) {
         if(groupCommands != null) {
@@ -90,18 +91,18 @@ public class GroupCommand {
         return this;
     }
 
-    /***************************************
+    /**
      * execute
-     ***************************************/
+     */
 
     public GroupCommand execute(FunctionGroupCommand functionGroupCommand) {
         this.functionGroupCommand = functionGroupCommand;
         return this;
     }
 
-    /***************************************
+    /**
      * add Command
-     ***************************************/
+     */
 
     public GroupCommand addCommand(Command<?,?,?>... commands) {
         if(commands != null) {
@@ -110,41 +111,41 @@ public class GroupCommand {
         return this;
     }
 
-    /***************************************
+    /**
      * static
-     ***************************************/
+     */
 
     public static GroupCommand create(String command) {
         return new GroupCommand(command, false, false, null, ListCommand.create());
     }
 
-    /***************************************
+    /**
      * static
-     ***************************************/
+     */
 
     public static GroupCommand create() {
         return new GroupCommand("default", true, true, null, ListCommand.create());
     }
 
-    /***************************************
+    /**
      * static
-     ***************************************/
+     */
 
     public static ParentGroupCommand parent(ListCommand listCommand) {
         return ParentGroupCommand.create(listCommand);
     }
 
-    /***************************************
+    /**
      * static
-     ***************************************/
+     */
 
     public static ParentGroupCommand parent() {
         return ParentGroupCommand.create();
     }
 
-    /***************************************
+    /**
      * static
-     ***************************************/
+     */
 
     public GroupCommand use(ListCommand listCommand,String ... commands) {
         if(commands != null){
@@ -155,17 +156,17 @@ public class GroupCommand {
         return this;
     }
 
-    /***************************************
+    /**
      * static
-     ***************************************/
+     */
 
     public GroupCommand use(ListCommand listCommand) {
         return use(listCommand,"all");
     }
 
-    /***************************************
+    /**
      * static
-     ***************************************/
+     */
 
     public static ResultListCommand process(String[] args, ListCommand listCommand, GroupCommand ... groupCommands) {
         return process(args, ParentGroupCommand.create(listCommand).addGroup(groupCommands));
@@ -177,16 +178,16 @@ public class GroupCommand {
 
     public static ResultListCommand process(String[] args, ParentGroupCommand parentGroupCommand) {
         return GroupCommand.process(
-            args, ExposeResultListCommand.create(),
+            args, InitListCommand.create(),
             parentGroupCommand.parent.listCommand, parentGroupCommand.parent, 0
         );
     }
 
-    /***************************************
+    /**
      * static
-     ***************************************/
+     */
 
-    private static ResultListCommand process(String[] args, ResultListCommand resultListCommandOld, ListCommand listCommand, GroupCommand current, int index) {
+    private static ResultListCommand process(String[] args, InitListCommand resultListCommandOld, ListCommand listCommand, GroupCommand current, int index) {
         current.runDefault = true;
         boolean isFoundCommand = false;
 
@@ -207,12 +208,12 @@ public class GroupCommand {
         if(!isFoundCommand && !current.internals.isEmpty()) {
             printHelp(current);
         }
-        return resultListCommandOld;
+        return ExposeInitListCommand.resultListCommand(resultListCommandOld);
     }
 
-    /***************************************
+    /**
      * static
-     ***************************************/
+     */
 
     private static void printHelp(GroupCommand groupCommand) {
         System.out.println("Help");

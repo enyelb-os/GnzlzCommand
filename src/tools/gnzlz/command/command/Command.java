@@ -1,55 +1,60 @@
 package tools.gnzlz.command.command;
 
-import tools.gnzlz.command.command.incertaces.Icommand;
-import tools.gnzlz.command.funtional.FunctionRequiredCommand;
+import tools.gnzlz.command.functional.FunctionCreateObject;
+import tools.gnzlz.command.command.functional.FunctionRequiredCommand;
+import tools.gnzlz.command.process.functional.FunctionIsQuestion;
 import tools.gnzlz.command.result.ExposeResultCommand;
+import tools.gnzlz.command.result.ExposeResultListCommand;
 import tools.gnzlz.command.result.ResultCommand;
+import tools.gnzlz.command.result.ResultListCommand;
 
 import java.util.ArrayList;
 
-public abstract class Command<Type, R, C extends Command<?, ?, ?>> implements Icommand<Type, R, C> {
+public abstract class Command<Type, R, C extends Command<?, ?, ?>> {
 
-    /***************************************
+    protected final static PrintCommand Print = new PrintCommand();
+
+    /**
      * vars
-     ***************************************/
+     */
 
     final String name;
 
-    /***************************************
+    /**
      * vars
-     ***************************************/
+     */
 
     final static FunctionRequiredCommand TRUE = (list) -> true;
     final static FunctionRequiredCommand FALSE = (list) -> false;
 
-    /***************************************
+    /**
      * vars
-     ***************************************/
+     */
 
     FunctionRequiredCommand required;
 
-    /***************************************
+    /**
      * vars
-     ***************************************/
+     */
 
     String message;
 
-    /***************************************
+    /**
      * vars
-     ***************************************/
+     */
 
     protected Type value;
 
-    /***************************************
+    /**
      * vars
-     ***************************************/
+     */
 
     final ArrayList<String> commands;
 
-    /***************************************
+    /**
      * constructor
      * @param name name
-     ***************************************/
+     */
 
     protected Command(String name){
         this.name = name;
@@ -58,67 +63,67 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> implements Ic
         this.commands = new ArrayList<String>();
     }
 
-    /***************************************
+    /**
      * set required
      * @param required required
-     ***************************************/
+     */
 
     public C required(boolean required) {
         this.required = required ? TRUE : FALSE;
         return (C) this;
     }
 
-    /***************************************
+    /**
      * set required
      * @param required required
-     ***************************************/
+     */
 
     public C required(FunctionRequiredCommand required) {
         this.required = required;
         return (C) this;
     }
 
-    /***************************************
+    /**
      * set required
-     ***************************************/
+     */
 
     public C required() {
         this.required = TRUE;
         return (C) this;
     }
 
-    /***************************************
+    /**
      * set value
      * @param value value
-     ***************************************/
+     */
 
     public C value(Type value) {
         this.value = value;
         return (C) this;
     }
 
-    /***************************************
+    /**
      * set
-     ***************************************/
+     */
 
     public C message(String message) {
         this.message = message;
         return (C) this;
     }
 
-    /***************************************
+    /**
      * set
-     ***************************************/
+     */
 
     public C commands(String ... commands) {
         this.validateAddCommands(commands);
         return (C) this;
     }
 
-    /***************************************
+    /**
      * valid exists name args
      * @param commandName commandName
-     ***************************************/
+     */
 
     private void validateAddCommand(String commandName){
         for (String commandNameOld: this.commands) {
@@ -129,10 +134,10 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> implements Ic
         this.commands.add(commandName);
     }
 
-    /***************************************
+    /**
      * valid list command exists name args
      * @param commands commands
-     ***************************************/
+     */
 
     private void validateAddCommands(String ... commands){
         if(commands != null){
@@ -142,12 +147,60 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> implements Ic
         }
     }
 
-    /***************************************
-     * create
-     ***************************************/
+    /**
+     * resultCommand
+     * @param resultCommands re
+     */
+
+    protected ResultCommand<R> resultCommand(ResultListCommand resultCommands, FunctionCreateObject<R> createObject) {
+        for (ResultCommand<?> resultCommand: ExposeResultListCommand.resultCommands(resultCommands)) {
+            if (ExposeResultCommand.command(resultCommand) == this) {
+                return (ResultCommand<R>) resultCommand;
+            }
+        }
+        ResultCommand<R> resultCommand = createResultCommand(createObject.create());
+        ExposeResultListCommand.addResultCommand(resultCommands, resultCommand);
+        return resultCommand;
+    }
+
+    /**
+     * createResultCommand
+     * @param object object
+     */
 
     protected ResultCommand<R> createResultCommand(R object){
         return ExposeResultCommand.create(this, object);
     }
+
+    /**
+     * validValue
+     * @param value value
+     */
+
+    public boolean validValue(Object value) {
+        return processValue(value) != null;
+    }
+
+    /**
+     * process
+     * @param isQuestion is
+     * @param resultListCommand r
+     * @param allresultListCommand a
+     */
+
+    protected abstract ResultCommand<R> process(FunctionIsQuestion isQuestion, ResultListCommand resultListCommand, ResultListCommand allresultListCommand);
+
+    /**
+     * process
+     */
+
+    protected abstract ResultCommand<R> args(ResultListCommand resultListCommand, Object value);
+
+    /**
+     * validValue
+     * @param value value
+     */
+
+    protected abstract R processValue(Object value);
 
 }

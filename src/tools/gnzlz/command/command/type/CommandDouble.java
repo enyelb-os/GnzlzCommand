@@ -1,8 +1,8 @@
 package tools.gnzlz.command.command.type;
 
-import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.command.CommandBasic;
 
-public class CommandDouble extends Command<Double, Double, CommandDouble> {
+public class CommandDouble extends CommandBasic<Double, CommandDouble> {
 
     /***************************************
      * constructor
@@ -20,13 +20,13 @@ public class CommandDouble extends Command<Double, Double, CommandDouble> {
      */
 
     @Override
-    public Double valueProcess(Object value) {
-        if(value instanceof String){
+    protected Double processValue(Object value) {
+        if(value instanceof String str){
             try {
-                return Double.parseDouble(String.valueOf(value));
+                return Double.parseDouble(str);
             } catch (NumberFormatException ignored) {}
-        } else if (value instanceof Double){
-            return (Double) value;
+        } else if (value instanceof Double doubl){
+            return doubl;
         }
         return null;
     }

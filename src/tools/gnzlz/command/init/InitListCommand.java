@@ -1,8 +1,8 @@
 package tools.gnzlz.command.init;
 
 import tools.gnzlz.command.command.Command;
-import tools.gnzlz.command.init.funtional.FunctionInitListCommand;
-import tools.gnzlz.command.init.funtional.FunctionReturnInitListCommand;
+import tools.gnzlz.command.init.functional.FunctionInitListCommand;
+import tools.gnzlz.command.init.functional.FunctionReturnInitListCommand;
 import tools.gnzlz.command.result.*;
 
 import java.util.ArrayList;
@@ -63,8 +63,8 @@ public class InitListCommand {
 
     public InitListCommand addCommand(Command<?,ResultListCommand,?> command, InitListCommand initListCommand){
         ExposeResultListCommand.addResultCommand(
-                resultListCommand,
-                ExposeResultCommand.create(command, initListCommand.resultListCommand)
+            resultListCommand,
+            ExposeResultCommand.create(command, initListCommand.resultListCommand)
         );
         return this;
     }
@@ -77,8 +77,8 @@ public class InitListCommand {
 
     public InitListCommand addCommand(Command<?,ResultArrayListCommand,?> command, InitArrayListCommand initArrayListCommand){
         ExposeResultListCommand.addResultCommand(
-                resultListCommand,
-                ExposeResultCommand.create(command, initArrayListCommand.resultArrayListCommand)
+            resultListCommand,
+            ExposeResultCommand.create(command, initArrayListCommand.resultArrayListCommand)
         );
         return this;
     }

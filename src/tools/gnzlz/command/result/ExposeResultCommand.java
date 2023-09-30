@@ -16,7 +16,7 @@ public class ExposeResultCommand {
         return resultCommand.value;
     }
 
-    public static void value(ResultCommand<?> resultCommand, Object value){
+    public static <R> void value(ResultCommand<R> resultCommand, R value){
         resultCommand.value(value);
     }
 
