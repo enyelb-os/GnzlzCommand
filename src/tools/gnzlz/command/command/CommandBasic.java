@@ -19,7 +19,13 @@ public abstract class CommandBasic<Type, C extends Command<?,?,?>> extends Comma
     }
 
     /**
-     * constructor
+     * type
+     */
+
+    protected abstract String type();
+
+    /**
+     * args
      * @param resultListCommand r
      * @param object a
      */
@@ -45,11 +51,12 @@ public abstract class CommandBasic<Type, C extends Command<?,?,?>> extends Comma
         if (resultCommand == null || ExposeResultCommand.assign(resultCommand)) {
             return resultCommand;
         }
-        FunctionVoid function = () -> {
-            Print.printResultListCommand(resultListCommand, "");
-            Print.printQuestion(this, resultCommand);
-        };
         Type defaultValue = Util.firstNonNull(this.processValue(resultCommand.value()), this.value);
+        final String strDefault = defaultValue != null ? defaultValue.toString() : "";
+        FunctionVoid function = () -> {
+            Print.printResultListCommand(allResultListCommand, "");
+            Print.printQuestion(this.message, this.type(), strDefault);
+        };
         ExposeResultCommand.value(resultCommand,isQuestion.process(this::processValue, this, resultListCommand, defaultValue, function));
 
         return resultCommand;

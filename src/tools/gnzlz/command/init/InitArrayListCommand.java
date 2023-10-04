@@ -2,7 +2,7 @@ package tools.gnzlz.command.init;
 
 import tools.gnzlz.command.init.functional.FunctionInitListCommand;
 import tools.gnzlz.command.init.functional.FunctionReturnInitListCommand;
-import tools.gnzlz.command.result.ExposeResultArrayCommand;
+import tools.gnzlz.command.result.ExposeResultArrayListCommand;
 import tools.gnzlz.command.result.ResultArrayListCommand;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class InitArrayListCommand {
      */
 
     protected InitArrayListCommand(){
-        this.resultArrayListCommand = ExposeResultArrayCommand.create();
+        this.resultArrayListCommand = ExposeResultArrayListCommand.create();
     }
 
     /**
@@ -37,7 +37,7 @@ public class InitArrayListCommand {
      */
 
     public InitArrayListCommand addListCommand(InitListCommand initListCommand){
-        ExposeResultArrayCommand.addResultListCommand(resultArrayListCommand, initListCommand.resultListCommand);
+        ExposeResultArrayListCommand.addResultListCommand(resultArrayListCommand, initListCommand.resultListCommand);
         return this;
     }
 
@@ -53,7 +53,7 @@ public class InitArrayListCommand {
             list.forEach((e) -> {
                 InitListCommand initListCommand = new InitListCommand();
                 functionInitListCommand.function(initListCommand, e);
-                ExposeResultArrayCommand.addResultListCommand(resultArrayListCommand, initListCommand.resultListCommand);
+                ExposeResultArrayListCommand.addResultListCommand(resultArrayListCommand, initListCommand.resultListCommand);
             });
         }
         return this;
@@ -70,7 +70,7 @@ public class InitArrayListCommand {
         if(!list.isEmpty()) {
             list.forEach((e) -> {
                 InitListCommand initListCommand = functionReturnInitListCommand.function(e);
-                ExposeResultArrayCommand.addResultListCommand(resultArrayListCommand, initListCommand.resultListCommand);
+                ExposeResultArrayListCommand.addResultListCommand(resultArrayListCommand, initListCommand.resultListCommand);
             });
         }
         return this;

@@ -1,13 +1,12 @@
 package tools.gnzlz.command.group;
 
-import tools.gnzlz.command.process.Process;
 import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.command.ExposeCommand;
 import tools.gnzlz.command.command.object.ExposeListCommand;
 import tools.gnzlz.command.command.object.ListCommand;
 import tools.gnzlz.command.functional.FunctionGroupCommand;
-import tools.gnzlz.command.init.ExposeInitListCommand;
 import tools.gnzlz.command.init.InitListCommand;
+import tools.gnzlz.command.process.Process;
 import tools.gnzlz.command.result.ResultListCommand;
 
 import java.util.ArrayList;
@@ -191,14 +190,14 @@ public class GroupCommand {
         current.runDefault = true;
         boolean isFoundCommand = false;
 
-        Process.argsAndQuestions(args, listCommand, resultListCommandOld);
+        ResultListCommand resultListCommand = Process.argsAndQuestions(args, listCommand, resultListCommandOld);
 
         for (GroupCommand groupCommand : current.internals){
             if((groupCommand.isDefault && current.runDefault) || args != null && args.length > index && args[index].equals(groupCommand.name)) {
                 current.runDefault = groupCommand.isDefault;
 
                 if (groupCommand.functionGroupCommand != null) {
-                    groupCommand.functionGroupCommand.run(resultListCommandOld);
+                    groupCommand.functionGroupCommand.run(resultListCommand);
                 }
 
                 process(args, resultListCommandOld, groupCommand.listCommand, groupCommand, index+1);
@@ -208,7 +207,7 @@ public class GroupCommand {
         if(!isFoundCommand && !current.internals.isEmpty()) {
             printHelp(current);
         }
-        return ExposeInitListCommand.resultListCommand(resultListCommandOld);
+        return resultListCommand;
     }
 
     /**

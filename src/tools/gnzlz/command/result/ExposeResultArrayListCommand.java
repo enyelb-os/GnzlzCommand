@@ -2,7 +2,7 @@ package tools.gnzlz.command.result;
 
 import java.util.ArrayList;
 
-public class ExposeResultArrayCommand {
+public class ExposeResultArrayListCommand {
 
 
     public static ResultArrayListCommand create(){

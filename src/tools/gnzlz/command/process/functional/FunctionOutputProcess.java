@@ -5,6 +5,12 @@ public interface FunctionOutputProcess {
 
     void print(String text);
 
+    default void print(boolean validate, String text){
+        if (validate) {
+            this.print(text);
+        }
+    }
+
     /**
      * Default println
      * @param text text
@@ -14,12 +20,24 @@ public interface FunctionOutputProcess {
         print(text + System.lineSeparator());
     }
 
+    default void println(boolean validate, String text){
+        if (validate) {
+            this.println(text);
+        }
+    }
+
     /**
      * Default println
      */
 
     default void println(){
         print(System.lineSeparator());
+    }
+
+    default void println(boolean validate){
+        if (validate) {
+            this.println();
+        }
     }
 
     /**

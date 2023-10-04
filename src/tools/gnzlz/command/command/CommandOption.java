@@ -1,5 +1,6 @@
 package tools.gnzlz.command.command;
 
+import tools.gnzlz.command.command.object.ExposeOption;
 import tools.gnzlz.command.command.object.Option;
 import tools.gnzlz.command.process.functional.FunctionIsQuestion;
 import tools.gnzlz.command.process.functional.FunctionVoid;
@@ -34,6 +35,30 @@ public abstract class CommandOption<Type, C> extends Command<Option<Type>, Type,
     public abstract C option(Type ... value);
 
     /**
+     * type
+     */
+
+    protected abstract String type();
+
+    /**
+     * addOptionsCommandReference
+     * @param resultListCommand value
+     */
+
+    private void addOptionsCommandReference(ResultListCommand resultListCommand){
+        if(this.value != null){
+            Command<?,Type,?> commandReference = ExposeOption.commandReference(this.value);
+            if(commandReference != null){
+                resultListCommand.listCommands((resultCommand->{
+                    if(commandReference == ExposeResultCommand.command(resultCommand)){
+                        this.value.options((Type) ExposeResultCommand.value(resultCommand));
+                    }
+                }));
+            }
+        }
+    }
+
+    /**
      * constructor
      * @param resultListCommand r
      * @param object a
@@ -60,11 +85,13 @@ public abstract class CommandOption<Type, C> extends Command<Option<Type>, Type,
         if ((resultCommand == null) || (ExposeResultCommand.assign(resultCommand))) {
             return resultCommand;
         }
-        FunctionVoid function = () -> {
-            Print.printResultListCommand(resultListCommand, "");
-            Print.printQuestion(this, resultCommand);
-        };
+        this.addOptionsCommandReference(allResultListCommand);
         Type defaultValue = resultCommand.value() != null ? this.processValue(resultCommand.value()) : this.value.value();
+        final String strDefault = defaultValue != null ? defaultValue.toString() : "";
+        FunctionVoid function = () -> {
+            Print.printResultListCommand(allResultListCommand, "");
+            Print.printQuestion(this.message, this.type(), strDefault);
+        };
         ExposeResultCommand.value(resultCommand,isQuestion.process(this::processValue, this, resultListCommand, defaultValue, function));
 
         return resultCommand;

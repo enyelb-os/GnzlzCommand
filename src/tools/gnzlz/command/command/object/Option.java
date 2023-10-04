@@ -72,7 +72,7 @@ public class Option<Type> {
 
     public boolean valid(Type value) {
         for (Type option : options) {
-            if(this.value instanceof String) {
+            if(this.value instanceof String str) {
                 if(((String) option).equalsIgnoreCase(value.toString())){
                     return true;
                 }

@@ -15,6 +15,15 @@ public class CommandBoolean extends CommandBasic<Boolean, CommandBoolean> {
     }
 
     /**
+     * type
+     */
+
+    @Override
+    public String type() {
+        return " bool";
+    }
+
+    /**
      * converter
      */
 

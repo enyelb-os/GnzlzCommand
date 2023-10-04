@@ -62,18 +62,17 @@ public class CommandArray extends Command<ArrayListCommand, ResultArrayListComma
 
     @Override
     protected ResultCommand<ResultArrayListCommand> process(FunctionIsQuestion isQuestion, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
-        ResultCommand<ResultArrayListCommand> resultCommand = this.resultCommand(resultListCommand, ExposeResultArrayCommand::create);
+        ResultCommand<ResultArrayListCommand> resultCommand = this.resultCommand(resultListCommand, ExposeResultArrayListCommand::create);
         if (resultCommand == null) {
             return null;
         }
-        ResultArrayListCommand resultListCommandCurrent = Util.firstNonNull(this.processValue(resultCommand.value()), ExposeResultArrayCommand.create());
+        ResultArrayListCommand resultListCommandCurrent = Util.firstNonNull(this.processValue(resultCommand.value()), ExposeResultArrayListCommand.create());
 
         String line;
         do {
 
 
-            Print.printResultListCommand(resultListCommand, "");
-
+            Print.printResultListCommand(allResultListCommand, "");
             Print.printMenuMultipleItem(this);
 
             Scanner in = new Scanner(System.in);
@@ -81,11 +80,12 @@ public class CommandArray extends Command<ArrayListCommand, ResultArrayListComma
 
             if(line.equals("1") || line.equalsIgnoreCase("add")) {
                 ResultListCommand resultListCommandNew = ExposeResultListCommand.create();
+                ExposeResultArrayListCommand.addResultListCommand(resultListCommandCurrent, resultListCommandNew);
                 ListCommand listCommand = this.value;
                 for (Command<?,?,?> command: ExposeListCommand.commands(listCommand)) {
                     ExposeCommand.process(command, isQuestion, resultListCommandNew, allResultListCommand);
                 }
-                ExposeResultArrayCommand.addResultListCommand(resultListCommandCurrent, resultListCommandNew);
+
             }
         } while(!line.equals("0") && !line.equalsIgnoreCase("exit"));
 

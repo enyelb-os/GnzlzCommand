@@ -1,10 +1,32 @@
 package tools.gnzlz.command.result;
 
+import tools.gnzlz.command.ansi.Color;
 import tools.gnzlz.command.functional.FunctionCommand;
+import tools.gnzlz.command.process.PrintCommand;
+import tools.gnzlz.command.process.utils.UtilPrint;
+import tools.gnzlz.command.result.interfaces.PrintResult;
 
 import java.util.ArrayList;
 
-public class ResultListCommand {
+public class ResultListCommand implements PrintResult {
+
+    /**
+     * vars
+     */
+
+    protected ResultArrayListCommand parentResultArrayListCommand;
+
+    /**
+     * vars
+     */
+
+    protected boolean isOneItem;
+
+    /**
+     * vars
+     */
+
+    protected ResultCommand<?> parentResultCommand;
 
     /**
      * vars
@@ -31,7 +53,9 @@ public class ResultListCommand {
                 return this;
             }
        }
+       resultCommand.parentResultListCommand = this;
        resultCommands.add(resultCommand);
+       isOneItem = resultCommands.size() == 1;
        return this;
     }
 
@@ -103,9 +127,8 @@ public class ResultListCommand {
     public ArrayList<ResultListCommand> array(String name){
         for (ResultCommand<?> command: resultCommands) {
             if(command.name().equals(name)){
-                if(command.value() instanceof ArrayList){
-                    ArrayList<ResultListCommand> value = (ArrayList<ResultListCommand>) command.value();
-                    return value;
+                if(command.value() instanceof ResultArrayListCommand ralc){
+                    return ExposeResultArrayListCommand.resultCommands(ralc);
                 }
             }
         }
@@ -120,8 +143,8 @@ public class ResultListCommand {
     public ResultListCommand list(String name){
         for (ResultCommand<?> command: resultCommands) {
             if(command.name().equals(name)){
-                if(command.value() instanceof ArrayList){
-                    return ((ResultListCommand) command.value());
+                if(command.value() instanceof ResultListCommand resultListCommand){
+                    return resultListCommand;
                 }
             }
         }
@@ -130,7 +153,7 @@ public class ResultListCommand {
 
     /**
      * method
-     **/
+     */
 
     private void listCommands(ArrayList<ResultCommand<?>> resultCommands, FunctionCommand functionCommand){
         for (ResultCommand<?> command: resultCommands) {
@@ -150,9 +173,81 @@ public class ResultListCommand {
 
     /**
      * method
-     **/
+     */
 
     public void listCommands(FunctionCommand functionCommand){
         listCommands(resultCommands,functionCommand);
+    }
+
+    /**
+     * print
+     */
+
+    private boolean isChildrenEmpty(ResultCommand<?> resultCommand){
+        if(resultCommand.value instanceof ResultListCommand rlc) {
+            return rlc.resultCommands.isEmpty();
+        } else if (resultCommand.value instanceof ResultArrayListCommand ralc){
+            return ralc.resultListCommands.isEmpty();
+        }
+        return false;
+    }
+
+    /**
+     * print
+     */
+
+    private boolean isAllItemBasic(ResultCommand<?> resultCommand){
+        if(resultCommand.value instanceof ResultListCommand rlc) {
+            return UtilPrint.isAllItemBasic(rlc.resultCommands);
+        } else if (resultCommand.value instanceof ResultArrayListCommand ralc){
+            for (ResultListCommand resultListCommand : ralc.resultListCommands) {
+                if (!UtilPrint.isAllItemBasic(resultListCommand)) {
+                    return false;
+                }
+            }
+            return ralc.resultListCommands.isEmpty();
+        }
+        return false;
+    }
+
+    /**
+     * print
+     */
+
+    @Override
+    public String print(int index) {
+        StringBuilder s = new StringBuilder();
+        final int[] item = {0, this.resultCommands.size()};
+        boolean allBasicItem = UtilPrint.isAllItemBasic(this.resultCommands);
+        boolean isOneItem = UtilPrint.isOneItem(this.parentResultArrayListCommand);
+        if(!isOneItem) {
+            s.append(Color.YELLOW.print("["));
+        }
+        this.resultCommands.stream().filter(UtilPrint::isBasicItem).forEach(resultCommand -> {
+            if (!allBasicItem && !isOneItem && item[0] == 0) {
+                s.append(System.lineSeparator()).append(PrintCommand.taps(index + 1));
+            } else if( item[0] != 0) {
+                s.append(Color.YELLOW.print(", "));
+            }
+            s.append(resultCommand.print(index + 1));
+            item[0]++;
+        });
+
+        this.resultCommands.stream().filter(UtilPrint::isNotBasicItem).forEach(resultCommand -> {
+            if (item[0] == item[1] - 1 && !isChildrenEmpty(resultCommand)) {
+                s.append(System.lineSeparator()).append(PrintCommand.taps(index + 1));
+            } else if (item[0] != 0){
+                s.append(Color.YELLOW.print(", "));
+            }
+            s.append(resultCommand.print(index + 1));
+            item[0]++;
+        });
+        if(!isOneItem) {
+            if(!allBasicItem) {
+                s.append(System.lineSeparator()).append(PrintCommand.taps(index));
+            }
+            s.append(Color.YELLOW.print("]"));
+        }
+        return s.toString();
     }
 }

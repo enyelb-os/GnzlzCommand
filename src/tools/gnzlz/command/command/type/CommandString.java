@@ -13,6 +13,15 @@ public class CommandString extends CommandBasic<String, CommandString> {
         super(name);
     }
 
+    /**
+     * type
+     */
+
+    @Override
+    public String type() {
+        return " string";
+    }
+
 
     /**
      * converter

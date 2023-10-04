@@ -16,6 +16,15 @@ public class CommandOptionInteger extends CommandOption<Integer, CommandOptionIn
         super(name);
     }
 
+    /**
+     * type
+     */
+
+    @Override
+    public String type() {
+        return this.value.toString() ;
+    }
+
     /***************************************
      * static create
      * @param name name

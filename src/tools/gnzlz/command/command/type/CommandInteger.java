@@ -15,6 +15,15 @@ public class CommandInteger extends CommandBasic<Integer, CommandInteger> {
     }
 
     /**
+     * type
+     */
+
+    @Override
+    public String type() {
+        return " int";
+    }
+
+    /**
      * converter
      *
      */

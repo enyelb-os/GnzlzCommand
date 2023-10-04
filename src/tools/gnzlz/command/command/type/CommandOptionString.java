@@ -17,6 +17,15 @@ public class CommandOptionString extends CommandOption<String, CommandOptionStri
     }
 
     /**
+     * type
+     */
+
+    @Override
+    public String type() {
+        return this.value.toString();
+    }
+
+    /**
      * static create
      * @param name name
      */

@@ -93,11 +93,11 @@ public class InitListCommand {
 
     public <Type> InitListCommand addCommand(Command<?,ResultArrayListCommand,?> command, ArrayList<Type> list, FunctionInitListCommand<Type> functionInitListCommand){
         if(!list.isEmpty()) {
-            ResultArrayListCommand resultArrayListCommand = ExposeResultArrayCommand.create();
+            ResultArrayListCommand resultArrayListCommand = ExposeResultArrayListCommand.create();
             list.forEach((e) -> {
                 InitListCommand initListCommand = new InitListCommand();
                 functionInitListCommand.function(initListCommand, e);
-                ExposeResultArrayCommand.addResultListCommand(resultArrayListCommand, initListCommand.resultListCommand);
+                ExposeResultArrayListCommand.addResultListCommand(resultArrayListCommand, initListCommand.resultListCommand);
             });
             ExposeResultListCommand.addResultCommand(
                 resultListCommand,
@@ -118,10 +118,10 @@ public class InitListCommand {
 
     public <Type> InitListCommand addCommand(Command<?,ResultArrayListCommand,?> command, ArrayList<Type> list, FunctionReturnInitListCommand<Type> functionReturnInitListCommand){
         if(!list.isEmpty()) {
-            ResultArrayListCommand resultArrayListCommand = ExposeResultArrayCommand.create();
+            ResultArrayListCommand resultArrayListCommand = ExposeResultArrayListCommand.create();
             list.forEach((e) -> {
                 InitListCommand initListCommand = functionReturnInitListCommand.function(e);
-                ExposeResultArrayCommand.addResultListCommand(resultArrayListCommand, initListCommand.resultListCommand);
+                ExposeResultArrayListCommand.addResultListCommand(resultArrayListCommand, initListCommand.resultListCommand);
             });
             ExposeResultListCommand.addResultCommand(
                 resultListCommand,

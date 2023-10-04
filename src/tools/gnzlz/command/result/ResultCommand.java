@@ -1,9 +1,26 @@
 package tools.gnzlz.command.result;
 
+import tools.gnzlz.command.ansi.Color;
 import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.command.ExposeCommand;
+import tools.gnzlz.command.process.PrintCommand;
+import tools.gnzlz.command.process.utils.UtilPrint;
+import tools.gnzlz.command.result.interfaces.PrintResult;
 
-public class ResultCommand<Type> {
+public class ResultCommand<Type> implements PrintResult {
+
+    /**
+     * vars
+     */
+
+    protected ResultListCommand parentResultListCommand;
+
+    /**
+     * vars
+     */
+
+    protected boolean isAllItemsBasic;
+
 
     /**
      * vars
@@ -65,10 +82,57 @@ public class ResultCommand<Type> {
      */
 
     protected ResultCommand<Type> value(Type value){
+        if(value instanceof ResultListCommand rlc) {
+            rlc.parentResultCommand = this;
+            isAllItemsBasic = false;
+        } else if(value instanceof ResultArrayListCommand ralc) {
+            ralc.parentResultCommand = this;
+            isAllItemsBasic = false;
+        }
         if(value != null) {
             this.value = value;
         }
         return this;
     }
 
+    /**
+     * print
+     */
+
+    private boolean isOneItem(){
+        if (parentResultListCommand != null) {
+            return UtilPrint.isOneItem(parentResultListCommand.parentResultArrayListCommand);
+        }
+        return false;
+    }
+
+    /**
+     * print
+     */
+
+    @Override
+    public String print(int index) {
+        StringBuilder s = new StringBuilder();
+        //boolean allBasicItem = UtilPrint.isAllItemBasic(this.parentResultListCommand);
+        boolean isOneItemParent = this.isOneItem();
+        if(!isOneItemParent ) {
+            s.append(PrintCommand.taps(0)).append(Color.PURPLE.print(this.name() + ": "));
+        }
+
+        if (this.value instanceof ResultListCommand rlc) {
+            s.append(rlc.print(index + 1));
+        } else if (this.value instanceof ResultArrayListCommand ralc) {
+            s.append(ralc.print(index + 1));
+        } else {
+            if (this.value instanceof Number) {
+                s.append(Color.GREEN.print(this.value));
+            } else if (this.value instanceof Boolean) {
+                s.append(Color.CYAN.print(this.value));
+            } else {
+                Object value = this.value == null ? "" : this.value;
+                s.append(Color.BLUE.print("\"" + value + "\""));
+            }
+        }
+        return s.toString();
+    }
 }

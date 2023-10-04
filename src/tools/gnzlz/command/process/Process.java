@@ -23,108 +23,19 @@ public class Process {
             R value = null;
             do {
                 function.execute();
-                Object object = FUNCTION_INPUT_PROCESS.process();
+                Object object = CONSOLE.process();
                 value = Util.firstNonNull(process.run(object), defaultValue);
-            } while (value == null && !ExposeCommand.required(command).valid(resultListCommand));
+            } while (value == null && ExposeCommand.required(command).valid(resultListCommand));
 
             return value;
         }
     };
-    /**
-     * vars
-     */
-
-    private static final FunctionIsQuestion FUNCTION_IS_NOT_QUESTION = new FunctionIsQuestion() {
-        @Override
-        public <R> R process(FunctionRunProcess<R> process, Command<?,R,?> command, ResultListCommand allResultListCommand, R defaultValue, FunctionVoid function) {
-            function.execute();
-            return Util.firstNonNull(process.run(FUNCTION_INPUT_PROCESS.process()), defaultValue);
-        }
-    };
 
     /**
      * vars
      */
 
-    private static final FunctionInputProcess FUNCTION_INPUT_PROCESS_CONSOLE = new Scanner(System.in)::nextLine;
-
-    /**
-     * vars
-     */
-
-    public static FunctionInputProcess FUNCTION_INPUT_PROCESS = FUNCTION_INPUT_PROCESS_CONSOLE;
-
-    /**
-     * vars
-     */
-
-    private static final FunctionOutputProcess FUNCTION_OUTPUT_PROCESS_CONSOLE = System.out::print;
-
-    /**
-     * vars
-     */
-
-    public static FunctionOutputProcess FUNCTION_OUTPUT_PROCESS_QUESTION = FUNCTION_OUTPUT_PROCESS_CONSOLE;
-
-    /**
-     * vars
-     */
-
-    public static FunctionOutputProcess FUNCTION_OUTPUT_PROCESS_RESULT = FUNCTION_OUTPUT_PROCESS_CONSOLE;
-
-    /**
-     * isDefault
-     * @param value value
-     */
-
-    private static String isDefault(Object value){
-        if ((value instanceof Integer || value instanceof Double || value instanceof Boolean || value instanceof String)) {
-            return " (Default: " + value.toString() +")";
-        } else if (value instanceof Option){
-            if(ExposeOption.value((Option<?>) value) != null){
-                return isDefault(ExposeOption.value((Option<?>) value));
-            }
-        }
-        return "";
-    }
-
-    /**
-     * isDefault
-     * @param command command
-     * @param resultCommand resultCommand
-     */
-
-    private static String isDefault(Command<?,Object,?> command, ResultCommand<Object> resultCommand){
-        String isDefault = isDefault(resultCommand.value());
-        if(!isDefault.isEmpty()){
-            return isDefault;
-        }else if (ExposeCommand.value(command) instanceof Option) {
-            return isDefault(ExposeOption.value((Option<?>) ExposeCommand.value(command)));
-        } else {
-            return isDefault(ExposeCommand.value(command));
-        }
-    }
-
-    /**
-     * addOptionsCommandReference: Default list options command reference
-     * @param command command
-     * @param resultListCommand resultListCommand
-     */
-
-    private static void addOptionsCommandReference(Command<?,?,?> command, ResultListCommand resultListCommand){
-        if(ExposeCommand.value(command) instanceof Option){
-            Option<Object> option = ExposeCommand.value((Command<Option<Object>, ?, ?>) command);
-            Command<?,Object,?> commandReference = ExposeOption.commandReference(option);
-            if(commandReference != null){
-                resultListCommand.listCommands((resultCommand->{
-                    if(commandReference == ExposeResultCommand.command(resultCommand)){
-                        option.options(ExposeResultCommand.value(resultCommand));
-                    }
-                }));
-            }
-        }
-    }
-
+    private static FunctionInputProcess CONSOLE = new Scanner(System.in)::nextLine;
 
 
     /**
@@ -316,5 +227,23 @@ public class Process {
 
     public static ResultListCommand argsAndQuestions(String[] args, ListCommand listCommand) {
         return Process.argsAndQuestions(args, listCommand, InitListCommand.create());
+    }
+
+    /**
+     * console
+     * @param console console
+     */
+
+    public static void console(FunctionOutputProcess console) {
+        PrintCommand.CONSOLE = console;
+    }
+
+    /**
+     * console
+     * @param console console
+     */
+
+    public static void console(FunctionInputProcess console) {
+        CONSOLE = console;
     }
 }

@@ -15,6 +15,15 @@ public class CommandDouble extends CommandBasic<Double, CommandDouble> {
     }
 
     /**
+     * type
+     */
+
+    @Override
+    public String type() {
+        return " number";
+    }
+
+    /**
      * converter
      *
      */
