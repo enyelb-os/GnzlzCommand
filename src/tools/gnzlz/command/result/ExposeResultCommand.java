@@ -8,7 +8,7 @@ public class ExposeResultCommand {
         return new ResultCommand<Type>(command, type);
     }
 
-    public static Command<?,?,?> command(ResultCommand<?> resultCommand){
+    public static <R> Command<?,R,?> command(ResultCommand<R> resultCommand){
         return resultCommand.command;
     }
 

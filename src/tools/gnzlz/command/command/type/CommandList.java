@@ -4,7 +4,7 @@ import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.command.ExposeCommand;
 import tools.gnzlz.command.command.object.ExposeListCommand;
 import tools.gnzlz.command.command.object.ListCommand;
-import tools.gnzlz.command.process.functional.FunctionIsQuestion;
+import tools.gnzlz.command.process.functional.FunctionInputProcess;
 import tools.gnzlz.command.result.ExposeResultCommand;
 import tools.gnzlz.command.result.ExposeResultListCommand;
 import tools.gnzlz.command.result.ResultCommand;
@@ -52,13 +52,13 @@ public class CommandList extends Command<ListCommand, ResultListCommand, Command
 
     /**
      * constructor
-     * @param isQuestion name
+     * @param inputProcess name
      * @param resultListCommand r
      * @param allResultListCommand allResultListCommand
      */
 
     @Override
-    protected ResultCommand<ResultListCommand> process(FunctionIsQuestion isQuestion, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
+    protected ResultCommand<ResultListCommand> process(FunctionInputProcess inputProcess, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
         ResultCommand<ResultListCommand> resultCommand = this.resultCommand(resultListCommand, ExposeResultListCommand::create);
         if (resultCommand == null) {
             return null;
@@ -66,7 +66,7 @@ public class CommandList extends Command<ListCommand, ResultListCommand, Command
         ResultListCommand resultListCommandCurrent = Util.firstNonNull(this.processValue(resultCommand.value()), ExposeResultListCommand.create());
         ListCommand listCommand = this.value;
         for (Command<?,?,?> command: ExposeListCommand.commands(listCommand)) {
-            ExposeCommand.process(command, isQuestion, resultListCommandCurrent, allResultListCommand);
+            ExposeCommand.process(command, inputProcess, resultListCommandCurrent, allResultListCommand);
         }
         return resultCommand;
     }

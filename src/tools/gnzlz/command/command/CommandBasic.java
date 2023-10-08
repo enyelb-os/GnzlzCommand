@@ -1,7 +1,6 @@
 package tools.gnzlz.command.command;
 
-import tools.gnzlz.command.process.functional.FunctionIsQuestion;
-import tools.gnzlz.command.process.functional.FunctionVoid;
+import tools.gnzlz.command.process.functional.FunctionInputProcess;
 import tools.gnzlz.command.result.ExposeResultCommand;
 import tools.gnzlz.command.result.ResultCommand;
 import tools.gnzlz.command.result.ResultListCommand;
@@ -40,25 +39,24 @@ public abstract class CommandBasic<Type, C extends Command<?,?,?>> extends Comma
 
     /**
      * process
-     * @param isQuestion name
+     * @param inputProcess name
      * @param resultListCommand r
      * @param allResultListCommand allResultListCommand
      */
 
     @Override
-    protected ResultCommand<Type> process(FunctionIsQuestion isQuestion, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
+    protected ResultCommand<Type> process(FunctionInputProcess inputProcess, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
         final ResultCommand<Type> resultCommand = this.resultCommand(resultListCommand, () -> this.value);
-        if (resultCommand == null || ExposeResultCommand.assign(resultCommand)) {
-            return resultCommand;
+        if (ExposeResultCommand.assign(resultCommand)) {
+            if (resultCommand.value() == null ) {
+                ExposeResultCommand.value(resultCommand, this.value);
+            }
+            do {
+                Print.printResultListCommand(allResultListCommand, "");
+                Print.printQuestion(this.message, this.type(), resultCommand.value() != null ? resultCommand.value().toString() : "");
+                ExposeResultCommand.value(resultCommand, this.processValue(inputProcess.process()));
+            } while (resultCommand.value() == null && this.required.valid(resultListCommand));
         }
-        Type defaultValue = Util.firstNonNull(this.processValue(resultCommand.value()), this.value);
-        final String strDefault = defaultValue != null ? defaultValue.toString() : "";
-        FunctionVoid function = () -> {
-            Print.printResultListCommand(allResultListCommand, "");
-            Print.printQuestion(this.message, this.type(), strDefault);
-        };
-        ExposeResultCommand.value(resultCommand,isQuestion.process(this::processValue, this, resultListCommand, defaultValue, function));
-
         return resultCommand;
     }
 }

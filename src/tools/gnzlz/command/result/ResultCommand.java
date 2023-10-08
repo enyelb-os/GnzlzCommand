@@ -15,12 +15,6 @@ public class ResultCommand<Type> implements PrintResult {
 
     protected ResultListCommand parentResultListCommand;
 
-    /**
-     * vars
-     */
-
-    protected boolean isAllItemsBasic;
-
 
     /**
      * vars
@@ -84,10 +78,8 @@ public class ResultCommand<Type> implements PrintResult {
     protected ResultCommand<Type> value(Type value){
         if(value instanceof ResultListCommand rlc) {
             rlc.parentResultCommand = this;
-            isAllItemsBasic = false;
         } else if(value instanceof ResultArrayListCommand ralc) {
             ralc.parentResultCommand = this;
-            isAllItemsBasic = false;
         }
         if(value != null) {
             this.value = value;

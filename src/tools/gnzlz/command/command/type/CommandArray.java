@@ -5,7 +5,7 @@ import tools.gnzlz.command.command.ExposeCommand;
 import tools.gnzlz.command.command.object.ArrayListCommand;
 import tools.gnzlz.command.command.object.ExposeListCommand;
 import tools.gnzlz.command.command.object.ListCommand;
-import tools.gnzlz.command.process.functional.FunctionIsQuestion;
+import tools.gnzlz.command.process.functional.FunctionInputProcess;
 import tools.gnzlz.command.result.*;
 import tools.gnzlz.command.utils.Util;
 
@@ -55,13 +55,13 @@ public class CommandArray extends Command<ArrayListCommand, ResultArrayListComma
 
     /**
      * constructor
-     * @param isQuestion name
+     * @param inputProcess name
      * @param resultListCommand r
      * @param allResultListCommand allResultListCommand
      */
 
     @Override
-    protected ResultCommand<ResultArrayListCommand> process(FunctionIsQuestion isQuestion, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
+    protected ResultCommand<ResultArrayListCommand> process(FunctionInputProcess inputProcess, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
         ResultCommand<ResultArrayListCommand> resultCommand = this.resultCommand(resultListCommand, ExposeResultArrayListCommand::create);
         if (resultCommand == null) {
             return null;
@@ -83,7 +83,7 @@ public class CommandArray extends Command<ArrayListCommand, ResultArrayListComma
                 ExposeResultArrayListCommand.addResultListCommand(resultListCommandCurrent, resultListCommandNew);
                 ListCommand listCommand = this.value;
                 for (Command<?,?,?> command: ExposeListCommand.commands(listCommand)) {
-                    ExposeCommand.process(command, isQuestion, resultListCommandNew, allResultListCommand);
+                    ExposeCommand.process(command, inputProcess, resultListCommandNew, allResultListCommand);
                 }
 
             }

@@ -16,11 +16,6 @@ public class ResultListCommand implements PrintResult {
 
     protected ResultArrayListCommand parentResultArrayListCommand;
 
-    /**
-     * vars
-     */
-
-    protected boolean isOneItem;
 
     /**
      * vars
@@ -55,7 +50,6 @@ public class ResultListCommand implements PrintResult {
        }
        resultCommand.parentResultListCommand = this;
        resultCommands.add(resultCommand);
-       isOneItem = resultCommands.size() == 1;
        return this;
     }
 

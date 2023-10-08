@@ -1,9 +1,9 @@
 package tools.gnzlz.command.command;
 
-import tools.gnzlz.command.functional.FunctionCreateObject;
 import tools.gnzlz.command.command.functional.FunctionRequiredCommand;
+import tools.gnzlz.command.functional.FunctionCreateObject;
 import tools.gnzlz.command.process.PrintCommand;
-import tools.gnzlz.command.process.functional.FunctionIsQuestion;
+import tools.gnzlz.command.process.functional.FunctionInputProcess;
 import tools.gnzlz.command.result.ExposeResultCommand;
 import tools.gnzlz.command.result.ExposeResultListCommand;
 import tools.gnzlz.command.result.ResultCommand;
@@ -184,12 +184,12 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> {
 
     /**
      * process
-     * @param isQuestion is
+     * @param console is
      * @param resultListCommand r
-     * @param allresultListCommand a
+     * @param allResultListCommand a
      */
 
-    protected abstract ResultCommand<R> process(FunctionIsQuestion isQuestion, ResultListCommand resultListCommand, ResultListCommand allresultListCommand);
+    protected abstract ResultCommand<R> process(FunctionInputProcess console, ResultListCommand resultListCommand, ResultListCommand allResultListCommand);
 
     /**
      * process

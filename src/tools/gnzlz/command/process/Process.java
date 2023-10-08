@@ -1,35 +1,20 @@
 package tools.gnzlz.command.process;
 
-import tools.gnzlz.command.command.ExposeCommand;
-import tools.gnzlz.command.command.object.*;
 import tools.gnzlz.command.command.Command;
-import tools.gnzlz.command.process.functional.*;
+import tools.gnzlz.command.command.ExposeCommand;
+import tools.gnzlz.command.command.object.ExposeListCommand;
+import tools.gnzlz.command.command.object.ListCommand;
 import tools.gnzlz.command.init.ExposeInitListCommand;
 import tools.gnzlz.command.init.InitListCommand;
-import tools.gnzlz.command.result.*;
-import tools.gnzlz.command.utils.Util;
+import tools.gnzlz.command.process.functional.FunctionInputProcess;
+import tools.gnzlz.command.process.functional.FunctionOutputProcess;
+import tools.gnzlz.command.result.ExposeResultCommand;
+import tools.gnzlz.command.result.ResultCommand;
+import tools.gnzlz.command.result.ResultListCommand;
 
 import java.util.Scanner;
 
 public class Process {
-
-    /**
-     * vars
-     */
-
-    private static final FunctionIsQuestion FUNCTION_IS_QUESTION = new FunctionIsQuestion() {
-        @Override
-        public <R> R process(FunctionRunProcess<R> process, Command<?, R, ?> command, ResultListCommand resultListCommand, R defaultValue, FunctionVoid function) {
-            R value = null;
-            do {
-                function.execute();
-                Object object = CONSOLE.process();
-                value = Util.firstNonNull(process.run(object), defaultValue);
-            } while (value == null && ExposeCommand.required(command).valid(resultListCommand));
-
-            return value;
-        }
-    };
 
     /**
      * vars
@@ -80,7 +65,7 @@ public class Process {
 
         for (Command<?,?,?> command: ExposeListCommand.commands(listCommand)) {
 
-            ExposeCommand.process(command, FUNCTION_IS_QUESTION, resultListCommand, allResultListCommand);
+            ExposeCommand.process(command, CONSOLE, resultListCommand, allResultListCommand);
 
             //ResultCommand<?> resultCommand = resultCommandCreate(resultListCommand, defaultResultListCommand, command, null);
 
