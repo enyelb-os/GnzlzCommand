@@ -82,7 +82,7 @@ public abstract class CommandOption<Type, C> extends Command<Option<Type>, Type,
     protected ResultCommand<Type> process(FunctionInputProcess inputProcess, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
         final ResultCommand<Type> resultCommand = this.resultCommand(resultListCommand, () -> this.value.value());
 
-        if (ExposeResultCommand.assign(resultCommand)) {
+        if (!ExposeResultCommand.assign(resultCommand)) {
             this.addOptionsCommandReference(allResultListCommand);
             if (resultCommand.value() == null ) {
                 ExposeResultCommand.value(resultCommand, this.value.value());

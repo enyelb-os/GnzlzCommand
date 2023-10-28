@@ -47,7 +47,8 @@ public abstract class CommandBasic<Type, C extends Command<?,?,?>> extends Comma
     @Override
     protected ResultCommand<Type> process(FunctionInputProcess inputProcess, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
         final ResultCommand<Type> resultCommand = this.resultCommand(resultListCommand, () -> this.value);
-        if (ExposeResultCommand.assign(resultCommand)) {
+        System.out.println(ExposeResultCommand.assign(resultCommand));
+        if (!ExposeResultCommand.assign(resultCommand)) {
             if (resultCommand.value() == null ) {
                 ExposeResultCommand.value(resultCommand, this.value);
             }
