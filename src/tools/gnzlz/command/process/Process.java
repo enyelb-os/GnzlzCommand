@@ -12,16 +12,7 @@ import tools.gnzlz.command.result.ExposeResultCommand;
 import tools.gnzlz.command.result.ResultCommand;
 import tools.gnzlz.command.result.ResultListCommand;
 
-import java.util.Scanner;
-
 public class Process {
-
-    /**
-     * vars
-     */
-
-    private static FunctionInputProcess CONSOLE = new Scanner(System.in)::nextLine;
-
 
     /**
      * Process args
@@ -64,90 +55,7 @@ public class Process {
     private static ResultListCommand processQuestion(ListCommand listCommand, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
 
         for (Command<?,?,?> command: ExposeListCommand.commands(listCommand)) {
-
-            ExposeCommand.process(command, CONSOLE, resultListCommand, allResultListCommand);
-
-            //ResultCommand<?> resultCommand = resultCommandCreate(resultListCommand, defaultResultListCommand, command, null);
-
-
-            //if(!ExposeResultCommand.assign(resultCommand) && ExposeCommand.required(command).valid(allResultListCommand)) {
-                /*Process.addOptionsCommandReference(command, resultListCommand);
-                if(ExposeCommand.value(command) instanceof ArrayListCommand) {
-                    ResultArrayListCommand resultArrayListCommand;
-                    if(resultCommand.value() instanceof ResultArrayListCommand){
-                        resultArrayListCommand = (ResultArrayListCommand) resultCommand.value();
-                    } else {
-                        resultArrayListCommand = ExposeResultArrayCommand.create();
-                        ExposeResultCommand.value(resultCommand, resultArrayListCommand);
-                    }
-
-                    String line;
-                    do {
-                        Scanner in = new Scanner(System.in);
-
-                        Print.printResultListCommand(resultListCommand, text);
-
-                        Print.printMenuMultipleItem(command);
-
-                        line = in.nextLine();
-
-                        if(line.equals("1") || line.equalsIgnoreCase("add")) {
-                            ResultListCommand resultListCommandNew = ExposeResultListCommand.create();
-                            ExposeResultArrayCommand.addResultListCommand(
-                                resultArrayListCommand,
-                                Process.processQuestion(
-                                    (ListCommand) ExposeCommand.value(command),
-                                    resultCommand,
-                                    defaultResultListCommand,
-                                    resultListCommandNew,
-                                    allResultListCommand
-                                )
-                            );
-                        }
-                    } while(!line.equals("0") && !line.equalsIgnoreCase("exit"));*/
-
-                //} else if(ExposeCommand.value(command) instanceof ListCommand) {
-
-                    /*Print.printResultListCommand(resultListCommand, text);
-
-                    ResultListCommand resultListCommandTemp;
-                    if(resultCommand.value() instanceof ResultListCommand){
-                        resultListCommandTemp = (ResultListCommand) resultCommand.value();
-                    } else {
-                        resultListCommandTemp = ExposeResultListCommand.create();
-                    }
-
-                    ExposeResultCommand.value(
-                        resultCommand,
-                        Process.processQuestion(
-                            (ListCommand) ExposeCommand.value(command),
-                            resultCommand,
-                            defaultResultListCommand,
-                            ExposeResultListCommand.create(),
-                            allResultListCommand
-                         )
-                    );*/
-
-               // } else {
-
-
-                    /*do {
-
-                        Scanner in = new Scanner(System.in);
-
-                        Print.printResultListCommand(resultListCommand, text);
-
-                        Print.printQuestion(command, resultCommand);
-
-                        ExposeResultCommand.value(resultCommand, in.nextLine());
-
-                        if (resultCommand.value() == null && ExposeCommand.value(command) != null) {
-                            ExposeResultCommand.value(resultCommand, ExposeCommand.value(command));
-                        }
-
-                    } while (resultCommand.value() == null);*/
-              //  }
-            //}
+            ExposeCommand.process(command, SystemIO.INP, resultListCommand, allResultListCommand);
         }
         return resultListCommand;
     }
@@ -220,7 +128,7 @@ public class Process {
      */
 
     public static void console(FunctionOutputProcess console) {
-        PrintCommand.CONSOLE = console;
+        SystemIO.OUT = console;
     }
 
     /**
@@ -229,6 +137,6 @@ public class Process {
      */
 
     public static void console(FunctionInputProcess console) {
-        CONSOLE = console;
+        SystemIO.INP = console;
     }
 }

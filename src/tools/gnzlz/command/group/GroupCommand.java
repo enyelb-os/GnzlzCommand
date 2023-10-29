@@ -7,6 +7,9 @@ import tools.gnzlz.command.command.object.ListCommand;
 import tools.gnzlz.command.functional.FunctionGroupCommand;
 import tools.gnzlz.command.init.InitListCommand;
 import tools.gnzlz.command.process.Process;
+import tools.gnzlz.command.process.SystemIO;
+import tools.gnzlz.command.process.print.PrintGroupCommand;
+import tools.gnzlz.command.result.ExposeResultCommand;
 import tools.gnzlz.command.result.ResultListCommand;
 
 import java.util.ArrayList;
@@ -49,7 +52,7 @@ public class GroupCommand {
      * vars
      */
 
-    private final boolean isDefault;
+    protected final boolean isDefault;
 
     /**
      * constructor
@@ -205,58 +208,24 @@ public class GroupCommand {
             }
         }
         if(!isFoundCommand && !current.internals.isEmpty()) {
-            printHelp(current);
+
+            do {
+                PrintGroupCommand.printOptions(current);
+                String value = (String) SystemIO.INP.process();
+                if (value.equalsIgnoreCase("-h") || value.equalsIgnoreCase("help") || value.equalsIgnoreCase("--help")) {
+                    PrintGroupCommand.printHelp(current);
+                } else {
+                    for (GroupCommand groupCommand: current.internals) {
+                        if (groupCommand.name.equals(value)) {
+                            process(args, resultListCommandOld, groupCommand.listCommand, groupCommand, index+1);
+                            break;
+                        }
+                    }
+                }
+            } while (true);
+
+
         }
         return resultListCommand;
-    }
-
-    /**
-     * static
-     */
-
-    private static void printHelp(GroupCommand groupCommand) {
-        System.out.println("Help");
-        printHelp(groupCommand, 0, "");
-    }
-
-    private static void printHelp(GroupCommand groupCommand, int taps, String commandRequire) {
-        boolean existsDefault = false;
-        for (GroupCommand command : groupCommand.internals) {
-            if(command.isDefault) {
-                existsDefault = true;
-                break;
-            }
-        }
-
-        StringBuilder commandRequireNew = new StringBuilder(commandRequire);
-        ExposeListCommand.commands(groupCommand.listCommand).forEach(require -> {
-            if (!commandRequireNew.isEmpty()) {
-                commandRequireNew.append(", ");
-            }
-            commandRequireNew.append(ExposeCommand.name(require));
-        });
-
-        if(existsDefault) {
-            System.out.println(taps(taps) + "- " + commandRequireNew);
-        }
-
-        for (GroupCommand command : groupCommand.internals) {
-            if(!command.isDefault) {
-                System.out.println(taps(taps) + command.name + ":");
-                printHelp(command, taps + 1, commandRequireNew.toString());
-            }
-        }
-
-        if(groupCommand.internals.isEmpty()){
-            System.out.println(taps(taps) + "- " + commandRequireNew);
-        }
-    }
-
-    private static String taps(int taps) {
-        StringBuilder staps = new StringBuilder();
-        for (int i = 0; i < taps; i++) {
-            staps.append("\t");
-        }
-        return staps.toString();
     }
 }

@@ -1,6 +1,7 @@
 package tools.gnzlz.command.command;
 
 import tools.gnzlz.command.process.functional.FunctionInputProcess;
+import tools.gnzlz.command.process.print.PrintCommand;
 import tools.gnzlz.command.result.ExposeResultCommand;
 import tools.gnzlz.command.result.ResultCommand;
 import tools.gnzlz.command.result.ResultListCommand;
@@ -47,14 +48,13 @@ public abstract class CommandBasic<Type, C extends Command<?,?,?>> extends Comma
     @Override
     protected ResultCommand<Type> process(FunctionInputProcess inputProcess, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
         final ResultCommand<Type> resultCommand = this.resultCommand(resultListCommand, () -> this.value);
-        System.out.println(ExposeResultCommand.assign(resultCommand));
         if (!ExposeResultCommand.assign(resultCommand)) {
             if (resultCommand.value() == null ) {
                 ExposeResultCommand.value(resultCommand, this.value);
             }
             do {
-                Print.printResultListCommand(allResultListCommand, "");
-                Print.printQuestion(this.message, this.type(), resultCommand.value() != null ? resultCommand.value().toString() : "");
+                PrintCommand.printResultListCommand(allResultListCommand, "");
+                PrintCommand.printQuestion(this.message, this.type(), resultCommand.value() != null ? resultCommand.value().toString() : "");
                 ExposeResultCommand.value(resultCommand, this.processValue(inputProcess.process()));
             } while (resultCommand.value() == null && this.required.valid(resultListCommand));
         }

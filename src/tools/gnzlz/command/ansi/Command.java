@@ -1,6 +1,6 @@
 package tools.gnzlz.command.ansi;
 
-import tools.gnzlz.command.process.PrintCommand;
+import tools.gnzlz.command.process.print.PrintCommand;
 
 public enum Command {
 
@@ -24,13 +24,10 @@ public enum Command {
 
     @Override
     public String toString() {
-        if(PrintCommand.isPrintable) {
-            if (System.getProperty("os.name").contains("Windows")) {
-                return cmd;
-            } else {
-                return terminal;
-            }
+        if (System.getProperty("os.name").contains("Windows")) {
+            return cmd;
+        } else {
+            return terminal;
         }
-        return "";
     }
 }

@@ -6,6 +6,7 @@ import tools.gnzlz.command.command.object.ArrayListCommand;
 import tools.gnzlz.command.command.object.ExposeListCommand;
 import tools.gnzlz.command.command.object.ListCommand;
 import tools.gnzlz.command.process.functional.FunctionInputProcess;
+import tools.gnzlz.command.process.print.PrintCommand;
 import tools.gnzlz.command.result.*;
 import tools.gnzlz.command.utils.Util;
 
@@ -72,8 +73,8 @@ public class CommandArray extends Command<ArrayListCommand, ResultArrayListComma
         do {
 
 
-            Print.printResultListCommand(allResultListCommand, "");
-            Print.printMenuMultipleItem(this);
+            PrintCommand.printResultListCommand(allResultListCommand, "");
+            PrintCommand.printMenuMultipleItem(this);
 
             Scanner in = new Scanner(System.in);
             line = in.nextLine();

@@ -3,8 +3,8 @@ package tools.gnzlz.command.result;
 import tools.gnzlz.command.ansi.Color;
 import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.command.ExposeCommand;
-import tools.gnzlz.command.process.PrintCommand;
-import tools.gnzlz.command.process.utils.UtilPrint;
+import tools.gnzlz.command.process.print.PrintCommand;
+import tools.gnzlz.command.process.print.UtilPrint;
 import tools.gnzlz.command.result.interfaces.PrintResult;
 
 public class ResultCommand<Type> implements PrintResult {
@@ -108,7 +108,7 @@ public class ResultCommand<Type> implements PrintResult {
         //boolean allBasicItem = UtilPrint.isAllItemBasic(this.parentResultListCommand);
         boolean isOneItemParent = this.isOneItem();
         if(!isOneItemParent ) {
-            s.append(PrintCommand.taps(0)).append(Color.PURPLE.print(this.name() + ": "));
+            s.append(UtilPrint.taps(0)).append(Color.PURPLE.print(this.name() + ": "));
         }
 
         if (this.value instanceof ResultListCommand rlc) {

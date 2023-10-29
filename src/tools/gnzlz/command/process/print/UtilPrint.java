@@ -1,10 +1,40 @@
-package tools.gnzlz.command.process.utils;
+package tools.gnzlz.command.process.print;
 
 import tools.gnzlz.command.result.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class UtilPrint {
+
+    /**
+     * Default methods
+     */
+
+    public static int separator = 70;
+
+    /**
+     * Default methods
+     */
+
+    public static void clearConsole(){
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                Runtime.getRuntime().exec("clear");
+            }
+        } catch (IOException | InterruptedException ignored) {}
+    }
+
+    /**
+     * Default methods
+     */
+
+    public static String taps(int taps) {
+        if (taps < 0) return "";
+        return "   ".repeat(taps);
+    }
 
     /**
      * Default methods

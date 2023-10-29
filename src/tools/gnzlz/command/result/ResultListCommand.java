@@ -2,8 +2,8 @@ package tools.gnzlz.command.result;
 
 import tools.gnzlz.command.ansi.Color;
 import tools.gnzlz.command.functional.FunctionCommand;
-import tools.gnzlz.command.process.PrintCommand;
-import tools.gnzlz.command.process.utils.UtilPrint;
+import tools.gnzlz.command.process.print.PrintCommand;
+import tools.gnzlz.command.process.print.UtilPrint;
 import tools.gnzlz.command.result.interfaces.PrintResult;
 
 import java.util.ArrayList;
@@ -219,7 +219,7 @@ public class ResultListCommand implements PrintResult {
         }
         this.resultCommands.stream().filter(UtilPrint::isBasicItem).forEach(resultCommand -> {
             if (!allBasicItem && !isOneItem && item[0] == 0) {
-                s.append(System.lineSeparator()).append(PrintCommand.taps(index + 1));
+                s.append(System.lineSeparator()).append(UtilPrint.taps(index + 1));
             } else if( item[0] != 0) {
                 s.append(Color.YELLOW.print(", "));
             }
@@ -229,7 +229,7 @@ public class ResultListCommand implements PrintResult {
 
         this.resultCommands.stream().filter(UtilPrint::isNotBasicItem).forEach(resultCommand -> {
             if (item[0] == item[1] - 1 && !isChildrenEmpty(resultCommand)) {
-                s.append(System.lineSeparator()).append(PrintCommand.taps(index + 1));
+                s.append(System.lineSeparator()).append(UtilPrint.taps(index + 1));
             } else if (item[0] != 0){
                 s.append(Color.YELLOW.print(", "));
             }
@@ -238,7 +238,7 @@ public class ResultListCommand implements PrintResult {
         });
         if(!isOneItem) {
             if(!allBasicItem) {
-                s.append(System.lineSeparator()).append(PrintCommand.taps(index));
+                s.append(System.lineSeparator()).append(UtilPrint.taps(index));
             }
             s.append(Color.YELLOW.print("]"));
         }

@@ -2,7 +2,7 @@ package tools.gnzlz.command.command;
 
 import tools.gnzlz.command.command.functional.FunctionRequiredCommand;
 import tools.gnzlz.command.functional.FunctionCreateObject;
-import tools.gnzlz.command.process.PrintCommand;
+import tools.gnzlz.command.process.print.PrintCommand;
 import tools.gnzlz.command.process.functional.FunctionInputProcess;
 import tools.gnzlz.command.result.ExposeResultCommand;
 import tools.gnzlz.command.result.ExposeResultListCommand;
@@ -12,8 +12,6 @@ import tools.gnzlz.command.result.ResultListCommand;
 import java.util.ArrayList;
 
 public abstract class Command<Type, R, C extends Command<?, ?, ?>> {
-
-    protected final static PrintCommand Print = new PrintCommand();
 
     /**
      * vars
