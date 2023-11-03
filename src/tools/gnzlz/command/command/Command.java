@@ -78,6 +78,7 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> {
      */
 
     public C required(FunctionRequiredCommand required) {
+        System.out.println(this.name + " " + this.required);
         this.required = required;
         return (C) this;
     }
