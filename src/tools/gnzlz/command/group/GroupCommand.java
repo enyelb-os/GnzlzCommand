@@ -208,23 +208,27 @@ public class GroupCommand {
             }
         }
         if(!isFoundCommand && !current.internals.isEmpty()) {
-
+            boolean exit = false;
             do {
                 PrintGroupCommand.printOptions(current);
                 String value = (String) SystemIO.INP.process();
-                if (value.equalsIgnoreCase("-h") || value.equalsIgnoreCase("help") || value.equalsIgnoreCase("--help")) {
-                    PrintGroupCommand.printHelp(current);
-                } else {
-                    for (GroupCommand groupCommand: current.internals) {
-                        if (groupCommand.name.equals(value)) {
-                            process(args, resultListCommandOld, groupCommand.listCommand, groupCommand, index+1);
-                            break;
+                if (!value.isBlank()) {
+                    String[] values = value.split(" ");
+                    if (values[0].equalsIgnoreCase("-h") || values[0].equalsIgnoreCase("help") || values[0].equalsIgnoreCase("--help")) {
+                        PrintGroupCommand.printHelp(current);
+                    } else {
+                        for (GroupCommand groupCommand: current.internals) {
+                            if (groupCommand.name.equals(values[0])) {
+                                if (groupCommand.functionGroupCommand != null) {
+                                    groupCommand.functionGroupCommand.run(resultListCommand);
+                                }
+                                process(values, resultListCommandOld, groupCommand.listCommand, groupCommand, 1);
+                                exit = true;
+                            }
                         }
                     }
                 }
-            } while (true);
-
-
+            } while (!exit);
         }
         return resultListCommand;
     }

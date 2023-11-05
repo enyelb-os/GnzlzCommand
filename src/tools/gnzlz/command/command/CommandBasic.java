@@ -1,5 +1,7 @@
 package tools.gnzlz.command.command;
 
+import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.command.ExposeCommand;
 import tools.gnzlz.command.process.functional.FunctionInputProcess;
 import tools.gnzlz.command.process.print.PrintCommand;
 import tools.gnzlz.command.result.ExposeResultCommand;
@@ -52,11 +54,13 @@ public abstract class CommandBasic<Type, C extends Command<?,?,?>> extends Comma
             if (resultCommand.value() == null ) {
                 ExposeResultCommand.value(resultCommand, this.value);
             }
-            do {
-                PrintCommand.printResultListCommand(allResultListCommand, "");
-                PrintCommand.printQuestion(this.message, this.type(), resultCommand.value() != null ? resultCommand.value().toString() : "");
-                ExposeResultCommand.value(resultCommand, this.processValue(inputProcess.process()));
-            } while (resultCommand.value() == null && this.required.valid(resultListCommand));
+            if (ExposeCommand.required(this).valid(resultListCommand)) {
+                do {
+                    PrintCommand.printResultListCommand(allResultListCommand, "");
+                    PrintCommand.printQuestion(ExposeCommand.message(this), this.type(), resultCommand.value() != null ? resultCommand.value().toString() : "");
+                    ExposeResultCommand.value(resultCommand, this.processValue(inputProcess.process()));
+                } while (resultCommand.value() == null && ExposeCommand.required(this).valid(resultListCommand));
+            }
         }
         return resultCommand;
     }
