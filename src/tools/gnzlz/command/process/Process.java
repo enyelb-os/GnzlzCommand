@@ -25,19 +25,21 @@ public class Process {
     private static ResultListCommand processArgs(String[] args, ListCommand listCommand, ResultListCommand resultListCommand){
         String option = "";
         Object value = null;
-        for (String code: args) {
-            for (Command<?,?,?> command: ExposeListCommand.commands(listCommand)) {
-                if (code.charAt(0) == '-') {
-                    option = code;
-                    value = true;
-                } else {
-                    value = code;
-                }
-                for (String commandOption: ExposeCommand.commands(command)) {
-                    if (option.equals(commandOption)) {
-                        ResultCommand<?> resultCommand = ExposeCommand.args(command, resultListCommand, value);
-                        ExposeResultCommand.assign(resultCommand, true);
-                        break;
+        if (args != null) {
+            for (String code: args) {
+                for (Command<?,?,?> command: ExposeListCommand.commands(listCommand)) {
+                    if (code.charAt(0) == '-') {
+                        option = code;
+                        value = true;
+                    } else {
+                        value = code;
+                    }
+                    for (String commandOption: ExposeCommand.commands(command)) {
+                        if (option.equals(commandOption)) {
+                            ResultCommand<?> resultCommand = ExposeCommand.args(command, resultListCommand, value);
+                            ExposeResultCommand.assign(resultCommand, true);
+                            break;
+                        }
                     }
                 }
             }

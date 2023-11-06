@@ -200,10 +200,10 @@ public class GroupCommand {
                 current.runDefault = groupCommand.isDefault;
 
                 if (groupCommand.functionGroupCommand != null) {
-                    groupCommand.functionGroupCommand.run(resultListCommand);
+                    groupCommand.functionGroupCommand.run(args, resultListCommand);
                 }
 
-                process(args, resultListCommandOld, groupCommand.listCommand, groupCommand, index+1);
+                process(args, resultListCommandOld, groupCommand.listCommand, groupCommand, groupCommand.isDefault ? index : index+1);
                 isFoundCommand = true;
             }
         }
@@ -220,7 +220,7 @@ public class GroupCommand {
                         for (GroupCommand groupCommand: current.internals) {
                             if (groupCommand.name.equals(values[0])) {
                                 if (groupCommand.functionGroupCommand != null) {
-                                    groupCommand.functionGroupCommand.run(resultListCommand);
+                                    groupCommand.functionGroupCommand.run(values, resultListCommand);
                                 }
                                 process(values, resultListCommandOld, groupCommand.listCommand, groupCommand, 1);
                                 exit = true;
