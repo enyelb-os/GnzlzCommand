@@ -35,6 +35,15 @@ public abstract class CommandOption<Type, C> extends Command<Option<Type>, Type,
     public abstract C option(Type ... value);
 
     /**
+     * set option
+     * @param value value
+     */
+    public C valueOption(Type value){
+        ExposeOption.value(this.value, value);
+        return (C) this;
+    }
+
+    /**
      * type
      */
 

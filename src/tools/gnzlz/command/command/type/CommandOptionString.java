@@ -41,7 +41,7 @@ public class CommandOptionString extends CommandOption<String, CommandOptionStri
 
     @Override
     protected String processValue(Object value) {
-        if(this.value.valid(value.toString())){
+        if(value != null && this.value.valid(value.toString())){
             return value.toString();
         }
         return null;

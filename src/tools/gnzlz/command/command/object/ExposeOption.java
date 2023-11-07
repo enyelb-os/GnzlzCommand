@@ -12,4 +12,9 @@ public class ExposeOption {
         return option.value;
     }
 
+    public static <R> void value(Option<R> option, R value){
+        if(option != null) {
+            option.value = value;
+        }
+    }
 }
