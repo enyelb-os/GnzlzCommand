@@ -199,11 +199,11 @@ public class GroupCommand {
             if((groupCommand.isDefault && current.runDefault) || args != null && args.length > index && args[index].equals(groupCommand.name)) {
                 current.runDefault = groupCommand.isDefault;
 
+                process(args, resultListCommandOld, groupCommand.listCommand, groupCommand, groupCommand.isDefault ? index : index+1);
+
                 if (groupCommand.functionGroupCommand != null) {
                     groupCommand.functionGroupCommand.run(args, resultListCommand);
                 }
-
-                process(args, resultListCommandOld, groupCommand.listCommand, groupCommand, groupCommand.isDefault ? index : index+1);
                 isFoundCommand = true;
             }
         }

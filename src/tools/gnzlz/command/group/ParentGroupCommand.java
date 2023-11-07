@@ -23,7 +23,7 @@ public class ParentGroupCommand {
      * add Group
      ***************************************/
 
-    public ParentGroupCommand addGroup(GroupCommand... groupCommands) {
+    public ParentGroupCommand addGroup(GroupCommand ... groupCommands) {
         this.parent.addGroup(groupCommands);
         return this;
     }
@@ -32,7 +32,7 @@ public class ParentGroupCommand {
      * add Command
      ***************************************/
 
-    public ParentGroupCommand addCommand(Command<?,?,?>... commands) {
+    public ParentGroupCommand addCommand(Command<?,?,?> ... commands) {
         parent.addCommand(commands);
         return this;
     }
