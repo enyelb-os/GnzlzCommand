@@ -16,7 +16,7 @@ public class ArrayListCommand extends ListCommand {
      * select listCommands
      ***************************************/
 
-    public static ArrayListCommand create(Command<?,?,?>... command){
+    public static ArrayListCommand create(Command<?,?,?>... command) {
         return new ArrayListCommand().addCommand(command);
     }
 
@@ -24,7 +24,7 @@ public class ArrayListCommand extends ListCommand {
      * static
      ***************************************/
 
-    public ArrayListCommand addCommand(Command<?,?,?> ... names){
+    public ArrayListCommand addCommand(Command<?,?,?> ... names) {
         super.addCommand(names);
         return this;
     }
