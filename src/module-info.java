@@ -9,4 +9,5 @@ module tools.gnzlz.command {
     exports tools.gnzlz.command.init.functional;
     exports tools.gnzlz.command.process;
     exports tools.gnzlz.command.functional;
+    exports tools.gnzlz.command.process.functional;
 }
