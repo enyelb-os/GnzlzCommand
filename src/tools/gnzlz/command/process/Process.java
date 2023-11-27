@@ -4,6 +4,7 @@ import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.command.ExposeCommand;
 import tools.gnzlz.command.command.object.ExposeListCommand;
 import tools.gnzlz.command.command.object.ListCommand;
+import tools.gnzlz.command.command.type.CommandBoolean;
 import tools.gnzlz.command.init.ExposeInitListCommand;
 import tools.gnzlz.command.init.InitListCommand;
 import tools.gnzlz.command.process.functional.FunctionInputProcess;
@@ -11,6 +12,9 @@ import tools.gnzlz.command.process.functional.FunctionOutputProcess;
 import tools.gnzlz.command.result.ExposeResultCommand;
 import tools.gnzlz.command.result.ResultCommand;
 import tools.gnzlz.command.result.ResultListCommand;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Process {
 
@@ -22,22 +26,41 @@ public class Process {
      *
      */
 
-    private static ResultListCommand processArgs(String[] args, ListCommand listCommand, ResultListCommand resultListCommand){
+    private static ResultListCommand processArgs(ArrayList<String> args, ListCommand listCommand, ResultListCommand resultListCommand){
         String option = "";
         Object value = null;
+        boolean isAssign;
         if (args != null) {
-            for (String code: args) {
-                for (Command<?,?,?> command: ExposeListCommand.commands(listCommand)) {
-                    if (code.charAt(0) == '-') {
-                        option = code;
-                        value = true;
-                    } else {
-                        value = code;
+            for (int i = 0; i < args.size() ; i++) {
+                String code = args.get(i);
+                isAssign = false;
+                if (code.charAt(0) == '-') {
+                    option = code;
+                    if (args.size() <= i+1 || args.get(i+1).charAt(0) == '-') {
+                        isAssign = true;
                     }
+                    value = null;
+                } else {
+                    isAssign = true;
+                    value = code;
+                }
+                for (Command<?,?,?> command: ExposeListCommand.commands(listCommand)) {
                     for (String commandOption: ExposeCommand.commands(command)) {
-                        if (option.equals(commandOption)) {
+                        if (option.equals(commandOption) && isAssign) {
+                            if (value == null) {
+                                if (command instanceof CommandBoolean) {
+                                    value = true;
+                                } else {
+                                    value = "";
+                                }
+                            } else {
+                                args.remove(i);
+                                i--;
+                            }
                             ResultCommand<?> resultCommand = ExposeCommand.args(command, resultListCommand, value);
                             ExposeResultCommand.assign(resultCommand, true);
+                            args.remove(i);
+                            i--;
                             break;
                         }
                     }
@@ -69,8 +92,29 @@ public class Process {
      * @param initListCommand i
      */
 
-    public static ResultListCommand args(String[] args, ListCommand listCommand, InitListCommand initListCommand) {
+    public static ResultListCommand args(ArrayList<String> args, ListCommand listCommand, InitListCommand initListCommand) {
         return Process.processArgs(args, listCommand, ExposeInitListCommand.resultListCommand(initListCommand));
+    }
+
+    /**
+     * args
+     * @param args args
+     * @param listCommand l
+     */
+
+    public static ResultListCommand args(ArrayList<String> args, ListCommand listCommand) {
+        return Process.args(args, listCommand, InitListCommand.create());
+    }
+
+    /**
+     * args
+     * @param args args
+     * @param listCommand l
+     * @param initListCommand i
+     */
+
+    public static ResultListCommand args(String[] args, ListCommand listCommand, InitListCommand initListCommand) {
+        return Process.processArgs(new ArrayList<>(Arrays.asList(args)), listCommand, ExposeInitListCommand.resultListCommand(initListCommand));
     }
 
     /**
@@ -105,11 +149,35 @@ public class Process {
 
     /**
      * argsAndQuestions
+     * @param args args
      * @param listCommand l
      * @param initListCommand i
      */
 
     public static ResultListCommand argsAndQuestions(String[] args, ListCommand listCommand, InitListCommand initListCommand) {
+        ResultListCommand defaultResultListCommand = ExposeInitListCommand.resultListCommand(initListCommand);
+        ResultListCommand newResultListCommand = Process.processArgs(new ArrayList<>(Arrays.asList(args)), listCommand, defaultResultListCommand);
+        return Process.processQuestion(listCommand, newResultListCommand, newResultListCommand);
+    }
+
+    /**
+     * argsAndQuestions
+     * @param args args
+     * @param listCommand listCommand
+     */
+
+    public static ResultListCommand argsAndQuestions(String[] args, ListCommand listCommand) {
+        return Process.argsAndQuestions(args, listCommand, InitListCommand.create());
+    }
+
+    /**
+     * argsAndQuestions
+     * @param args args
+     * @param listCommand l
+     * @param initListCommand i
+     */
+
+    public static ResultListCommand argsAndQuestions(ArrayList<String> args, ListCommand listCommand, InitListCommand initListCommand) {
         ResultListCommand defaultResultListCommand = ExposeInitListCommand.resultListCommand(initListCommand);
         ResultListCommand newResultListCommand = Process.processArgs(args, listCommand, defaultResultListCommand);
         return Process.processQuestion(listCommand, newResultListCommand, newResultListCommand);
@@ -117,10 +185,11 @@ public class Process {
 
     /**
      * argsAndQuestions
+     * @param args args
      * @param listCommand listCommand
      */
 
-    public static ResultListCommand argsAndQuestions(String[] args, ListCommand listCommand) {
+    public static ResultListCommand argsAndQuestions(ArrayList<String> args, ListCommand listCommand) {
         return Process.argsAndQuestions(args, listCommand, InitListCommand.create());
     }
 
