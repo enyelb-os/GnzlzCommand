@@ -234,7 +234,7 @@ public class GroupCommand {
         for (GroupCommand groupCommand : current.internals){
             if((groupCommand.isDefault && current.runDefault) || args.size() > index && args.get(index).equals(groupCommand.name)) {
                 if (args.size() > index && args.get(index).equals(groupCommand.name)) {
-                    System.out.println(args.remove(index) + " remove");
+                    args.remove(index);
                     if (index > 0) {
                         index--;
                     }
@@ -263,7 +263,7 @@ public class GroupCommand {
                         ArrayList<String> array = new ArrayList<>(Arrays.asList(values));
                         for (GroupCommand groupCommand: current.internals) {
                             if (groupCommand.name.equals(array.get(0))) {
-                                System.out.println(array.remove(index) + " remove");
+                                array.remove(index);
                                 if (groupCommand.functionGroupCommand != null) {
                                     groupCommand.functionGroupCommand.run(array, resultListCommand);
                                 }
