@@ -4,12 +4,12 @@ import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.command.ExposeCommand;
 import tools.gnzlz.command.command.object.ExposeListCommand;
 import tools.gnzlz.command.command.object.ListCommand;
-import tools.gnzlz.command.process.functional.FunctionInputProcess;
 import tools.gnzlz.command.result.ExposeResultCommand;
 import tools.gnzlz.command.result.ExposeResultListCommand;
 import tools.gnzlz.command.result.ResultCommand;
 import tools.gnzlz.command.result.ResultListCommand;
 import tools.gnzlz.command.utils.Util;
+import tools.gnzlz.system.io.functional.FunctionInputProcess;
 
 public class CommandList extends Command<ListCommand, ResultListCommand, CommandList> {
 

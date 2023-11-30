@@ -1,6 +1,6 @@
 package tools.gnzlz.command.result;
 
-import tools.gnzlz.command.ansi.Color;
+import tools.gnzlz.system.ansi.Color;
 import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.command.ExposeCommand;
 import tools.gnzlz.command.process.print.UtilPrint;

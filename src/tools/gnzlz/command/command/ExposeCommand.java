@@ -1,9 +1,9 @@
 package tools.gnzlz.command.command;
 
 import tools.gnzlz.command.command.functional.FunctionRequiredCommand;
-import tools.gnzlz.command.process.functional.FunctionInputProcess;
 import tools.gnzlz.command.result.ResultCommand;
 import tools.gnzlz.command.result.ResultListCommand;
+import tools.gnzlz.system.io.functional.FunctionInputProcess;
 
 import java.util.ArrayList;
 

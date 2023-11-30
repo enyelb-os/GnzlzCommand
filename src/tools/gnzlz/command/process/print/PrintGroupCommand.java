@@ -1,11 +1,11 @@
 package tools.gnzlz.command.process.print;
 
-import tools.gnzlz.command.ansi.Color;
+import tools.gnzlz.system.ansi.Color;
 import tools.gnzlz.command.command.ExposeCommand;
 import tools.gnzlz.command.command.object.ExposeListCommand;
 import tools.gnzlz.command.group.ExposeGroupCommand;
 import tools.gnzlz.command.group.GroupCommand;
-import tools.gnzlz.command.process.SystemIO;
+import tools.gnzlz.system.io.SystemIO;
 
 public class PrintGroupCommand {
 
@@ -70,7 +70,7 @@ public class PrintGroupCommand {
         SystemIO.OUT.print(" (");
         SystemIO.OUT.print(str.toString());
         SystemIO.OUT.print(")");
-        SystemIO.OUT.println();
+        SystemIO.OUT.ln();
         SystemIO.OUT.print(Color.GREEN.print("Choose an option?: "));
     }
 }

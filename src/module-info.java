@@ -1,4 +1,6 @@
 module tools.gnzlz.command {
+    requires tools.gnzlz.system.io;
+
     exports tools.gnzlz.command.command;
     exports tools.gnzlz.command.command.object;
     exports tools.gnzlz.command.command.functional;

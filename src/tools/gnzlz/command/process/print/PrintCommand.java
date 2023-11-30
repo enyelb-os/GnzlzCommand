@@ -1,9 +1,9 @@
 package tools.gnzlz.command.process.print;
 
-import tools.gnzlz.command.ansi.Color;
+import tools.gnzlz.system.ansi.Color;
+import tools.gnzlz.system.io.SystemIO;
 import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.command.ExposeCommand;
-import tools.gnzlz.command.process.SystemIO;
 import tools.gnzlz.command.result.*;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class PrintCommand {
          SystemIO.OUT.println(" 1.- " + Color.CYAN.print("Add item"));
          SystemIO.OUT.println(" 0.- " + Color.CYAN.print("Exit continue"));
          SystemIO.OUT.println("");
-         SystemIO.OUT.printTitle(ExposeCommand.message(command), UtilPrint.separator);
+         SystemIO.OUT.title(ExposeCommand.message(command), UtilPrint.separator, "=");
          SystemIO.OUT.println("");
          SystemIO.OUT.print(Color.GREEN.print("Choose an option?: "));
     }
@@ -30,23 +30,23 @@ public class PrintCommand {
      public static void printResultListCommand(ResultListCommand resultListCommand, String text){
         ArrayList<ResultCommand<?>> resultCommands = ExposeResultListCommand.resultCommands(resultListCommand);
         UtilPrint.clearConsole();
-        SystemIO.OUT.println();
-        SystemIO.OUT.printTitle(text, UtilPrint.separator);
-        SystemIO.OUT.println();
+        SystemIO.OUT.ln();
+        SystemIO.OUT.title(text, UtilPrint.separator, "=");
+        SystemIO.OUT.ln();
         if (UtilPrint.isEmptyResultListCommand(resultCommands)) {
             SystemIO.OUT.println("List: Empty");
         } else {
             printResultListCommand(resultCommands, 0);
         }
-        SystemIO.OUT.println();
-        SystemIO.OUT.printSeparator(UtilPrint.separator);
-        SystemIO.OUT.println();
+        SystemIO.OUT.ln();
+        SystemIO.OUT.repeat(UtilPrint.separator, "=");
+        SystemIO.OUT.ln();
     }
 
     public static void printResultListCommand(ArrayList<ResultCommand<?>> listCommand, int index){
-        listCommand.stream().forEach((resultCommand -> {
+        listCommand.forEach((resultCommand -> {
             SystemIO.OUT.print(resultCommand.print(index));
-            SystemIO.OUT.println();
+            SystemIO.OUT.ln();
         }));
     }
 
@@ -63,7 +63,7 @@ public class PrintCommand {
          }
 
          if (!type.isEmpty() || !defaultValue.isEmpty()) {
-             SystemIO.OUT.println();
+             SystemIO.OUT.ln();
          }
          SystemIO.OUT.print(Color.GREEN.print(messages  +  ": "));
     }

@@ -5,10 +5,10 @@ import tools.gnzlz.command.command.ExposeCommand;
 import tools.gnzlz.command.command.object.ArrayListCommand;
 import tools.gnzlz.command.command.object.ExposeListCommand;
 import tools.gnzlz.command.command.object.ListCommand;
-import tools.gnzlz.command.process.functional.FunctionInputProcess;
 import tools.gnzlz.command.process.print.PrintCommand;
 import tools.gnzlz.command.result.*;
 import tools.gnzlz.command.utils.Util;
+import tools.gnzlz.system.io.functional.FunctionInputProcess;
 
 import java.util.Scanner;
 

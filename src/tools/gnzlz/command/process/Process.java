@@ -7,11 +7,12 @@ import tools.gnzlz.command.command.object.ListCommand;
 import tools.gnzlz.command.command.type.CommandBoolean;
 import tools.gnzlz.command.init.ExposeInitListCommand;
 import tools.gnzlz.command.init.InitListCommand;
-import tools.gnzlz.command.process.functional.FunctionInputProcess;
-import tools.gnzlz.command.process.functional.FunctionOutputProcess;
 import tools.gnzlz.command.result.ExposeResultCommand;
 import tools.gnzlz.command.result.ResultCommand;
 import tools.gnzlz.command.result.ResultListCommand;
+import tools.gnzlz.system.io.SystemIO;
+import tools.gnzlz.system.io.functional.FunctionInputProcess;
+import tools.gnzlz.system.io.functional.FunctionOutputProcess;
 
 import java.util.ArrayList;
 import java.util.Arrays;

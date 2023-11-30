@@ -7,9 +7,9 @@ import tools.gnzlz.command.command.object.ListCommand;
 import tools.gnzlz.command.functional.FunctionGroupCommand;
 import tools.gnzlz.command.init.InitListCommand;
 import tools.gnzlz.command.process.Process;
-import tools.gnzlz.command.process.SystemIO;
 import tools.gnzlz.command.process.print.PrintGroupCommand;
 import tools.gnzlz.command.result.ResultListCommand;
+import tools.gnzlz.system.io.SystemIO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
