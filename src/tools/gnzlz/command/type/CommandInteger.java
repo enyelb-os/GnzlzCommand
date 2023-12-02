@@ -1,6 +1,6 @@
-package tools.gnzlz.command.command.type;
+package tools.gnzlz.command.type;
 
-import tools.gnzlz.command.command.CommandBasic;
+import tools.gnzlz.command.CommandBasic;
 
 public class CommandInteger extends CommandBasic<Integer, CommandInteger> {
 

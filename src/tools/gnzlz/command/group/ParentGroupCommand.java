@@ -1,66 +1,71 @@
 package tools.gnzlz.command.group;
 
-import tools.gnzlz.command.command.Command;
-import tools.gnzlz.command.command.object.ListCommand;
+import tools.gnzlz.command.Command;
+import tools.gnzlz.command.object.ListCommand;
 
 public class ParentGroupCommand {
 
-    /***************************************
-     * vars
-     ***************************************/
+    /**
+     * parent
+     */
+    final GroupCommand parent;
 
-    protected final GroupCommand parent;
-
-    /***************************************
-     * constructor
-     ***************************************/
-
+    /**
+     * ParentGroupCommand
+     * @param listCommand l
+     */
     ParentGroupCommand(ListCommand listCommand){
         this.parent = new GroupCommand("parent", true, false, null, listCommand);
     }
 
-    /***************************************
-     * add Group
-     ***************************************/
-
+    /**
+     * addGroup
+     * @param groupCommands gc
+     */
     public ParentGroupCommand addGroup(GroupCommand ... groupCommands) {
         this.parent.addGroup(groupCommands);
         return this;
     }
 
-    /***************************************
-     * add Command
-     ***************************************/
-
+    /**
+     * addCommand
+     * @param commands c
+     */
     public ParentGroupCommand addCommand(Command<?,?,?> ... commands) {
         parent.addCommand(commands);
         return this;
     }
 
-    /***************************************
-     * static
-     ***************************************/
-
+    /**
+     * create
+     */
     public static ParentGroupCommand create(ListCommand listCommand) {
         return new ParentGroupCommand(listCommand);
     }
 
+    /**
+     * create
+     */
     public static ParentGroupCommand create() {
         return create(ListCommand.create());
     }
 
-    /***************************************
-     * static
-     ***************************************/
-
+    /**
+     * use
+     * @param listCommand lc
+     * @param commands c
+     */
     public ParentGroupCommand use(ListCommand listCommand, String ... commands) {
         parent.use(listCommand, commands);
         return this;
     }
 
+    /**
+     * use
+     * @param listCommand lc
+     */
     public ParentGroupCommand use(ListCommand listCommand) {
         parent.use(listCommand);
         return this;
     }
-
 }

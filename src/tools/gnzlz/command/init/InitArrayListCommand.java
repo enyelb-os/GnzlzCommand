@@ -10,15 +10,13 @@ import java.util.ArrayList;
 public class InitArrayListCommand {
 
     /**
-     * vars
+     * resultArrayListCommand
      */
-
     protected ResultArrayListCommand resultArrayListCommand;
 
     /**
-     * constructor
+     * InitArrayListCommand
      */
-
     protected InitArrayListCommand(){
         this.resultArrayListCommand = ExposeResultArrayListCommand.create();
     }
@@ -26,28 +24,25 @@ public class InitArrayListCommand {
     /**
      * create
      */
-
     public static InitArrayListCommand create(){
         return new InitArrayListCommand();
     }
 
     /**
-     * add
+     * addListCommand
      * @param initListCommand resultListCommand
      */
-
     public InitArrayListCommand addListCommand(InitListCommand initListCommand){
         ExposeResultArrayListCommand.addResultListCommand(resultArrayListCommand, initListCommand.resultListCommand);
         return this;
     }
 
     /**
-     * add
+     * addListCommand
      * @param list list
      * @param functionInitListCommand f
      * @param <Type> type
      */
-
     public <Type> InitArrayListCommand addListCommand(ArrayList<Type> list, FunctionInitListCommand<Type> functionInitListCommand){
         if(!list.isEmpty()) {
             list.forEach((e) -> {
@@ -60,12 +55,11 @@ public class InitArrayListCommand {
     }
 
     /**
-     * add
+     * addListCommand
      * @param list list
      * @param functionReturnInitListCommand f
      * @param <Type> type
      */
-
     public <Type> InitArrayListCommand addListCommand(ArrayList<Type> list, FunctionReturnInitListCommand<Type> functionReturnInitListCommand){
         if(!list.isEmpty()) {
             list.forEach((e) -> {
@@ -75,6 +69,4 @@ public class InitArrayListCommand {
         }
         return this;
     }
-
-
 }

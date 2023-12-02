@@ -1,8 +1,8 @@
-package tools.gnzlz.command.process.print;
+package tools.gnzlz.command.process.print.hidden;
 
 import tools.gnzlz.system.ansi.Color;
-import tools.gnzlz.command.command.ExposeCommand;
-import tools.gnzlz.command.command.object.ExposeListCommand;
+import tools.gnzlz.command.ExposeCommand;
+import tools.gnzlz.command.object.ExposeListCommand;
 import tools.gnzlz.command.group.ExposeGroupCommand;
 import tools.gnzlz.command.group.GroupCommand;
 import tools.gnzlz.system.io.SystemIO;
@@ -10,14 +10,18 @@ import tools.gnzlz.system.io.SystemIO;
 public class PrintGroupCommand {
 
     /**
-     * Default methods
+     * printHelp
+     * @param groupCommand groupCommand
      */
     public static void printHelp(GroupCommand groupCommand) {
         printHelp(groupCommand, 0, "");
     }
 
     /**
-     * Default methods
+     * printHelp
+     * @param groupCommand gc
+     * @param taps t
+     * @param commandRequire cr
      */
     private static void printHelp(GroupCommand groupCommand, int taps, String commandRequire) {
         boolean existsDefault = false;
@@ -54,7 +58,7 @@ public class PrintGroupCommand {
 
 
     /**
-     * Default methods
+     * printOptions
      * @param current GroupCommand
      */
     public static void printOptions(GroupCommand current){

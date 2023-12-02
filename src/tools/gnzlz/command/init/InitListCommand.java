@@ -1,6 +1,6 @@
 package tools.gnzlz.command.init;
 
-import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.Command;
 import tools.gnzlz.command.init.functional.FunctionInitListCommand;
 import tools.gnzlz.command.init.functional.FunctionReturnInitListCommand;
 import tools.gnzlz.command.result.*;
@@ -10,15 +10,13 @@ import java.util.ArrayList;
 public class InitListCommand {
 
     /**
-     * vars
+     * resultListCommand
      */
-
     protected final ResultListCommand resultListCommand;
 
     /**
-     * constructor
+     * InitListCommand
      */
-
     protected InitListCommand(){
         this.resultListCommand = ExposeResultListCommand.create();
     }
@@ -26,7 +24,6 @@ public class InitListCommand {
     /**
      * create
      */
-
     public static InitListCommand create(){
         return new InitListCommand();
     }
@@ -35,7 +32,6 @@ public class InitListCommand {
      * addCommand
      * @param initCommand initCommand
      */
-
     public InitListCommand addCommand(InitCommand<?> initCommand){
         ExposeResultListCommand.addResultCommand(resultListCommand, initCommand.resultCommand);
         return this;
@@ -43,10 +39,10 @@ public class InitListCommand {
 
     /**
      * addCommand
+     * @param <Type> type
      * @param command command
      * @param value value
      */
-
     public <Type> InitListCommand addCommand(Command<?,Type,?> command, Type value){
         ExposeResultListCommand.addResultCommand(
             resultListCommand,
@@ -60,7 +56,6 @@ public class InitListCommand {
      * @param command command
      * @param initListCommand value
      */
-
     public InitListCommand addCommand(Command<?,ResultListCommand,?> command, InitListCommand initListCommand){
         ExposeResultListCommand.addResultCommand(
             resultListCommand,
@@ -74,7 +69,6 @@ public class InitListCommand {
      * @param command command
      * @param initArrayListCommand value
      */
-
     public InitListCommand addCommand(Command<?,ResultArrayListCommand,?> command, InitArrayListCommand initArrayListCommand){
         ExposeResultListCommand.addResultCommand(
             resultListCommand,
@@ -90,7 +84,6 @@ public class InitListCommand {
      * @param functionInitListCommand f
      * @param <Type> type
      */
-
     public <Type> InitListCommand addCommand(Command<?,ResultArrayListCommand,?> command, ArrayList<Type> list, FunctionInitListCommand<Type> functionInitListCommand){
         if(!list.isEmpty()) {
             ResultArrayListCommand resultArrayListCommand = ExposeResultArrayListCommand.create();
@@ -107,7 +100,6 @@ public class InitListCommand {
         return this;
     }
 
-
     /**
      * addCommand
      * @param command command
@@ -115,7 +107,6 @@ public class InitListCommand {
      * @param functionReturnInitListCommand f
      * @param <Type> type
      */
-
     public <Type> InitListCommand addCommand(Command<?,ResultArrayListCommand,?> command, ArrayList<Type> list, FunctionReturnInitListCommand<Type> functionReturnInitListCommand){
         if(!list.isEmpty()) {
             ResultArrayListCommand resultArrayListCommand = ExposeResultArrayListCommand.create();

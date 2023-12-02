@@ -1,27 +1,25 @@
 package tools.gnzlz.command.result;
 
 import tools.gnzlz.system.ansi.Color;
-import tools.gnzlz.command.process.print.UtilPrint;
-import tools.gnzlz.command.result.interfaces.PrintResult;
+import tools.gnzlz.command.process.print.hidden.UtilPrint;
+import tools.gnzlz.command.result.interfaces.hidden.PrintResult;
 
 import java.util.ArrayList;
 
 public class ResultArrayListCommand implements PrintResult {
 
     /**
-     * vars
+     * parentResultCommand
      */
-
     protected ResultCommand<?> parentResultCommand;
 
     /**
-     * vars
+     * resultListCommands
      */
-
     protected ArrayList<ResultListCommand> resultListCommands;
 
     /**
-     * constructor
+     * ResultArrayListCommand
      */
     protected ResultArrayListCommand(){
         this.resultListCommands = new ArrayList<ResultListCommand>();
@@ -40,8 +38,8 @@ public class ResultArrayListCommand implements PrintResult {
 
     /**
      * print
+     * @param index index
      */
-
     @Override
     public String print(int index) {
         StringBuilder s = new StringBuilder();

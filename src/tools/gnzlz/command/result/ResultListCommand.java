@@ -1,37 +1,33 @@
 package tools.gnzlz.command.result;
 
 import tools.gnzlz.system.ansi.Color;
-import tools.gnzlz.command.functional.FunctionCommand;
-import tools.gnzlz.command.process.print.UtilPrint;
-import tools.gnzlz.command.result.interfaces.PrintResult;
+import tools.gnzlz.command.result.functional.FunctionCommand;
+import tools.gnzlz.command.process.print.hidden.UtilPrint;
+import tools.gnzlz.command.result.interfaces.hidden.PrintResult;
 
 import java.util.ArrayList;
 
 public class ResultListCommand implements PrintResult {
 
     /**
-     * vars
+     * parentResultArrayListCommand
      */
-
     protected ResultArrayListCommand parentResultArrayListCommand;
 
 
     /**
-     * vars
+     * parentResultCommand
      */
-
     protected ResultCommand<?> parentResultCommand;
 
     /**
-     * vars
+     * resultCommands
      */
-
     protected final ArrayList<ResultCommand<?>> resultCommands;
 
     /**
-     * constructor
+     * ResultListCommand
      */
-
     protected ResultListCommand(){
         this.resultCommands = new ArrayList<ResultCommand<?>>();
     }
@@ -40,7 +36,6 @@ public class ResultListCommand implements PrintResult {
      * add
      * @param resultCommand resultCommand
      */
-
     protected ResultListCommand add(ResultCommand<?> resultCommand){
        for (ResultCommand<?> command: resultCommands) {
             if(command.command() == resultCommand.command()){
@@ -56,7 +51,6 @@ public class ResultListCommand implements PrintResult {
      * get
      * @param name name
      */
-
     public Object get(String name){
         for (ResultCommand<?> command: resultCommands) {
             if(command.name().equals(name)){
@@ -70,7 +64,6 @@ public class ResultListCommand implements PrintResult {
      * string
      * @param name name
      */
-
     public String string(String name){
         for (ResultCommand<?> command: resultCommands) {
             if(command.name().equals(name)){
@@ -84,7 +77,6 @@ public class ResultListCommand implements PrintResult {
      * bool
      * @param name name
      */
-
     public boolean bool(String name){
         for (ResultCommand<?> command: resultCommands) {
             if(command.name().equals(name)){
@@ -102,7 +94,6 @@ public class ResultListCommand implements PrintResult {
      * integer
      * @param name name
      */
-
     public int integer(String name){
         for (ResultCommand<?> command: resultCommands) {
             if(command.name().equals(name) && command.value() instanceof Integer){
@@ -116,7 +107,6 @@ public class ResultListCommand implements PrintResult {
      * array
      * @param name name
      */
-
     public ArrayList<ResultListCommand> array(String name){
         for (ResultCommand<?> command: resultCommands) {
             if(command.name().equals(name)){
@@ -125,14 +115,13 @@ public class ResultListCommand implements PrintResult {
                 }
             }
         }
-        return new ArrayList<ResultListCommand>();
+        return new ArrayList<>();
     }
 
     /**
      * list
      * @param name name
      */
-
     public ResultListCommand list(String name){
         for (ResultCommand<?> command: resultCommands) {
             if(command.name().equals(name)){
@@ -145,9 +134,10 @@ public class ResultListCommand implements PrintResult {
     }
 
     /**
-     * method
+     * listCommands
+     * @param resultCommands rc
+     * @param functionCommand fc
      */
-
     private void listCommands(ArrayList<ResultCommand<?>> resultCommands, FunctionCommand functionCommand){
         for (ResultCommand<?> command: resultCommands) {
             if(command.value() instanceof ResultListCommand) {
@@ -165,17 +155,17 @@ public class ResultListCommand implements PrintResult {
     }
 
     /**
-     * method
+     * listCommands
+     * @param functionCommand fc
      */
-
     public void listCommands(FunctionCommand functionCommand){
         listCommands(resultCommands,functionCommand);
     }
 
     /**
-     * print
+     * isChildrenEmpty
+     * @param resultCommand rc
      */
-
     private boolean isChildrenEmpty(ResultCommand<?> resultCommand){
         if(resultCommand.value instanceof ResultListCommand rlc) {
             return rlc.resultCommands.isEmpty();
@@ -187,8 +177,8 @@ public class ResultListCommand implements PrintResult {
 
     /**
      * print
+     * @param index index
      */
-
     @Override
     public String print(int index) {
         StringBuilder s = new StringBuilder();

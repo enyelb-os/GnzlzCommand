@@ -1,13 +1,13 @@
 package tools.gnzlz.command.group;
 
-import tools.gnzlz.command.command.Command;
-import tools.gnzlz.command.command.ExposeCommand;
-import tools.gnzlz.command.command.object.ExposeListCommand;
-import tools.gnzlz.command.command.object.ListCommand;
-import tools.gnzlz.command.functional.FunctionGroupCommand;
+import tools.gnzlz.command.Command;
+import tools.gnzlz.command.ExposeCommand;
+import tools.gnzlz.command.object.ExposeListCommand;
+import tools.gnzlz.command.object.ListCommand;
+import tools.gnzlz.command.group.functional.FunctionGroupCommand;
 import tools.gnzlz.command.init.InitListCommand;
 import tools.gnzlz.command.process.Process;
-import tools.gnzlz.command.process.print.PrintGroupCommand;
+import tools.gnzlz.command.process.print.hidden.PrintGroupCommand;
 import tools.gnzlz.command.result.ResultListCommand;
 import tools.gnzlz.system.io.SystemIO;
 
@@ -20,32 +20,32 @@ public class GroupCommand {
     /**
      * internals
      */
-    protected final ArrayList<GroupCommand> internals = new ArrayList<GroupCommand>();
+    final ArrayList<GroupCommand> internals = new ArrayList<GroupCommand>();
 
     /**
      * functionGroupCommand
      */
-    private FunctionGroupCommand functionGroupCommand;
+    FunctionGroupCommand functionGroupCommand;
 
     /**
      * listCommand
      */
-    protected ListCommand listCommand;
+    ListCommand listCommand;
 
     /**
      * runDefault
      */
-    private boolean runDefault = true;
+    boolean runDefault = true;
 
     /**
      * name
      */
-    protected final String name;
+    final String name;
 
     /**
      * isDefault
      */
-    protected final boolean isDefault;
+    final boolean isDefault;
 
     /**
      * GroupCommand
@@ -55,7 +55,7 @@ public class GroupCommand {
      * @param functionGroupCommand functionGroupCommand
      * @param listCommand listCommand
      */
-    protected GroupCommand(String name, boolean hashcode, boolean isDefault, FunctionGroupCommand functionGroupCommand, ListCommand listCommand){
+    GroupCommand(String name, boolean hashcode, boolean isDefault, FunctionGroupCommand functionGroupCommand, ListCommand listCommand){
         this.name = name + (hashcode ? this.hashCode() : "");
         this.isDefault = isDefault;
         this.functionGroupCommand = functionGroupCommand;
@@ -216,15 +216,19 @@ public class GroupCommand {
      */
     public static ResultListCommand process(ArrayList<String> args, ParentGroupCommand parentGroupCommand) {
         return GroupCommand.process(
-                args, InitListCommand.create(),
-                parentGroupCommand.parent.listCommand, parentGroupCommand.parent, 0
+            args, InitListCommand.create(),
+            parentGroupCommand.parent.listCommand, parentGroupCommand.parent, 0
         );
     }
 
     /**
-     * static
+     * process
+     * @param args args
+     * @param resultListCommandOld rlco
+     * @param listCommand lc
+     * @param current c
+     * @param index index
      */
-
     private static ResultListCommand process(ArrayList<String> args, InitListCommand resultListCommandOld, ListCommand listCommand, GroupCommand current, int index) {
         current.runDefault = true;
         boolean isFoundCommand = false;

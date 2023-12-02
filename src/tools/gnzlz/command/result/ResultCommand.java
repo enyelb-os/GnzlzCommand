@@ -1,44 +1,39 @@
 package tools.gnzlz.command.result;
 
 import tools.gnzlz.system.ansi.Color;
-import tools.gnzlz.command.command.Command;
-import tools.gnzlz.command.command.ExposeCommand;
-import tools.gnzlz.command.process.print.UtilPrint;
-import tools.gnzlz.command.result.interfaces.PrintResult;
+import tools.gnzlz.command.Command;
+import tools.gnzlz.command.ExposeCommand;
+import tools.gnzlz.command.process.print.hidden.UtilPrint;
+import tools.gnzlz.command.result.interfaces.hidden.PrintResult;
 
 public class ResultCommand<Type> implements PrintResult {
 
     /**
-     * vars
+     * print
      */
-
     protected ResultListCommand parentResultListCommand;
 
 
     /**
-     * vars
+     * assign
      */
-
     protected boolean assign;
 
     /**
-     * vars
+     * command
      */
-
     protected Command<?,Type,?> command;
 
     /**
-     * vars
+     * value
      */
-
     protected Type value;
 
     /**
-     * constructor
+     * ResultCommand
      * @param command command
      * @param value value
      */
-
      protected ResultCommand(Command<?,Type,?> command, Type value){
         this.command = command;
         this.value = value;
@@ -48,7 +43,6 @@ public class ResultCommand<Type> implements PrintResult {
     /**
      * name
      */
-
     public String name(){
         return ExposeCommand.name(command);
     }
@@ -56,7 +50,6 @@ public class ResultCommand<Type> implements PrintResult {
     /**
      * value
      */
-
     public Object value(){
         return value;
     }
@@ -64,7 +57,6 @@ public class ResultCommand<Type> implements PrintResult {
     /**
      * command
      */
-
     public Command<?,Type,?> command(){
         return command;
     }
@@ -73,7 +65,6 @@ public class ResultCommand<Type> implements PrintResult {
      * value
      * @param value value
      */
-
     protected ResultCommand<Type> value(Type value){
         if(value instanceof ResultListCommand rlc) {
             rlc.parentResultCommand = this;
@@ -87,9 +78,8 @@ public class ResultCommand<Type> implements PrintResult {
     }
 
     /**
-     * print
+     * isOneItem
      */
-
     private boolean isOneItem(){
         if (parentResultListCommand != null) {
             return UtilPrint.isOneItem(parentResultListCommand.parentResultArrayListCommand);
@@ -99,8 +89,8 @@ public class ResultCommand<Type> implements PrintResult {
 
     /**
      * print
+     * @param index index
      */
-
     @Override
     public String print(int index) {
         StringBuilder s = new StringBuilder();

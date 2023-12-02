@@ -1,9 +1,9 @@
-package tools.gnzlz.command.command.type;
+package tools.gnzlz.command.type;
 
-import tools.gnzlz.command.command.Command;
-import tools.gnzlz.command.command.CommandOption;
-import tools.gnzlz.command.command.ExposeCommand;
-import tools.gnzlz.command.command.object.Option;
+import tools.gnzlz.command.Command;
+import tools.gnzlz.command.CommandOption;
+import tools.gnzlz.command.ExposeCommand;
+import tools.gnzlz.command.object.Option;
 
 public class CommandOptionString extends CommandOption<String, CommandOptionString> {
 

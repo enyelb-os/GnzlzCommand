@@ -1,7 +1,7 @@
-package tools.gnzlz.command.command.object;
+package tools.gnzlz.command.object;
 
-import tools.gnzlz.command.command.Command;
-import tools.gnzlz.command.command.ExposeCommand;
+import tools.gnzlz.command.Command;
+import tools.gnzlz.command.ExposeCommand;
 
 import java.util.ArrayList;
 

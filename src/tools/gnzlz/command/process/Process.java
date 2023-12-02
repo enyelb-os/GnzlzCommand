@@ -1,10 +1,10 @@
 package tools.gnzlz.command.process;
 
-import tools.gnzlz.command.command.Command;
-import tools.gnzlz.command.command.ExposeCommand;
-import tools.gnzlz.command.command.object.ExposeListCommand;
-import tools.gnzlz.command.command.object.ListCommand;
-import tools.gnzlz.command.command.type.CommandBoolean;
+import tools.gnzlz.command.Command;
+import tools.gnzlz.command.ExposeCommand;
+import tools.gnzlz.command.object.ExposeListCommand;
+import tools.gnzlz.command.object.ListCommand;
+import tools.gnzlz.command.type.CommandBoolean;
 import tools.gnzlz.command.init.ExposeInitListCommand;
 import tools.gnzlz.command.init.InitListCommand;
 import tools.gnzlz.command.result.ExposeResultCommand;
@@ -26,10 +26,9 @@ public class Process {
      * @param resultListCommand r
      *
      */
-
     private static ResultListCommand processArgs(ArrayList<String> args, ListCommand listCommand, ResultListCommand resultListCommand){
         String option = "";
-        Object value = null;
+        Object value;
         boolean isAssign;
         if (args != null) {
             for (int i = 0; i < args.size() ; i++) {
@@ -77,7 +76,6 @@ public class Process {
      * @param resultListCommand a
      * @param allResultListCommand a
      */
-
     private static ResultListCommand processQuestion(ListCommand listCommand, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
 
         for (Command<?,?,?> command: ExposeListCommand.commands(listCommand)) {
@@ -92,7 +90,6 @@ public class Process {
      * @param listCommand l
      * @param initListCommand i
      */
-
     public static ResultListCommand args(ArrayList<String> args, ListCommand listCommand, InitListCommand initListCommand) {
         return Process.processArgs(args, listCommand, ExposeInitListCommand.resultListCommand(initListCommand));
     }
@@ -102,7 +99,6 @@ public class Process {
      * @param args args
      * @param listCommand l
      */
-
     public static ResultListCommand args(ArrayList<String> args, ListCommand listCommand) {
         return Process.args(args, listCommand, InitListCommand.create());
     }
@@ -113,7 +109,6 @@ public class Process {
      * @param listCommand l
      * @param initListCommand i
      */
-
     public static ResultListCommand args(String[] args, ListCommand listCommand, InitListCommand initListCommand) {
         return Process.processArgs(new ArrayList<>(Arrays.asList(args)), listCommand, ExposeInitListCommand.resultListCommand(initListCommand));
     }
@@ -123,7 +118,6 @@ public class Process {
      * @param args args
      * @param listCommand l
      */
-
     public static ResultListCommand args(String[] args, ListCommand listCommand) {
         return Process.args(args, listCommand, InitListCommand.create());
     }
@@ -133,7 +127,6 @@ public class Process {
      * @param listCommand l
      * @param initListCommand i
      */
-
     public static ResultListCommand questions(ListCommand listCommand, InitListCommand initListCommand) {
         ResultListCommand resultListCommand = ExposeInitListCommand.resultListCommand(initListCommand);
         return Process.processQuestion(listCommand,  resultListCommand, resultListCommand);
@@ -143,7 +136,6 @@ public class Process {
      * questions
      * @param listCommand l
      */
-
     public static ResultListCommand questions(ListCommand listCommand) {
         return Process.questions(listCommand, InitListCommand.create());
     }
@@ -154,7 +146,6 @@ public class Process {
      * @param listCommand l
      * @param initListCommand i
      */
-
     public static ResultListCommand argsAndQuestions(String[] args, ListCommand listCommand, InitListCommand initListCommand) {
         ResultListCommand defaultResultListCommand = ExposeInitListCommand.resultListCommand(initListCommand);
         ResultListCommand newResultListCommand = Process.processArgs(new ArrayList<>(Arrays.asList(args)), listCommand, defaultResultListCommand);
@@ -166,7 +157,6 @@ public class Process {
      * @param args args
      * @param listCommand listCommand
      */
-
     public static ResultListCommand argsAndQuestions(String[] args, ListCommand listCommand) {
         return Process.argsAndQuestions(args, listCommand, InitListCommand.create());
     }
@@ -177,7 +167,6 @@ public class Process {
      * @param listCommand l
      * @param initListCommand i
      */
-
     public static ResultListCommand argsAndQuestions(ArrayList<String> args, ListCommand listCommand, InitListCommand initListCommand) {
         ResultListCommand defaultResultListCommand = ExposeInitListCommand.resultListCommand(initListCommand);
         ResultListCommand newResultListCommand = Process.processArgs(args, listCommand, defaultResultListCommand);
@@ -189,7 +178,6 @@ public class Process {
      * @param args args
      * @param listCommand listCommand
      */
-
     public static ResultListCommand argsAndQuestions(ArrayList<String> args, ListCommand listCommand) {
         return Process.argsAndQuestions(args, listCommand, InitListCommand.create());
     }
@@ -198,7 +186,6 @@ public class Process {
      * console
      * @param console console
      */
-
     public static void console(FunctionOutputProcess console) {
         SystemIO.OUT = console;
     }
@@ -207,7 +194,6 @@ public class Process {
      * console
      * @param console console
      */
-
     public static void console(FunctionInputProcess console) {
         SystemIO.INP = console;
     }

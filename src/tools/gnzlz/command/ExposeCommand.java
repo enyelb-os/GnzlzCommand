@@ -1,6 +1,6 @@
-package tools.gnzlz.command.command;
+package tools.gnzlz.command;
 
-import tools.gnzlz.command.command.functional.FunctionRequiredCommand;
+import tools.gnzlz.command.functional.FunctionRequiredCommand;
 import tools.gnzlz.command.result.ResultCommand;
 import tools.gnzlz.command.result.ResultListCommand;
 

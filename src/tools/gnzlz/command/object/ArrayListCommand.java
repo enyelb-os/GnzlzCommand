@@ -1,6 +1,6 @@
-package tools.gnzlz.command.command.object;
+package tools.gnzlz.command.object;
 
-import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.Command;
 
 public class ArrayListCommand extends ListCommand {
 

@@ -1,4 +1,4 @@
-package tools.gnzlz.command.process.print;
+package tools.gnzlz.command.process.print.hidden;
 
 import tools.gnzlz.command.result.*;
 
@@ -8,15 +8,13 @@ import java.util.ArrayList;
 public class UtilPrint {
 
     /**
-     * Default methods
+     * separator
      */
-
     public static int separator = 70;
 
     /**
-     * Default methods
+     * clearConsole
      */
-
     public static void clearConsole(){
         try {
             if (System.getProperty("os.name").contains("Windows")) {
@@ -28,18 +26,18 @@ public class UtilPrint {
     }
 
     /**
-     * Default methods
+     * taps
+     * @param taps taps
      */
-
     public static String taps(int taps) {
         if (taps < 0) return "";
         return "   ".repeat(taps);
     }
 
     /**
-     * Default methods
+     * isMultiline
+     * @param resultListCommand rlc
      */
-
     public static boolean isMultiline(ResultListCommand resultListCommand) {
         ArrayList<ResultCommand<?>> resultCommands = ExposeResultListCommand.resultCommands(resultListCommand);
         for (ResultCommand<?> resultCommand: resultCommands) {
@@ -59,9 +57,9 @@ public class UtilPrint {
     }
 
     /**
-     * Default methods
+     * isMultiline
+     * @param resultArrayListCommand ralc
      */
-
     public static boolean isMultiline(ResultArrayListCommand resultArrayListCommand) {
         ArrayList<ResultListCommand> resultListCommands = ExposeResultArrayListCommand.resultCommands(resultArrayListCommand);
         for (ResultListCommand resultListCommand: resultListCommands) {
@@ -74,9 +72,9 @@ public class UtilPrint {
     }
 
     /**
-     * Default methods
+     * isAllItemBasic
+     * @param resultCommands rc
      */
-
     public static boolean isAllItemBasic(ArrayList<ResultCommand<?>>  resultCommands) {
         for (ResultCommand<?> resultCommand: resultCommands) {
             if (resultCommand.value() instanceof ResultListCommand rlc) {
@@ -93,9 +91,9 @@ public class UtilPrint {
     }
 
     /**
-     * Default methods
+     * isAllItemBasic
+     * @param resultListCommand rlc
      */
-
     public static boolean isAllItemBasic(ResultListCommand resultListCommand) {
         if (resultListCommand != null) {
             ArrayList<ResultCommand<?>> resultCommands = ExposeResultListCommand.resultCommands(resultListCommand);
@@ -115,33 +113,9 @@ public class UtilPrint {
     }
 
     /**
-     * Default methods
+     * isOneItem
+     * @param resultArrayListCommand ralc
      */
-
-    public static boolean isOneItemList(ResultCommand<?>  resultCommand) {
-        boolean status =  false;
-        //for (ResultCommand<?> resultCommand: resultCommands) {
-            if (resultCommand.value() instanceof ResultListCommand rlc) {
-                status = true;
-                if(ExposeResultListCommand.resultCommands(rlc).size() > 1) {
-                    return false;
-                }
-            } else if(resultCommand.value() instanceof ResultArrayListCommand ralc) {
-                status = true;
-                for (ResultListCommand resultListCommand : ExposeResultArrayListCommand.resultCommands(ralc)){
-                    if(ExposeResultListCommand.resultCommands(resultListCommand).size() > 1) {
-                        return false;
-                    }
-                }
-            }
-        //}
-        return status;
-    }
-
-    /**
-     * Default methods
-     */
-
     public static boolean isOneItem(ResultArrayListCommand resultArrayListCommand) {
         if (resultArrayListCommand != null) {
             if(ExposeResultArrayListCommand.resultCommands(resultArrayListCommand).size() == 1) {
@@ -158,9 +132,9 @@ public class UtilPrint {
     }
 
     /**
-     * Default methods
+     * isOneItem
+     * @param resultListCommand rlc
      */
-
     public static boolean isOneItem(ResultListCommand resultListCommand) {
         if (resultListCommand != null) {
             return ExposeResultListCommand.resultCommands(resultListCommand).size() == 1;
@@ -169,9 +143,9 @@ public class UtilPrint {
     }
 
     /**
-     * Default methods
+     * isBasicItem
+     * @param resultCommand rc
      */
-
     public static boolean isBasicItem(ResultCommand<?> resultCommand) {
         if(resultCommand != null) {
             return !(resultCommand.value() instanceof ResultListCommand) && !(resultCommand.value() instanceof ResultArrayListCommand);
@@ -180,17 +154,17 @@ public class UtilPrint {
     }
 
     /**
-     * Default methods
+     * isNotBasicItem
+     * @param resultCommand rc
      */
-
     public static boolean isNotBasicItem(ResultCommand<?> resultCommand) {
         return !UtilPrint.isBasicItem(resultCommand);
     }
 
     /**
-     * Default methods
+     * isEmptyResultListCommand
+     * @param listCommand lc
      */
-
     public static boolean isEmptyResultListCommand(ArrayList<ResultCommand<?>> listCommand){
         for (ResultCommand<?> resultCommand : listCommand) {
             if(resultCommand.value() != null) {

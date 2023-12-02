@@ -1,12 +1,11 @@
-package tools.gnzlz.command.command;
+package tools.gnzlz.command;
 
-import tools.gnzlz.command.process.print.PrintCommand;
+import tools.gnzlz.command.process.print.hidden.PrintCommand;
 import tools.gnzlz.command.result.ExposeResultCommand;
 import tools.gnzlz.command.result.ResultCommand;
 import tools.gnzlz.command.result.ResultListCommand;
 import tools.gnzlz.command.utils.Util;
 import tools.gnzlz.system.io.SystemIO;
-import tools.gnzlz.system.io.functional.FunctionInputProcess;
 
 public abstract class CommandBasic<Type, C extends Command<?,?,?>> extends Command<Type, Type, C> {
 
