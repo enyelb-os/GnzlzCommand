@@ -4,12 +4,10 @@ import tools.gnzlz.command.command.CommandBasic;
 
 public class CommandInteger extends CommandBasic<Integer, CommandInteger> {
 
-    /***************************************
-     * constructor
+    /**
+     * CommandInteger
      * @param name name
-     **************************************
      */
-
     public CommandInteger(String name) {
         super(name);
     }
@@ -17,17 +15,15 @@ public class CommandInteger extends CommandBasic<Integer, CommandInteger> {
     /**
      * type
      */
-
     @Override
-    public String type() {
+    protected String type() {
         return " int";
     }
 
     /**
-     * converter
-     *
+     * processValue
+     * @param value value
      */
-
     @Override
     protected Integer processValue(Object value) {
         if(value instanceof String str){
@@ -40,12 +36,10 @@ public class CommandInteger extends CommandBasic<Integer, CommandInteger> {
         return null;
     }
 
-
-    /***************************************
-     * static create
+    /**
+     * create
      * @param name name
-     ***************************************/
-
+     */
     public static CommandInteger create(String name){
         return new CommandInteger(name);
     }

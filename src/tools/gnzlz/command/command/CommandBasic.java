@@ -5,15 +5,15 @@ import tools.gnzlz.command.result.ExposeResultCommand;
 import tools.gnzlz.command.result.ResultCommand;
 import tools.gnzlz.command.result.ResultListCommand;
 import tools.gnzlz.command.utils.Util;
+import tools.gnzlz.system.io.SystemIO;
 import tools.gnzlz.system.io.functional.FunctionInputProcess;
 
 public abstract class CommandBasic<Type, C extends Command<?,?,?>> extends Command<Type, Type, C> {
 
     /**
-     * constructor
+     * CommandBasic
      * @param name name
      */
-
     protected CommandBasic(String name) {
         super(name);
     }
@@ -21,17 +21,15 @@ public abstract class CommandBasic<Type, C extends Command<?,?,?>> extends Comma
     /**
      * type
      */
-
     protected abstract String type();
 
     /**
-     * args
+     * processArgs
      * @param resultListCommand r
      * @param object a
      */
-
     @Override
-    protected ResultCommand<Type> args(ResultListCommand resultListCommand, Object object) {
+    protected ResultCommand<Type> processArgs(ResultListCommand resultListCommand, Object object) {
         ResultCommand<Type> resultCommand = this.resultCommand(resultListCommand, () -> processValue(object));
         Type defaultValue = Util.firstNonNull(this.processValue(object),this.processValue(resultCommand.value()), this.value);
         ExposeResultCommand.value(resultCommand, defaultValue);
@@ -39,14 +37,12 @@ public abstract class CommandBasic<Type, C extends Command<?,?,?>> extends Comma
     }
 
     /**
-     * process
-     * @param inputProcess name
+     * processQuestion
      * @param resultListCommand r
      * @param allResultListCommand allResultListCommand
      */
-
     @Override
-    protected ResultCommand<Type> process(FunctionInputProcess inputProcess, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
+    protected ResultCommand<Type> processQuestion(ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
         final ResultCommand<Type> resultCommand = this.resultCommand(resultListCommand, () -> this.value);
         if (!ExposeResultCommand.assign(resultCommand)) {
             if (resultCommand.value() == null ) {
@@ -56,7 +52,7 @@ public abstract class CommandBasic<Type, C extends Command<?,?,?>> extends Comma
                 do {
                     PrintCommand.printResultListCommand(allResultListCommand, "");
                     PrintCommand.printQuestion(ExposeCommand.message(this), this.type(), resultCommand.value() != null ? resultCommand.value().toString() : "");
-                    ExposeResultCommand.value(resultCommand, this.processValue(inputProcess.process()));
+                    ExposeResultCommand.value(resultCommand, this.processValue(SystemIO.INP.process()));
                 } while (resultCommand.value() == null && ExposeCommand.required(this).valid(resultListCommand));
             }
         }

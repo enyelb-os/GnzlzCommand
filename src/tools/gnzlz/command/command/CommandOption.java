@@ -7,13 +7,14 @@ import tools.gnzlz.command.result.ExposeResultCommand;
 import tools.gnzlz.command.result.ResultCommand;
 import tools.gnzlz.command.result.ResultListCommand;
 import tools.gnzlz.command.utils.Util;
+import tools.gnzlz.system.io.SystemIO;
 import tools.gnzlz.system.io.functional.FunctionInputProcess;
 
 public abstract class CommandOption<Type, C> extends Command<Option<Type>, Type, CommandOption<Type, C>> {
 
 
     /**
-     * constructor
+     * CommandOption
      * @param name name
      */
     protected CommandOption(String name) {
@@ -24,14 +25,12 @@ public abstract class CommandOption<Type, C> extends Command<Option<Type>, Type,
      * set option
      * @param value value
      */
-
     public abstract C option(Command<?,Type,?> value);
 
     /**
      * set option
      * @param value value
      */
-
     public abstract C option(Type ... value);
 
     /**
@@ -46,14 +45,12 @@ public abstract class CommandOption<Type, C> extends Command<Option<Type>, Type,
     /**
      * type
      */
-
     protected abstract String type();
 
     /**
      * addOptionsCommandReference
      * @param resultListCommand value
      */
-
     private void addOptionsCommandReference(ResultListCommand resultListCommand){
         if(this.value != null){
             Command<?,Type,?> commandReference = ExposeOption.commandReference(this.value);
@@ -72,9 +69,8 @@ public abstract class CommandOption<Type, C> extends Command<Option<Type>, Type,
      * @param resultListCommand r
      * @param object a
      */
-
     @Override
-    protected ResultCommand<Type> args(ResultListCommand resultListCommand, Object object) {
+    protected ResultCommand<Type> processArgs(ResultListCommand resultListCommand, Object object) {
         ResultCommand<Type> resultCommand = this.resultCommand(resultListCommand, () -> processValue(object));
         Type defaultValue = Util.firstNonNull(this.processValue(object),this.processValue(resultCommand.value()), this.value.value());
         ExposeResultCommand.value(resultCommand, defaultValue);
@@ -83,13 +79,11 @@ public abstract class CommandOption<Type, C> extends Command<Option<Type>, Type,
 
     /**
      * process
-     * @param inputProcess name
      * @param resultListCommand r
      * @param allResultListCommand allResultListCommand
      */
-
     @Override
-    protected ResultCommand<Type> process(FunctionInputProcess inputProcess, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
+    protected ResultCommand<Type> processQuestion(ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
         final ResultCommand<Type> resultCommand = this.resultCommand(resultListCommand, this.value::value);
         if (!ExposeResultCommand.assign(resultCommand)) {
             this.addOptionsCommandReference(allResultListCommand);
@@ -100,7 +94,7 @@ public abstract class CommandOption<Type, C> extends Command<Option<Type>, Type,
                 do {
                     PrintCommand.printResultListCommand(allResultListCommand, "");
                     PrintCommand.printQuestion(ExposeCommand.message(this), this.type(), resultCommand.value() != null ? resultCommand.value().toString() : "");
-                    ExposeResultCommand.value(resultCommand, this.processValue(inputProcess.process()));
+                    ExposeResultCommand.value(resultCommand, this.processValue(SystemIO.INP.process()));
                 } while (resultCommand.value() == null && ExposeCommand.required(this).valid(resultListCommand));
             }
         }

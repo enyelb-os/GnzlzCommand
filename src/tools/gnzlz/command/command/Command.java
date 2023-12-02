@@ -40,7 +40,7 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> {
     /**
      * value
      */
-    protected Type value;
+    Type value;
 
     /**
      * commands
@@ -55,7 +55,7 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> {
         this.name = name;
         this.required = FALSE;
         this.message = "";
-        this.commands = new ArrayList<String>();
+        this.commands = new ArrayList<>();
     }
 
     /**
@@ -107,7 +107,7 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> {
      * @param commands c
      */
     public C commands(String ... commands) {
-        this.validateAddCommands(commands);
+        this.addCommands(commands);
         return (C) this;
     }
 
@@ -115,7 +115,7 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> {
      * valid exists name args
      * @param commandName commandName
      */
-    private void validateAddCommand(String commandName){
+    private void addCommand(String commandName){
         for (String commandNameOld: this.commands) {
             if (commandNameOld.equals(commandName)) {
                 return;
@@ -128,10 +128,10 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> {
      * valid list command exists name args
      * @param commands commands
      */
-    private void validateAddCommands(String ... commands){
+    private void addCommands(String ... commands){
         if(commands != null){
             for (String commandName : commands) {
-                validateAddCommand(commandName);
+                addCommand(commandName);
             }
         }
     }
@@ -161,27 +161,26 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> {
     }
 
     /**
-     * validValue
+     * valid
      * @param value value
      */
-    public boolean validValue(Object value) {
+    public boolean valid(Object value) {
         return processValue(value) != null;
     }
 
     /**
-     * process
-     * @param console is
+     * processQuestion
      * @param resultListCommand r
      * @param allResultListCommand a
      */
-    protected abstract ResultCommand<R> process(FunctionInputProcess console, ResultListCommand resultListCommand, ResultListCommand allResultListCommand);
+    protected abstract ResultCommand<R> processQuestion(ResultListCommand resultListCommand, ResultListCommand allResultListCommand);
 
     /**
-     * args
+     * processArgs
      * @param resultListCommand r
      * @param value v
      */
-    protected abstract ResultCommand<R> args(ResultListCommand resultListCommand, Object value);
+    protected abstract ResultCommand<R> processArgs(ResultListCommand resultListCommand, Object value);
 
     /**
      * validValue

@@ -3,45 +3,80 @@ package tools.gnzlz.command.command;
 import tools.gnzlz.command.command.functional.FunctionRequiredCommand;
 import tools.gnzlz.command.result.ResultCommand;
 import tools.gnzlz.command.result.ResultListCommand;
-import tools.gnzlz.system.io.functional.FunctionInputProcess;
 
 import java.util.ArrayList;
 
 public class ExposeCommand {
 
+    /**
+     * name
+     * @param command command
+     */
     public static String name(Command<?,?,?> command){
         return command.name;
     }
 
+    /**
+     * value
+     * @param <T> T
+     * @param command command
+     */
     public static <T> T value(Command<T,?,?> command){
         return command.value;
     }
 
+    /**
+     * message
+     * @param command command
+     */
     public static String message(Command<?,?,?> command){
         return command.message;
     }
 
+    /**
+     * commands
+     * @param command command
+     */
     public static ArrayList<String> commands(Command<?,?,?> command){
         return command.commands;
     }
 
+    /**
+     * required
+     * @param command command
+     */
     public static FunctionRequiredCommand required(Command<?,?,?> command){
         return command.required;
     }
 
-    public static <R> ResultCommand<R> createResultCommand(Command<?,R,?> command, R object){
-        return command.createResultCommand(object);
-    }
-
+    /**
+     * processValue
+     * @param <R> R
+     * @param command command
+     * @param processValue processValue
+     */
     public static <R> R processValue(Command<?,R,?> command, Object processValue){
         return command.processValue(processValue);
     }
 
-    public static <R> ResultCommand<R> process(Command<?,R,?> command, FunctionInputProcess inputProcess, ResultListCommand resultListCommand, ResultListCommand allResultListCommand){
-        return command.process(inputProcess, resultListCommand, allResultListCommand);
+    /**
+     * processArgs
+     * @param <R> R
+     * @param command command
+     * @param resultListCommand rlc
+     * @param value value
+     */
+    public static <R> ResultCommand<R> processArgs(Command<?,R,?> command, ResultListCommand resultListCommand, Object value){
+        return command.processArgs(resultListCommand, value);
     }
 
-    public static <R> ResultCommand<R> args(Command<?,R,?> command, ResultListCommand resultListCommand, Object value){
-        return command.args(resultListCommand, value);
+    /**
+     * processArgs
+     * @param <R> R
+     * @param command command
+     * @param resultListCommand rlc
+     */
+    public static <R> void processQuestion(Command<?,R,?> command, ResultListCommand resultListCommand, ResultListCommand allResultListCommand){
+        command.processQuestion(resultListCommand, allResultListCommand);
     }
 }

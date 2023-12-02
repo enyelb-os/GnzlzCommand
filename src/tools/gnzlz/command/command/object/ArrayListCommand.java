@@ -4,29 +4,27 @@ import tools.gnzlz.command.command.Command;
 
 public class ArrayListCommand extends ListCommand {
 
-    /***************************************
-     * select listCommands
-     ***************************************/
-
+    /**
+     * create
+     */
     public static ArrayListCommand create(){
         return new ArrayListCommand();
     }
 
-    /***************************************
-     * select listCommands
-     ***************************************/
-
+    /**
+     * create
+     * @param command command
+     */
     public static ArrayListCommand create(Command<?,?,?>... command) {
         return new ArrayListCommand().addCommand(command);
     }
 
-    /***************************************
-     * static
-     ***************************************/
-
-    public ArrayListCommand addCommand(Command<?,?,?> ... names) {
-        super.addCommand(names);
+    /**
+     * addCommand
+     * @param commands commands
+     */
+    public ArrayListCommand addCommand(Command<?,?,?> ... commands) {
+        super.addCommand(commands);
         return this;
     }
-
 }

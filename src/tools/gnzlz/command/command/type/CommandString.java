@@ -5,10 +5,9 @@ import tools.gnzlz.command.command.CommandBasic;
 public class CommandString extends CommandBasic<String, CommandString> {
 
     /**
-     * constructor
+     * CommandString
      * @param name name
      */
-
     public CommandString(String name) {
         super(name);
     }
@@ -16,18 +15,15 @@ public class CommandString extends CommandBasic<String, CommandString> {
     /**
      * type
      */
-
     @Override
-    public String type() {
+    protected String type() {
         return " string";
     }
 
-
     /**
-     * converter
+     * processValue
      * @param value value
      */
-
     @Override
     protected String processValue(Object value) {
         if(value instanceof String str){
@@ -37,10 +33,9 @@ public class CommandString extends CommandBasic<String, CommandString> {
     }
 
     /**
-     * static create
+     * create
      * @param name name
      */
-
     public static CommandString create(String name){
         return new CommandString(name);
     }

@@ -6,36 +6,34 @@ import java.util.ArrayList;
 
 public class Option<Type> {
 
-    /***************************************
+    /**
      * command reference
-     ***************************************/
+     */
     Command<?,Type,?> commandReference;
 
-    /***************************************
+    /**
      * Value
-     ***************************************/
-
+     */
     Type value;
 
-    /***************************************
+    /**
      * list to options
-     ***************************************/
-
+     */
     final ArrayList<Type> options;
 
-    /***************************************
-     * constructor
-     ***************************************/
-
+    /**
+     * Option
+     */
      Option(){
         this.options = new ArrayList<Type>();
     }
 
-    /***************************************
+    /**
      * validate and add list options
-     ***************************************/
-
-    private void validateAddOptions(Type ... options){
+     * @param options options
+     */
+    @SafeVarargs
+    private void addOptions(Type ... options){
         if(options != null){
             for (Type optionName : options) {
                 for (Type optionNameOld: this.options) {
@@ -48,28 +46,29 @@ public class Option<Type> {
         }
     }
 
-    /***************************************
+    /**
      * set Options
-     ***************************************/
-
-    public Option<Type> options(Type ... options) {
-        this.validateAddOptions(options);
+     * @param options options
+     */
+    @SafeVarargs
+    public final Option<Type> options(Type... options) {
+        this.addOptions(options);
         return this;
     }
 
-    /***************************************
+    /**
      * set reference command to list
-     ***************************************/
-
+     * @param commandReference commandReference
+     */
     public Option<Type> reference(Command<?,Type,?> commandReference) {
         this.commandReference = commandReference;
         return this;
     }
 
-    /***************************************
+    /**
      * get valid option
-     ***************************************/
-
+     * @param value value
+     */
     public boolean valid(Type value) {
         for (Type option : options) {
             if(this.value instanceof String str) {
@@ -84,41 +83,38 @@ public class Option<Type> {
         return false;
     }
 
-    /***************************************
+    /**
      * get value
-     ***************************************/
-
+     */
     public Type value() {
         return this.value;
     }
 
     /**
      * toString
-     *
      */
-
     @Override
     public String toString(){
-        String type = "(";
+        StringBuilder type = new StringBuilder("(");
         for (int i = 0; i < options.size(); i++) {
-            type += (i !=0 ? "|": "") + options.get(i);
+            type.append(i != 0 ? "|" : "").append(options.get(i));
         }
-        type += ")";
-        return type;
+        type.append(")");
+        return type.toString();
     }
 
-    /***************************************
-     * statics constructors
-     ***************************************/
-
+    /**
+     * string
+     * @param options options
+     */
     public static Option<String> string(String ... options) {
         return new Option<String>().options(options);
     }
 
-    /***************************************
-     * statics constructors
-     ***************************************/
-
+    /**
+     * integer
+     * @param options options
+     */
     public static Option<Integer> integer(Integer ... options) {
         return new Option<Integer>().options(options);
     }

@@ -58,7 +58,7 @@ public class Process {
                                 args.remove(i);
                                 i--;
                             }
-                            ResultCommand<?> resultCommand = ExposeCommand.args(command, resultListCommand, value);
+                            ResultCommand<?> resultCommand = ExposeCommand.processArgs(command, resultListCommand, value);
                             ExposeResultCommand.assign(resultCommand, true);
                             args.remove(i);
                             i--;
@@ -81,7 +81,7 @@ public class Process {
     private static ResultListCommand processQuestion(ListCommand listCommand, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
 
         for (Command<?,?,?> command: ExposeListCommand.commands(listCommand)) {
-            ExposeCommand.process(command, SystemIO.INP, resultListCommand, allResultListCommand);
+            ExposeCommand.processQuestion(command, resultListCommand, allResultListCommand);
         }
         return resultListCommand;
     }

@@ -4,12 +4,10 @@ import tools.gnzlz.command.command.CommandBasic;
 
 public class CommandDouble extends CommandBasic<Double, CommandDouble> {
 
-    /***************************************
-     * constructor
+    /**
+     * CommandDouble
      * @param name name
-     **************************************
      */
-
     public CommandDouble(String name) {
         super(name);
     }
@@ -17,17 +15,15 @@ public class CommandDouble extends CommandBasic<Double, CommandDouble> {
     /**
      * type
      */
-
     @Override
-    public String type() {
+    protected String type() {
         return " number";
     }
 
     /**
-     * converter
-     *
+     * processValue
+     * @param value value
      */
-
     @Override
     protected Double processValue(Object value) {
         if(value instanceof String str){
@@ -40,11 +36,10 @@ public class CommandDouble extends CommandBasic<Double, CommandDouble> {
         return null;
     }
 
-    /***************************************
-     * static create
+    /**
+     * create
      * @param name name
-     ***************************************/
-
+     */
     public static CommandDouble create(String name){
         return new CommandDouble(name);
     }

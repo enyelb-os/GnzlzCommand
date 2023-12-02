@@ -8,27 +8,25 @@ import tools.gnzlz.command.command.object.ListCommand;
 import tools.gnzlz.command.process.print.PrintCommand;
 import tools.gnzlz.command.result.*;
 import tools.gnzlz.command.utils.Util;
+import tools.gnzlz.system.io.SystemIO;
 import tools.gnzlz.system.io.functional.FunctionInputProcess;
 
 import java.util.Scanner;
 
 public class CommandArray extends Command<ArrayListCommand, ResultArrayListCommand, CommandArray> {
 
-    /***************************************
-     * constructor
+    /**
+     * CommandArray
      * @param name name
-     **************************************
      */
-
      CommandArray(String name) {
         super(name);
      }
 
     /**
-     * converter
-     *
+     * processValue
+     * @param value value
      */
-
     @Override
     public ResultArrayListCommand processValue(Object value) {
         if(value instanceof ResultArrayListCommand) {
@@ -38,13 +36,12 @@ public class CommandArray extends Command<ArrayListCommand, ResultArrayListComma
     }
 
     /**
-     * constructor
+     * processArgs
      * @param resultListCommand r
      * @param object a
      */
-
     @Override
-    protected ResultCommand<ResultArrayListCommand> args(ResultListCommand resultListCommand, Object object) {
+    protected ResultCommand<ResultArrayListCommand> processArgs(ResultListCommand resultListCommand, Object object) {
         ResultCommand<ResultArrayListCommand> resultCommand = this.resultCommand(resultListCommand, () -> this.processValue(object));
         if (resultCommand == null) {
             return null;
@@ -55,14 +52,12 @@ public class CommandArray extends Command<ArrayListCommand, ResultArrayListComma
     }
 
     /**
-     * constructor
-     * @param inputProcess name
+     * processQuestion
      * @param resultListCommand r
      * @param allResultListCommand allResultListCommand
      */
-
     @Override
-    protected ResultCommand<ResultArrayListCommand> process(FunctionInputProcess inputProcess, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
+    protected ResultCommand<ResultArrayListCommand> processQuestion(ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
         ResultCommand<ResultArrayListCommand> resultCommand = this.resultCommand(resultListCommand, ExposeResultArrayListCommand::create);
         if (resultCommand == null) {
             return null;
@@ -71,20 +66,17 @@ public class CommandArray extends Command<ArrayListCommand, ResultArrayListComma
 
         String line;
         do {
-
-
             PrintCommand.printResultListCommand(allResultListCommand, "");
             PrintCommand.printMenuMultipleItem(this);
 
-            Scanner in = new Scanner(System.in);
-            line = in.nextLine();
+            line = SystemIO.INP.process().toString();
 
             if(line.equals("1") || line.equalsIgnoreCase("add")) {
                 ResultListCommand resultListCommandNew = ExposeResultListCommand.create();
                 ExposeResultArrayListCommand.addResultListCommand(resultListCommandCurrent, resultListCommandNew);
-                ListCommand listCommand = this.value;
+                ListCommand listCommand = ExposeCommand.value(this);
                 for (Command<?,?,?> command: ExposeListCommand.commands(listCommand)) {
-                    ExposeCommand.process(command, inputProcess, resultListCommandNew, allResultListCommand);
+                    ExposeCommand.processQuestion(command, resultListCommandNew, allResultListCommand);
                 }
 
             }
@@ -93,30 +85,26 @@ public class CommandArray extends Command<ArrayListCommand, ResultArrayListComma
         return resultCommand;
     }
 
-
-    /***************************************
-     * static create
+    /**
+     * create
      * @param name name
-     ***************************************/
-
+     */
     public static CommandArray create(String name){
         return new CommandArray(name);
     }
 
-    /***************************************
-     * set array
+    /**
+     * array
      * @param value value
-     ***************************************/
-
+     */
     public CommandArray array(ArrayListCommand value) {
         return this.value(value);
     }
 
-    /***************************************
-     * set array
+    /**
+     * array
      * @param value value
-     ***************************************/
-
+     */
     public CommandArray array(Command<?,?,?> ... value) {
         return this.value(ArrayListCommand.create().addCommand(value));
     }

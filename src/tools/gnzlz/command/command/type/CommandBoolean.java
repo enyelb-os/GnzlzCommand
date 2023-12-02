@@ -4,12 +4,10 @@ import tools.gnzlz.command.command.CommandBasic;
 
 public class CommandBoolean extends CommandBasic<Boolean, CommandBoolean> {
 
-    /***************************************
-     * constructor
+    /**
+     * CommandBoolean
      * @param name name
-     **************************************
      */
-
     public CommandBoolean(String name) {
         super(name);
     }
@@ -17,16 +15,15 @@ public class CommandBoolean extends CommandBasic<Boolean, CommandBoolean> {
     /**
      * type
      */
-
     @Override
-    public String type() {
+    protected String type() {
         return " bool";
     }
 
     /**
-     * converter
+     * processValue
+     * @param value value
      */
-
     @Override
     protected Boolean processValue(Object value) {
         if(value instanceof CommandString){
@@ -37,11 +34,10 @@ public class CommandBoolean extends CommandBasic<Boolean, CommandBoolean> {
         return false;
     }
 
-    /***************************************
-     * static create
+    /**
+     * create
      * @param name name
-     ***************************************/
-
+     */
     public static CommandBoolean create(String name){
         return new CommandBoolean(name);
     }

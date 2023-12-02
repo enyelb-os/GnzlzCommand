@@ -9,25 +9,24 @@ import tools.gnzlz.command.result.ExposeResultListCommand;
 import tools.gnzlz.command.result.ResultCommand;
 import tools.gnzlz.command.result.ResultListCommand;
 import tools.gnzlz.command.utils.Util;
+import tools.gnzlz.system.io.SystemIO;
 import tools.gnzlz.system.io.functional.FunctionInputProcess;
 
 public class CommandList extends Command<ListCommand, ResultListCommand, CommandList> {
 
     /**
-     * constructor
+     * CommandList
      * @param name name
      */
-
     public CommandList(String name) {
         super(name);
     }
 
 
     /**
-     * converter
+     * processValue
      * @param value value
      */
-
     @Override
     public ResultListCommand processValue(Object value) {
         if(value instanceof ResultListCommand) {
@@ -37,13 +36,12 @@ public class CommandList extends Command<ListCommand, ResultListCommand, Command
     }
 
     /**
-     * constructor
+     * processArgs
      * @param resultListCommand r
      * @param object a
      */
-
     @Override
-    protected ResultCommand<ResultListCommand> args(ResultListCommand resultListCommand, Object object) {
+    protected ResultCommand<ResultListCommand> processArgs(ResultListCommand resultListCommand, Object object) {
         ResultCommand<ResultListCommand> resultCommand = this.resultCommand(resultListCommand, () ->  this.processValue(object));
         ResultListCommand defaultValue = Util.firstNonNull(this.processValue(object), this.processValue(resultCommand.value()));
         ExposeResultCommand.value(resultCommand, defaultValue);
@@ -51,49 +49,44 @@ public class CommandList extends Command<ListCommand, ResultListCommand, Command
     }
 
     /**
-     * constructor
-     * @param inputProcess name
+     * processQuestion
      * @param resultListCommand r
      * @param allResultListCommand allResultListCommand
      */
-
     @Override
-    protected ResultCommand<ResultListCommand> process(FunctionInputProcess inputProcess, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
+    protected ResultCommand<ResultListCommand> processQuestion(ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
         ResultCommand<ResultListCommand> resultCommand = this.resultCommand(resultListCommand, ExposeResultListCommand::create);
         if (resultCommand == null) {
             return null;
         }
         ResultListCommand resultListCommandCurrent = Util.firstNonNull(this.processValue(resultCommand.value()), ExposeResultListCommand.create());
-        ListCommand listCommand = this.value;
+        ListCommand listCommand = ExposeCommand.value(this);
         for (Command<?,?,?> command: ExposeListCommand.commands(listCommand)) {
-            ExposeCommand.process(command, inputProcess, resultListCommandCurrent, allResultListCommand);
+            ExposeCommand.processQuestion(command, resultListCommandCurrent, allResultListCommand);
         }
         return resultCommand;
     }
 
     /**
-     * static create
+     * create
      * @param name name
      */
-
     public static CommandList create(String name){
         return new CommandList(name);
     }
 
-    /***************************************
-     * set list
+    /**
+     * list
      * @param value name
-     ***************************************/
-
+     */
     public CommandList list(ListCommand value) {
         return this.value(value);
     }
 
-    /***************************************
-     * set list
+    /**
+     * list
      * @param value name
-     ***************************************/
-
+     */
     public CommandList list(Command<?,?,?> ... value) {
         return this.value(ListCommand.create().addCommand(value));
     }

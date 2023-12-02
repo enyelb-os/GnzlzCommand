@@ -7,58 +7,60 @@ import java.util.ArrayList;
 
 public class ListCommand {
 
-    /***************************************
-     * vars
-     ***************************************/
+    /**
+     * commands
+     */
      final ArrayList<Command<?,?,?>> commands;
 
-    /***************************************
-     * constructor
-     ***************************************/
-
+    /**
+     * ListCommand
+     */
      ListCommand(){
         commands = new ArrayList<Command<?,?,?>>();
      }
 
-    /***************************************
-     * select listCommands
-     ***************************************/
-
+    /**
+     * create
+     */
     public static ListCommand create(){
         return new ListCommand();
     }
 
-    public Command<?,?,?> command(Command<?,?,?> name){
-        for (Command<?,?,?> command: this.commands) {
-            if(ExposeCommand.name(command).equals(ExposeCommand.name(name))){
-                return command;
+    /**
+     * command
+     * @param command command
+     */
+    public Command<?,?,?> command(Command<?,?,?> command){
+        for (Command<?,?,?> commandOld: this.commands) {
+            if(ExposeCommand.name(commandOld).equals(ExposeCommand.name(command))){
+                return commandOld;
             }
         }
-        this.commands.add(name);
-        return name;
+        this.commands.add(command);
+        return command;
     }
 
-    /***************************************
-     * static
-     ***************************************/
-
-    public ListCommand addCommand(Command<?,?,?> name){
-        for (Command<?,?,?> command: this.commands) {
-            if(ExposeCommand.name(command).equals(ExposeCommand.name(name))){
+    /**
+     * addCommand
+     * @param command command
+     */
+    public ListCommand addCommand(Command<?,?,?> command){
+        for (Command<?,?,?> commandOld: this.commands) {
+            if(ExposeCommand.name(commandOld).equals(ExposeCommand.name(command))){
                 return this;
             }
         }
-        this.commands.add(name);
+        this.commands.add(command);
         return this;
     }
 
-    /***************************************
-     * static
-     ***************************************/
-
-    public ListCommand addCommand(Command<?,?,?> ... names){
-        if(names != null){
-            for (Command<?,?,?> name: names) {
+    /**
+     * addCommand
+     * @param commands commands
+     */
+    public ListCommand addCommand(Command<?,?,?> ... commands){
+        if(commands != null){
+            for (Command<?,?,?> name: commands) {
                 this.addCommand(name);
             }
         }

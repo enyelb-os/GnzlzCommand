@@ -189,24 +189,6 @@ public class ResultListCommand implements PrintResult {
      * print
      */
 
-    private boolean isAllItemBasic(ResultCommand<?> resultCommand){
-        if(resultCommand.value instanceof ResultListCommand rlc) {
-            return UtilPrint.isAllItemBasic(rlc.resultCommands);
-        } else if (resultCommand.value instanceof ResultArrayListCommand ralc){
-            for (ResultListCommand resultListCommand : ralc.resultListCommands) {
-                if (!UtilPrint.isAllItemBasic(resultListCommand)) {
-                    return false;
-                }
-            }
-            return ralc.resultListCommands.isEmpty();
-        }
-        return false;
-    }
-
-    /**
-     * print
-     */
-
     @Override
     public String print(int index) {
         StringBuilder s = new StringBuilder();
