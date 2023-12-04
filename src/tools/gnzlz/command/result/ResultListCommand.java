@@ -144,13 +144,11 @@ public class ResultListCommand implements PrintResult {
      */
     private void listCommands(ArrayList<ResultCommand<?>> resultCommands, FunctionCommand functionCommand){
         for (ResultCommand<?> command: resultCommands) {
-            if(command.value() instanceof ResultListCommand) {
-                listCommands(((ResultListCommand) command.value()).resultCommands, functionCommand);
-            } else if(command.value() instanceof ArrayList) {
-                for (Object o: (ArrayList<?>) command.value()) {
-                    if(o instanceof ResultListCommand) {
-                        listCommands(((ResultListCommand) o).resultCommands, functionCommand);
-                    }
+            if(command.value() instanceof ResultListCommand rlc) {
+                listCommands(rlc.resultCommands, functionCommand);
+            } else if(command.value() instanceof ResultArrayListCommand ralc) {
+                for (ResultListCommand rlc: ralc.resultListCommands) {
+                    listCommands(rlc.resultCommands, functionCommand);
                 }
             } else {
                 functionCommand.run(command);
