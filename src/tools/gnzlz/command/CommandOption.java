@@ -89,12 +89,18 @@ public abstract class CommandOption<Type, C> extends Command<Option<Type>, Type,
             if (resultCommand.value() == null ) {
                 ExposeResultCommand.value(resultCommand, this.value.value());
             }
-            if (ExposeCommand.required(this).valid(resultListCommand)) {
+            if (ExposeCommand.required(this).valid(allResultListCommand, resultListCommand)) {
+                boolean repeat;
                 do {
                     PrintCommand.printResultListCommand(allResultListCommand, "");
-                    PrintCommand.printQuestion(ExposeCommand.message(this), this.type(), resultCommand.value() != null ? resultCommand.value().toString() : "");
-                    ExposeResultCommand.value(resultCommand, this.processValue(SystemIO.INP.process()));
-                } while (resultCommand.value() == null && ExposeCommand.required(this).valid(resultListCommand));
+                    PrintCommand.printQuestion(ExposeCommand.message(this), this.type(), resultCommand.value(), ExposeCommand.error(this));
+                    Object process = SystemIO.INP.process();
+                    boolean valid = ExposeCommand.valid(this).valid(process, ExposeCommand.functionError(this), allResultListCommand, resultListCommand);
+                    if (valid) {
+                        ExposeResultCommand.value(resultCommand, this.processValue(process));
+                    }
+                    repeat = (process != null && !process.toString().isEmpty()) && !valid;
+                } while (resultCommand.value() == null && ExposeCommand.required(this).valid(allResultListCommand, resultListCommand) || repeat);
             }
         }
         return resultCommand;

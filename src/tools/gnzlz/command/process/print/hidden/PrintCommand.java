@@ -62,17 +62,21 @@ public class PrintCommand {
      * @param type type
      * @param defaultValue defaultValue
      */
-    public static void printQuestion(String messages, String type, String defaultValue){
-         if (!type.isEmpty()) {
-             SystemIO.OUT.print("Type:" + Color.CYAN.print(type) + (!defaultValue.isEmpty() ? " | " : ""));
-         }
-         if (!defaultValue.isEmpty()) {
-             SystemIO.OUT.print("Default: " +  Color.RED.print(defaultValue));
-         }
+    public static void printQuestion(String messages, String type, Object defaultValue, String[] errors){
+        defaultValue = defaultValue == null ? "" : defaultValue;
+        for (String error: errors) {
+            SystemIO.OUT.println(Color.RED.print(error));
+        }
+        if (!type.isEmpty()) {
+            SystemIO.OUT.print("Type:" + Color.CYAN.print(type) + (!defaultValue.toString().isEmpty() ? " | " : ""));
+        }
+        if (!defaultValue.toString().isEmpty()) {
+            SystemIO.OUT.print("Default: " +  Color.RED.print(defaultValue.toString()));
+        }
 
-         if (!type.isEmpty() || !defaultValue.isEmpty()) {
-             SystemIO.OUT.ln();
-         }
-         SystemIO.OUT.print(Color.GREEN.print(messages  +  ": "));
+        if (!type.isEmpty() || !defaultValue.toString().isEmpty()) {
+            SystemIO.OUT.ln();
+        }
+        SystemIO.OUT.print(Color.GREEN.print(messages  +  ": "));
     }
 }

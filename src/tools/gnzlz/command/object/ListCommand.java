@@ -16,7 +16,7 @@ public class ListCommand {
      * ListCommand
      */
      ListCommand(){
-        commands = new ArrayList<Command<?,?,?>>();
+        commands = new ArrayList<>();
      }
 
     /**

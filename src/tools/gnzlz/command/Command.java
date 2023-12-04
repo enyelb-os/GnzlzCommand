@@ -1,7 +1,9 @@
 package tools.gnzlz.command;
 
 import tools.gnzlz.command.functional.FunctionRequiredCommand;
-import tools.gnzlz.command.functional.FunctionCreateObject;
+import tools.gnzlz.command.functional.hidden.FunctionCreateObject;
+import tools.gnzlz.command.functional.FunctionSetError;
+import tools.gnzlz.command.functional.FunctionValidCommand;
 import tools.gnzlz.command.result.ExposeResultCommand;
 import tools.gnzlz.command.result.ExposeResultListCommand;
 import tools.gnzlz.command.result.ResultCommand;
@@ -17,24 +19,29 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> {
     final String name;
 
     /**
-     * TRUE
-     */
-    final static FunctionRequiredCommand TRUE = (list) -> true;
-
-    /**
-     * FALSE
-     */
-    final static FunctionRequiredCommand FALSE = (list) -> false;
-
-    /**
      * required
      */
     FunctionRequiredCommand required;
 
     /**
+     * required
+     */
+    FunctionValidCommand valid;
+
+    /**
      * message
      */
     String message;
+
+    /**
+     * error
+     */
+    final ArrayList<String> errors;
+
+    /**
+     * setError
+     */
+    final FunctionSetError error;
 
     /**
      * value
@@ -52,9 +59,12 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> {
      */
     protected Command(String name){
         this.name = name;
-        this.required = FALSE;
+        this.required = FunctionRequiredCommand.FALSE;
+        this.valid = FunctionValidCommand.TRUE;
         this.message = "";
         this.commands = new ArrayList<>();
+        this.errors = new ArrayList<>();
+        this.error = this.errors::add;
     }
 
     /**
@@ -62,7 +72,7 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> {
      * @param required required
      */
     public C required(boolean required) {
-        this.required = required ? TRUE : FALSE;
+        this.required = required ? FunctionRequiredCommand.TRUE : FunctionRequiredCommand.FALSE;
         return (C) this;
     }
 
@@ -71,7 +81,9 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> {
      * @param required required
      */
     public C required(FunctionRequiredCommand required) {
-        this.required = required;
+        if (required != null) {
+            this.required = required;
+        }
         return (C) this;
     }
 
@@ -79,7 +91,7 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> {
      * set required
      */
     public C required() {
-        this.required = TRUE;
+        this.required = FunctionRequiredCommand.TRUE;
         return (C) this;
     }
 
@@ -165,6 +177,17 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> {
      */
     public boolean valid(Object value) {
         return processValue(value) != null;
+    }
+
+    /**
+     * set valid
+     * @param valid valid
+     */
+    public C valid(FunctionValidCommand valid) {
+        if (valid != null) {
+            this.valid = valid;
+        }
+        return (C) this;
     }
 
     /**

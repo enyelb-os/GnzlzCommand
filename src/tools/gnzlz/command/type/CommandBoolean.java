@@ -1,6 +1,7 @@
 package tools.gnzlz.command.type;
 
 import tools.gnzlz.command.CommandBasic;
+import tools.gnzlz.command.ExposeCommand;
 
 public class CommandBoolean extends CommandBasic<Boolean, CommandBoolean> {
 
@@ -26,12 +27,13 @@ public class CommandBoolean extends CommandBasic<Boolean, CommandBoolean> {
      */
     @Override
     protected Boolean processValue(Object value) {
-        if(value instanceof CommandString){
-            return value.toString().equalsIgnoreCase("true") || value.toString().equals("1");
-        } else if (value instanceof Boolean){
-            return (Boolean) value;
+        if(value instanceof String s && !s.isEmpty()){
+            return s.equalsIgnoreCase("true") || s.equals("1");
+        } else if (value instanceof Boolean b){
+            return b;
         }
-        return false;
+        ExposeCommand.error(this, "value is not boolean");
+        return null;
     }
 
     /**

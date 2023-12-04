@@ -20,6 +20,9 @@ public class CommandOptionInteger extends CommandOption<Integer, CommandOptionIn
      */
     @Override
     protected String type() {
+        if (ExposeCommand.value(this) != null) {
+            return ExposeCommand.value(this).toString();
+        }
         return " int";
     }
 
@@ -42,6 +45,7 @@ public class CommandOptionInteger extends CommandOption<Integer, CommandOptionIn
                 return integer;
             }
         }
+        ExposeCommand.error(this, "value is not valid");
         return null;
     }
 

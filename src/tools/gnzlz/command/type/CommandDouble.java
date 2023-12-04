@@ -1,6 +1,7 @@
 package tools.gnzlz.command.type;
 
 import tools.gnzlz.command.CommandBasic;
+import tools.gnzlz.command.ExposeCommand;
 
 public class CommandDouble extends CommandBasic<Double, CommandDouble> {
 
@@ -33,6 +34,7 @@ public class CommandDouble extends CommandBasic<Double, CommandDouble> {
         } else if (value instanceof Double doubl){
             return doubl;
         }
+        ExposeCommand.error(this, "value is not double");
         return null;
     }
 

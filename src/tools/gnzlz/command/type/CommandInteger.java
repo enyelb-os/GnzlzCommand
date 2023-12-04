@@ -1,6 +1,7 @@
 package tools.gnzlz.command.type;
 
 import tools.gnzlz.command.CommandBasic;
+import tools.gnzlz.command.ExposeCommand;
 
 public class CommandInteger extends CommandBasic<Integer, CommandInteger> {
 
@@ -33,6 +34,7 @@ public class CommandInteger extends CommandBasic<Integer, CommandInteger> {
         } else if(value instanceof Integer integer){
             return integer;
         }
+        ExposeCommand.error(this, "value is not integer");
         return null;
     }
 

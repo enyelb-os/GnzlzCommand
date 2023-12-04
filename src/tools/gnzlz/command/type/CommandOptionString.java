@@ -21,6 +21,9 @@ public class CommandOptionString extends CommandOption<String, CommandOptionStri
      */
     @Override
     protected String type() {
+        if (ExposeCommand.value(this) != null) {
+            return ExposeCommand.value(this).toString();
+        }
         return " string";
     }
 
@@ -41,6 +44,7 @@ public class CommandOptionString extends CommandOption<String, CommandOptionStri
         if(value != null && ExposeCommand.value(this).valid(value.toString())){
             return value.toString();
         }
+        ExposeCommand.error(this, "value is not valid");
         return null;
     }
 

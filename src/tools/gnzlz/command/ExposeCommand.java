@@ -1,6 +1,8 @@
 package tools.gnzlz.command;
 
 import tools.gnzlz.command.functional.FunctionRequiredCommand;
+import tools.gnzlz.command.functional.FunctionSetError;
+import tools.gnzlz.command.functional.FunctionValidCommand;
 import tools.gnzlz.command.result.ResultCommand;
 import tools.gnzlz.command.result.ResultListCommand;
 
@@ -47,6 +49,45 @@ public class ExposeCommand {
      */
     public static FunctionRequiredCommand required(Command<?,?,?> command){
         return command.required;
+    }
+
+
+    /**
+     * valid
+     * @param command command
+     */
+    public static FunctionValidCommand valid(Command<?,?,?> command) {
+        return command.valid;
+    }
+
+    /**
+     * error
+     * @param command command
+     */
+    public static String[] error(Command<?,?,?> command) {
+        String[] array = new String[command.errors.size()];
+        for (int i = 0; i < command.errors.size() ; i++) {
+            array[i] = command.errors.get(i);
+        }
+        command.errors.clear();
+        return array;
+    }
+
+    /**
+     * functionError
+     * @param command command
+     */
+    public static FunctionSetError functionError(Command<?,?,?> command) {
+        return command.error;
+    }
+
+    /**
+     * error
+     * @param command command
+     * @param error error
+     */
+    public static void error(Command<?,?,?> command, String error) {
+        command.error.set(error);
     }
 
     /**

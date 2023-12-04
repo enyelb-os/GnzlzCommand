@@ -67,7 +67,11 @@ public class ResultListCommand implements PrintResult {
     public String string(String name){
         for (ResultCommand<?> command: resultCommands) {
             if(command.name().equals(name)){
-                return command.value().toString();
+                if (command.value() != null) {
+                    return command.value().toString();
+                } else {
+                    return "";
+                }
             }
         }
         return "";
