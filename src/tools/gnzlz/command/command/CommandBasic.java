@@ -1,5 +1,7 @@
-package tools.gnzlz.command;
+package tools.gnzlz.command.command;
 
+import tools.gnzlz.command.command.data.DataFunctionRequired;
+import tools.gnzlz.command.command.data.DataFunctionValid;
 import tools.gnzlz.command.process.print.hidden.PrintCommand;
 import tools.gnzlz.command.result.ExposeResultCommand;
 import tools.gnzlz.command.result.ResultCommand;
@@ -47,18 +49,19 @@ public abstract class CommandBasic<Type, C extends Command<?,?,?>> extends Comma
             if (resultCommand.value() == null ) {
                 ExposeResultCommand.value(resultCommand, this.value);
             }
-            if (ExposeCommand.required(this).valid(allResultListCommand, resultListCommand)) {
+            var data = new DataFunctionRequired(allResultListCommand, resultListCommand);
+            if (ExposeCommand.required(this).valid(data)) {
                 boolean repeat;
                 do {
                     PrintCommand.printResultListCommand(allResultListCommand, "");
                     PrintCommand.printQuestion(ExposeCommand.message(this), this.type(), resultCommand.value(), ExposeCommand.error(this));
                     Object process = SystemIO.INP.process();
-                    boolean valid = ExposeCommand.valid(this).valid(process, ExposeCommand.functionError(this), allResultListCommand, resultListCommand);
+                    boolean valid = ExposeCommand.valid(this).valid(new DataFunctionValid(process, ExposeCommand.functionError(this), allResultListCommand, resultListCommand));
                     if (valid) {
                         ExposeResultCommand.value(resultCommand, this.processValue(process));
                     }
                     repeat = (process != null && !process.toString().isEmpty()) && !valid;
-                } while (resultCommand.value() == null && ExposeCommand.required(this).valid(allResultListCommand, resultListCommand) || repeat);
+                } while (resultCommand.value() == null && ExposeCommand.required(this).valid(data) || repeat);
             }
         }
         return resultCommand;

@@ -1,10 +1,10 @@
 package tools.gnzlz.command.process;
 
-import tools.gnzlz.command.Command;
-import tools.gnzlz.command.ExposeCommand;
-import tools.gnzlz.command.object.ExposeListCommand;
-import tools.gnzlz.command.object.ListCommand;
-import tools.gnzlz.command.type.CommandBoolean;
+import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.command.ExposeCommand;
+import tools.gnzlz.command.command.object.ExposeListCommand;
+import tools.gnzlz.command.command.object.ListCommand;
+import tools.gnzlz.command.CommandBoolean;
 import tools.gnzlz.command.init.ExposeInitListCommand;
 import tools.gnzlz.command.init.InitListCommand;
 import tools.gnzlz.command.result.ExposeResultCommand;

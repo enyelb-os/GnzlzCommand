@@ -1,4 +1,4 @@
-package tools.gnzlz.command.functional;
+package tools.gnzlz.command.command.functional;
 
 @FunctionalInterface
 public interface FunctionSetError {

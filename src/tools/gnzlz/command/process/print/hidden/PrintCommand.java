@@ -2,8 +2,8 @@ package tools.gnzlz.command.process.print.hidden;
 
 import tools.gnzlz.system.ansi.Color;
 import tools.gnzlz.system.io.SystemIO;
-import tools.gnzlz.command.Command;
-import tools.gnzlz.command.ExposeCommand;
+import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.command.ExposeCommand;
 import tools.gnzlz.command.result.*;
 
 import java.util.ArrayList;

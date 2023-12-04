@@ -1,8 +1,8 @@
 package tools.gnzlz.command.result;
 
 import tools.gnzlz.system.ansi.Color;
-import tools.gnzlz.command.Command;
-import tools.gnzlz.command.ExposeCommand;
+import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.command.ExposeCommand;
 import tools.gnzlz.command.process.print.hidden.UtilPrint;
 import tools.gnzlz.command.result.interfaces.hidden.PrintResult;
 

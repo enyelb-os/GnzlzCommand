@@ -1,6 +1,6 @@
 package tools.gnzlz.command.group;
 
-import tools.gnzlz.command.object.ListCommand;
+import tools.gnzlz.command.command.object.ListCommand;
 
 import java.util.ArrayList;
 

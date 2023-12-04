@@ -1,4 +1,4 @@
-package tools.gnzlz.command.functional.hidden;
+package tools.gnzlz.command.command.functional.hidden;
 
 @FunctionalInterface
 public interface FunctionCreateObject<R> {

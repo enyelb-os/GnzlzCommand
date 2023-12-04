@@ -1,6 +1,6 @@
-package tools.gnzlz.command.object;
+package tools.gnzlz.command.command.object;
 
-import tools.gnzlz.command.Command;
+import tools.gnzlz.command.command.Command;
 
 import java.util.ArrayList;
 

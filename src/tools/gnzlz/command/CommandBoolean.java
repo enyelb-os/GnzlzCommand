@@ -1,7 +1,7 @@
-package tools.gnzlz.command.type;
+package tools.gnzlz.command;
 
-import tools.gnzlz.command.CommandBasic;
-import tools.gnzlz.command.ExposeCommand;
+import tools.gnzlz.command.command.CommandBasic;
+import tools.gnzlz.command.command.ExposeCommand;
 
 public class CommandBoolean extends CommandBasic<Boolean, CommandBoolean> {
 

@@ -1,8 +1,8 @@
 package tools.gnzlz.command.process.print.hidden;
 
 import tools.gnzlz.system.ansi.Color;
-import tools.gnzlz.command.ExposeCommand;
-import tools.gnzlz.command.object.ExposeListCommand;
+import tools.gnzlz.command.command.ExposeCommand;
+import tools.gnzlz.command.command.object.ExposeListCommand;
 import tools.gnzlz.command.group.ExposeGroupCommand;
 import tools.gnzlz.command.group.GroupCommand;
 import tools.gnzlz.system.io.SystemIO;

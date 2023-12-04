@@ -1,6 +1,6 @@
 package tools.gnzlz.command.init;
 
-import tools.gnzlz.command.Command;
+import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.result.ExposeResultCommand;
 import tools.gnzlz.command.result.ResultCommand;
 

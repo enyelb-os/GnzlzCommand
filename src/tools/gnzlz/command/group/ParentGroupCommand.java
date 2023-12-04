@@ -1,7 +1,7 @@
 package tools.gnzlz.command.group;
 
-import tools.gnzlz.command.Command;
-import tools.gnzlz.command.object.ListCommand;
+import tools.gnzlz.command.command.Command;
+import tools.gnzlz.command.command.object.ListCommand;
 
 public class ParentGroupCommand {
 

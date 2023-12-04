@@ -1,6 +1,6 @@
 package tools.gnzlz.command.result;
 
-import tools.gnzlz.command.Command;
+import tools.gnzlz.command.command.Command;
 
 public class ExposeResultCommand {
 

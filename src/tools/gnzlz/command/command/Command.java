@@ -1,9 +1,9 @@
-package tools.gnzlz.command;
+package tools.gnzlz.command.command;
 
-import tools.gnzlz.command.functional.FunctionRequiredCommand;
-import tools.gnzlz.command.functional.hidden.FunctionCreateObject;
-import tools.gnzlz.command.functional.FunctionSetError;
-import tools.gnzlz.command.functional.FunctionValidCommand;
+import tools.gnzlz.command.command.functional.FunctionRequiredCommand;
+import tools.gnzlz.command.command.functional.hidden.FunctionCreateObject;
+import tools.gnzlz.command.command.functional.FunctionSetError;
+import tools.gnzlz.command.command.functional.FunctionValidCommand;
 import tools.gnzlz.command.result.ExposeResultCommand;
 import tools.gnzlz.command.result.ExposeResultListCommand;
 import tools.gnzlz.command.result.ResultCommand;

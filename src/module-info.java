@@ -2,9 +2,11 @@ module tools.gnzlz.command {
     requires tools.gnzlz.system.io;
 
     exports tools.gnzlz.command;
-    exports tools.gnzlz.command.object;
-    exports tools.gnzlz.command.functional;
-    exports tools.gnzlz.command.type;
+
+    exports tools.gnzlz.command.command;
+    exports tools.gnzlz.command.command.object;
+    exports tools.gnzlz.command.command.functional;
+    exports tools.gnzlz.command.command.data;
 
     exports tools.gnzlz.command.init;
     exports tools.gnzlz.command.init.functional;

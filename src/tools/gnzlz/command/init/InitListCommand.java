@@ -1,6 +1,6 @@
 package tools.gnzlz.command.init;
 
-import tools.gnzlz.command.Command;
+import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.init.functional.FunctionInitListCommand;
 import tools.gnzlz.command.init.functional.FunctionReturnInitListCommand;
 import tools.gnzlz.command.result.*;
