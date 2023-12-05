@@ -37,6 +37,13 @@ public class ResultArrayListCommand implements PrintResult {
     }
 
     /**
+     * array
+     */
+    public ArrayList<ResultListCommand> array(){
+        return resultListCommands;
+    }
+
+    /**
      * print
      * @param index index
      */

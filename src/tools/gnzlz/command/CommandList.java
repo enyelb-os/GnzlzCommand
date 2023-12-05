@@ -4,10 +4,7 @@ import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.command.ExposeCommand;
 import tools.gnzlz.command.command.object.ExposeListCommand;
 import tools.gnzlz.command.command.object.ListCommand;
-import tools.gnzlz.command.result.ExposeResultCommand;
-import tools.gnzlz.command.result.ExposeResultListCommand;
-import tools.gnzlz.command.result.ResultCommand;
-import tools.gnzlz.command.result.ResultListCommand;
+import tools.gnzlz.command.result.*;
 import tools.gnzlz.command.utils.Util;
 
 public class CommandList extends Command<ListCommand, ResultListCommand, CommandList> {
@@ -39,30 +36,30 @@ public class CommandList extends Command<ListCommand, ResultListCommand, Command
      * @param object a
      */
     @Override
-    protected ResultCommand<ResultListCommand> processArgs(ResultListCommand resultListCommand, Object object) {
+    protected void processArgs(ResultListCommand resultListCommand, Object object) {
         ResultCommand<ResultListCommand> resultCommand = this.resultCommand(resultListCommand, () ->  this.processValue(object));
         ResultListCommand defaultValue = Util.firstNonNull(this.processValue(object), this.processValue(resultCommand.value()));
         ExposeResultCommand.value(resultCommand, defaultValue);
-        return resultCommand;
+        ExposeResultCommand.assign(resultCommand, true);
     }
 
     /**
      * processQuestion
      * @param resultListCommand r
      * @param allResultListCommand allResultListCommand
+     * @param resultArrayListCommand resultArrayListCommand
      */
     @Override
-    protected ResultCommand<ResultListCommand> processQuestion(ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
+    protected void processQuestion(ResultListCommand resultListCommand, ResultListCommand allResultListCommand, ResultArrayListCommand resultArrayListCommand) {
         ResultCommand<ResultListCommand> resultCommand = this.resultCommand(resultListCommand, ExposeResultListCommand::create);
         if (resultCommand == null) {
-            return null;
+            return;
         }
         ResultListCommand resultListCommandCurrent = Util.firstNonNull(this.processValue(resultCommand.value()), ExposeResultListCommand.create());
         ListCommand listCommand = ExposeCommand.value(this);
         for (Command<?,?,?> command: ExposeListCommand.commands(listCommand)) {
-            ExposeCommand.processQuestion(command, resultListCommandCurrent, allResultListCommand);
+            ExposeCommand.processQuestion(command, resultListCommandCurrent, allResultListCommand, resultArrayListCommand);
         }
-        return resultCommand;
     }
 
     /**

@@ -3,6 +3,7 @@ package tools.gnzlz.command.command;
 import tools.gnzlz.command.command.functional.FunctionRequiredCommand;
 import tools.gnzlz.command.command.functional.FunctionSetError;
 import tools.gnzlz.command.command.functional.FunctionValidCommand;
+import tools.gnzlz.command.result.ResultArrayListCommand;
 import tools.gnzlz.command.result.ResultCommand;
 import tools.gnzlz.command.result.ResultListCommand;
 
@@ -107,8 +108,8 @@ public class ExposeCommand {
      * @param resultListCommand rlc
      * @param value value
      */
-    public static <R> ResultCommand<R> processArgs(Command<?,R,?> command, ResultListCommand resultListCommand, Object value){
-        return command.processArgs(resultListCommand, value);
+    public static <R> void processArgs(Command<?,R,?> command, ResultListCommand resultListCommand, Object value){
+        command.processArgs(resultListCommand, value);
     }
 
     /**
@@ -116,8 +117,9 @@ public class ExposeCommand {
      * @param <R> R
      * @param command command
      * @param resultListCommand rlc
+     * @param resultArrayListCommand resultArrayListCommand
      */
-    public static <R> void processQuestion(Command<?,R,?> command, ResultListCommand resultListCommand, ResultListCommand allResultListCommand){
-        command.processQuestion(resultListCommand, allResultListCommand);
+    public static <R> void processQuestion(Command<?,R,?> command, ResultListCommand resultListCommand, ResultListCommand allResultListCommand, ResultArrayListCommand resultArrayListCommand){
+        command.processQuestion(resultListCommand, allResultListCommand, resultArrayListCommand);
     }
 }

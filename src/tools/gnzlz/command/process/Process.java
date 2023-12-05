@@ -7,9 +7,7 @@ import tools.gnzlz.command.command.object.ListCommand;
 import tools.gnzlz.command.CommandBoolean;
 import tools.gnzlz.command.init.ExposeInitListCommand;
 import tools.gnzlz.command.init.InitListCommand;
-import tools.gnzlz.command.result.ExposeResultCommand;
-import tools.gnzlz.command.result.ResultCommand;
-import tools.gnzlz.command.result.ResultListCommand;
+import tools.gnzlz.command.result.*;
 import tools.gnzlz.system.io.SystemIO;
 import tools.gnzlz.system.io.functional.FunctionInputProcess;
 import tools.gnzlz.system.io.functional.FunctionOutputProcess;
@@ -57,8 +55,7 @@ public class Process {
                                 args.remove(i);
                                 i--;
                             }
-                            ResultCommand<?> resultCommand = ExposeCommand.processArgs(command, resultListCommand, value);
-                            ExposeResultCommand.assign(resultCommand, true);
+                            ExposeCommand.processArgs(command, resultListCommand, value);
                             args.remove(i);
                             i--;
                             break;
@@ -79,7 +76,7 @@ public class Process {
     private static ResultListCommand processQuestion(ListCommand listCommand, ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
 
         for (Command<?,?,?> command: ExposeListCommand.commands(listCommand)) {
-            ExposeCommand.processQuestion(command, resultListCommand, allResultListCommand);
+            ExposeCommand.processQuestion(command, resultListCommand, allResultListCommand, ExposeResultArrayListCommand.create());
         }
         return resultListCommand;
     }

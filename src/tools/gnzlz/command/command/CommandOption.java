@@ -6,6 +6,7 @@ import tools.gnzlz.command.command.object.ExposeOption;
 import tools.gnzlz.command.command.object.Option;
 import tools.gnzlz.command.process.print.hidden.PrintCommand;
 import tools.gnzlz.command.result.ExposeResultCommand;
+import tools.gnzlz.command.result.ResultArrayListCommand;
 import tools.gnzlz.command.result.ResultCommand;
 import tools.gnzlz.command.result.ResultListCommand;
 import tools.gnzlz.command.utils.Util;
@@ -71,20 +72,21 @@ public abstract class CommandOption<Type, C> extends Command<Option<Type>, Type,
      * @param object a
      */
     @Override
-    protected ResultCommand<Type> processArgs(ResultListCommand resultListCommand, Object object) {
+    protected void processArgs(ResultListCommand resultListCommand, Object object) {
         ResultCommand<Type> resultCommand = this.resultCommand(resultListCommand, () -> processValue(object));
         Type defaultValue = Util.firstNonNull(this.processValue(object),this.processValue(resultCommand.value()), this.value.value());
         ExposeResultCommand.value(resultCommand, defaultValue);
-        return resultCommand;
+        ExposeResultCommand.assign(resultCommand, true);
     }
 
     /**
      * process
      * @param resultListCommand r
      * @param allResultListCommand allResultListCommand
+     * @param resultArrayListCommand resultArrayListCommand
      */
     @Override
-    protected ResultCommand<Type> processQuestion(ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
+    protected void processQuestion(ResultListCommand resultListCommand, ResultListCommand allResultListCommand, ResultArrayListCommand resultArrayListCommand) {
         final ResultCommand<Type> resultCommand = this.resultCommand(resultListCommand, this.value::value);
         if (!ExposeResultCommand.assign(resultCommand)) {
             this.addOptionsCommandReference(allResultListCommand);
@@ -98,7 +100,7 @@ public abstract class CommandOption<Type, C> extends Command<Option<Type>, Type,
                     PrintCommand.printResultListCommand(allResultListCommand, "");
                     PrintCommand.printQuestion(ExposeCommand.message(this), this.type(), resultCommand.value(), ExposeCommand.error(this));
                     Object process = SystemIO.INP.process();
-                    boolean valid = ExposeCommand.valid(this).valid(new DataFunctionValid(process, ExposeCommand.functionError(this), allResultListCommand, resultListCommand));
+                    boolean valid = ExposeCommand.valid(this).valid(new DataFunctionValid(process, ExposeCommand.functionError(this), allResultListCommand, resultListCommand, resultArrayListCommand));
                     if (valid) {
                         ExposeResultCommand.value(resultCommand, this.processValue(process));
                     }
@@ -106,6 +108,5 @@ public abstract class CommandOption<Type, C> extends Command<Option<Type>, Type,
                 } while (resultCommand.value() == null && ExposeCommand.required(this).valid(data) || repeat);
             }
         }
-        return resultCommand;
     }
 }

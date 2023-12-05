@@ -38,26 +38,27 @@ public class CommandArray extends Command<ArrayListCommand, ResultArrayListComma
      * @param object a
      */
     @Override
-    protected ResultCommand<ResultArrayListCommand> processArgs(ResultListCommand resultListCommand, Object object) {
+    protected void processArgs(ResultListCommand resultListCommand, Object object) {
         ResultCommand<ResultArrayListCommand> resultCommand = this.resultCommand(resultListCommand, () -> this.processValue(object));
         if (resultCommand == null) {
-            return null;
+            return;
         }
         ResultArrayListCommand defaultValue = Util.firstNonNull(this.processValue(object), this.processValue(resultCommand.value()));
         ExposeResultCommand.value(resultCommand, defaultValue);
-        return resultCommand;
+        ExposeResultCommand.assign(resultCommand, true);
     }
 
     /**
      * processQuestion
      * @param resultListCommand r
      * @param allResultListCommand allResultListCommand
+     * @param resultArrayListCommand resultArrayListCommand
      */
     @Override
-    protected ResultCommand<ResultArrayListCommand> processQuestion(ResultListCommand resultListCommand, ResultListCommand allResultListCommand) {
+    protected void processQuestion(ResultListCommand resultListCommand, ResultListCommand allResultListCommand, ResultArrayListCommand resultArrayListCommand) {
         ResultCommand<ResultArrayListCommand> resultCommand = this.resultCommand(resultListCommand, ExposeResultArrayListCommand::create);
         if (resultCommand == null) {
-            return null;
+            return;
         }
         ResultArrayListCommand resultListCommandCurrent = Util.firstNonNull(this.processValue(resultCommand.value()), ExposeResultArrayListCommand.create());
 
@@ -73,13 +74,11 @@ public class CommandArray extends Command<ArrayListCommand, ResultArrayListComma
                 ExposeResultArrayListCommand.addResultListCommand(resultListCommandCurrent, resultListCommandNew);
                 ListCommand listCommand = ExposeCommand.value(this);
                 for (Command<?,?,?> command: ExposeListCommand.commands(listCommand)) {
-                    ExposeCommand.processQuestion(command, resultListCommandNew, allResultListCommand);
+                    ExposeCommand.processQuestion(command, resultListCommandNew, allResultListCommand, resultListCommandCurrent);
                 }
 
             }
         } while(!line.equals("0") && !line.equalsIgnoreCase("exit"));
-
-        return resultCommand;
     }
 
     /**

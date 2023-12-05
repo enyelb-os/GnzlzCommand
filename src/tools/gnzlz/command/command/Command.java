@@ -4,10 +4,7 @@ import tools.gnzlz.command.command.functional.FunctionRequiredCommand;
 import tools.gnzlz.command.command.functional.hidden.FunctionCreateObject;
 import tools.gnzlz.command.command.functional.FunctionSetError;
 import tools.gnzlz.command.command.functional.FunctionValidCommand;
-import tools.gnzlz.command.result.ExposeResultCommand;
-import tools.gnzlz.command.result.ExposeResultListCommand;
-import tools.gnzlz.command.result.ResultCommand;
-import tools.gnzlz.command.result.ResultListCommand;
+import tools.gnzlz.command.result.*;
 
 import java.util.ArrayList;
 
@@ -195,14 +192,14 @@ public abstract class Command<Type, R, C extends Command<?, ?, ?>> {
      * @param resultListCommand r
      * @param allResultListCommand a
      */
-    protected abstract ResultCommand<R> processQuestion(ResultListCommand resultListCommand, ResultListCommand allResultListCommand);
+    protected abstract void processQuestion(ResultListCommand resultListCommand, ResultListCommand allResultListCommand, ResultArrayListCommand resultArrayListCommand);
 
     /**
      * processArgs
      * @param resultListCommand r
      * @param value v
      */
-    protected abstract ResultCommand<R> processArgs(ResultListCommand resultListCommand, Object value);
+    protected abstract void processArgs(ResultListCommand resultListCommand, Object value);
 
     /**
      * validValue
