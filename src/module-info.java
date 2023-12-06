@@ -1,5 +1,5 @@
 module tools.gnzlz.command {
-    requires tools.gnzlz.system.io;
+    requires transitive tools.gnzlz.system.io;
 
     exports tools.gnzlz.command;
 
