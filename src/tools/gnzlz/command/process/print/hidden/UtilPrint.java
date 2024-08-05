@@ -8,24 +8,6 @@ import java.util.ArrayList;
 public class UtilPrint {
 
     /**
-     * separator
-     */
-    public static int separator = 70;
-
-    /**
-     * clearConsole
-     */
-    public static void clearConsole(){
-        try {
-            if (System.getProperty("os.name").contains("Windows")) {
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            } else {
-                Runtime.getRuntime().exec("clear");
-            }
-        } catch (IOException | InterruptedException ignored) {}
-    }
-
-    /**
      * taps
      * @param taps taps
      */

@@ -69,7 +69,7 @@ public class PrintGroupCommand {
             }
             str.append(ExposeGroupCommand.name(groupCommand));
         }
-        UtilPrint.clearConsole();
+        SystemIO.OUT.clearConsole();
         SystemIO.OUT.print(Color.GREEN.print("Options"));
         SystemIO.OUT.print(" (");
         SystemIO.OUT.print(str.toString());

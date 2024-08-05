@@ -5,6 +5,7 @@ import tools.gnzlz.system.io.SystemIO;
 import tools.gnzlz.command.command.Command;
 import tools.gnzlz.command.command.ExposeCommand;
 import tools.gnzlz.command.result.*;
+import tools.gnzlz.system.text.TextIO;
 
 import java.util.ArrayList;
 
@@ -15,11 +16,10 @@ public class PrintCommand {
      * @param command command
      */
      public static void printMenuMultipleItem(Command<?,?,?> command){
-         SystemIO.OUT.println(" 1.- " + Color.CYAN.print("Add item"));
-         SystemIO.OUT.println(" 0.- " + Color.CYAN.print("Exit continue"));
-         SystemIO.OUT.println("");
-         SystemIO.OUT.title(ExposeCommand.message(command), UtilPrint.separator, "=");
-         SystemIO.OUT.println("");
+         SystemIO.OUT.println(Color.BLACK.print(Color.WHITE, TextIO.center(ExposeCommand.message(command))));
+         SystemIO.OUT.println(Color.BLACK.print(Color.WHITE,"(1)") + Color.CYAN.print(" Add item"));
+         SystemIO.OUT.println(Color.BLACK.print(Color.WHITE,"(0)") + Color.RED.print(" Exit continue"));
+         SystemIO.OUT.println(Color.BLACK.print(Color.WHITE, TextIO.repeat(" ")));
          SystemIO.OUT.print(Color.GREEN.print("Choose an option?: "));
     }
 
@@ -30,17 +30,14 @@ public class PrintCommand {
      */
      public static void printResultListCommand(ResultListCommand resultListCommand, String text){
         ArrayList<ResultCommand<?>> resultCommands = ExposeResultListCommand.resultCommands(resultListCommand);
-        UtilPrint.clearConsole();
-        SystemIO.OUT.ln();
-        SystemIO.OUT.title(text, UtilPrint.separator, "=");
-        SystemIO.OUT.ln();
+        SystemIO.OUT.clearConsole();
+        SystemIO.OUT.println(Color.BLACK.print(Color.WHITE, TextIO.center(text)));
         if (UtilPrint.isEmptyResultListCommand(resultCommands)) {
             SystemIO.OUT.println("List: Empty");
         } else {
             printResultListCommand(resultCommands, 0);
         }
-        SystemIO.OUT.ln();
-        SystemIO.OUT.repeat(UtilPrint.separator, "=");
+        SystemIO.OUT.println(Color.BLACK.print(Color.WHITE,TextIO.repeat(" ")));
         SystemIO.OUT.ln();
     }
 
